@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../settings_btn.dart';
+import '../drawer.dart';
 
 class MapView extends StatelessWidget {
   @override
@@ -6,14 +8,9 @@ class MapView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Map'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings),
-            tooltip: "Settings",
-            onPressed: null,
-          )
-        ],
+        actions: [SettingsBtn()],
       ),
+      drawer: DrawerMenu(),
       body: null,
     );
   }

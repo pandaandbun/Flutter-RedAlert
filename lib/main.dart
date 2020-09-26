@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'missing_person_screen.dart';
-import 'map_screen.dart';
-import 'saved_person_screen.dart';
+import 'Missing Person/missing_person_screen.dart';
+import 'Map/map_screen.dart';
+import 'Saved/saved_person_screen.dart';
 
 void main() => runApp(MyApp());
 
