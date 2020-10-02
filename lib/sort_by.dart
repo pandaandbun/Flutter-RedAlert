@@ -15,17 +15,18 @@ class _SortByState extends State<SortBy> {
       children: [
         Text("Sort By"),
         DropdownButton<String>(
-            value: dropDownValue,
-            icon: Icon(Icons.arrow_downward),
-            items: <String>["Date", "Age", "Area"]
-                .map<DropdownMenuItem<String>>((String value) =>
-                    DropdownMenuItem<String>(value: value, child: Text(value)))
-                .toList(),
-            onChanged: (String newValue) {
-              setState(() {
-                dropDownValue = newValue;
-              });
-            }),
+          value: dropDownValue,
+          icon: Icon(Icons.arrow_downward),
+          items: <String>["Date", "Age", "Area"]
+              .map<DropdownMenuItem<String>>((String value) =>
+                  DropdownMenuItem<String>(value: value, child: Text(value)))
+              .toList(),
+          onChanged: (String newValue) {
+            setState(() {
+              dropDownValue = newValue;
+            });
+          }
+        ),
       ],
     );
   }

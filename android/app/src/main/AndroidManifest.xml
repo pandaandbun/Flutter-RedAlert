@@ -7,7 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="major_group_project_redalert"
+        android:label="Red Alert"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
