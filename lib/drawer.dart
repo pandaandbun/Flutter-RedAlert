@@ -47,6 +47,18 @@ class DrawerMenu extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, '/saved');
               }
             }),
+        ListTile(
+            leading: Icon(Icons.show_chart),
+            title: Text('Charts'),
+            onTap: () {
+              if (currentRoute == '/charts') {
+                Navigator.pop(context);
+              } else if (currentRoute == '/') {
+                Navigator.pushNamed(context, '/charts');
+              } else {
+                Navigator.pushReplacementNamed(context, '/charts');
+              }
+            }),
       ]),
     );
   }
