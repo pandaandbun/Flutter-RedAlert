@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Red_Alert/drawer.dart';
+
 /*
 class ThemeP extends StatefulWidget {
   @override
@@ -8,21 +8,17 @@ class ThemeP extends StatefulWidget {
 
 class ThemePage extends State<ThemeP> {
   */
-  class ThemeP extends StatelessWidget{
+class ThemeP extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Theme')),
-      drawer: DrawerMenu(),
+      appBar: AppBar(leading: _goBack(), title: Text('Theme')),
       body: Column(
-        children: [
-          _goBack(),
-        ],
+        children: [],
       ),
     );
   }
 }
-
 
 class _goBack extends StatelessWidget {
   const _goBack({

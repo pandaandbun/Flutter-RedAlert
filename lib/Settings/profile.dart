@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:Red_Alert/drawer.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -10,12 +9,9 @@ class ProfilePage extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Profile')),
-      drawer: DrawerMenu(),
+      appBar: AppBar(leading: _goBack(), title: Text('Profile')),
       body: Column(
-        children: [
-          _goBack(),
-        ],
+        children: [],
       ),
     );
   }

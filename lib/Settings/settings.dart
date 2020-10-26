@@ -12,7 +12,6 @@ class SettingsPage extends State<Settings> {
   bool _isOn3 = false;
   bool _isOn4 = false;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +54,7 @@ class SettingsPage extends State<Settings> {
                       color: Colors.red,
                     ),
                     onTap: () {
-                    Navigator.pushReplacementNamed(context, '/password');
+                      Navigator.pushReplacementNamed(context, '/password');
                     },
                   ),
                   _solidLine(),
@@ -70,7 +69,7 @@ class SettingsPage extends State<Settings> {
                       color: Colors.red,
                     ),
                     onTap: () {
-                    Navigator.pushReplacementNamed(context, '/theme');
+                      Navigator.pushReplacementNamed(context, '/theme');
                     },
                   ),
                 ],
@@ -98,7 +97,7 @@ class SettingsPage extends State<Settings> {
               secondary:
                   const Icon(Icons.notifications_outlined, color: Colors.red),
             ),
-                     SwitchListTile(
+            SwitchListTile(
               activeColor: Colors.red,
               contentPadding: const EdgeInsets.all(0),
               value: _isOn2,
@@ -111,7 +110,7 @@ class SettingsPage extends State<Settings> {
               secondary:
                   const Icon(Icons.notifications_outlined, color: Colors.red),
             ),
-                     SwitchListTile(
+            SwitchListTile(
               activeColor: Colors.red,
               contentPadding: const EdgeInsets.all(0),
               value: _isOn3,
@@ -124,7 +123,7 @@ class SettingsPage extends State<Settings> {
               secondary:
                   const Icon(Icons.notifications_outlined, color: Colors.red),
             ),
-                     SwitchListTile(
+            SwitchListTile(
               activeColor: Colors.red,
               contentPadding: const EdgeInsets.all(0),
               value: _isOn4,
