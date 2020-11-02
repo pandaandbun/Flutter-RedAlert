@@ -10,9 +10,14 @@ class Person {
   Map<String, dynamic> toMap() => {
         'id': id
       };
+
+  Person.fromMap(Map<String, dynamic> map) {
+    id = map['id'];
+  }
 }
 
 class PeopleModel with ChangeNotifier {
+
   static Database _database;
 
   Future<Database> get database async {
@@ -27,7 +32,7 @@ class PeopleModel with ChangeNotifier {
         onCreate: (db, version) async {
       await db.execute('''
         CREATE TABLE people (
-          id INTEGER
+          id INTEGER UNIQUE
         )
         ''');
     }, version: 1);
@@ -46,7 +51,11 @@ class PeopleModel with ChangeNotifier {
 
   insertPeople(Person person) async {
     final db = await database;
-    await db.insert("people", person.toMap());
+    try { 
+      await db.insert("people", person.toMap());
+    } catch (error) {
+      return error;
+    }
 
     notifyListeners();
   }
