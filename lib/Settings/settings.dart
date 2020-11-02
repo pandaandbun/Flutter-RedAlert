@@ -95,7 +95,7 @@ class SettingsPage extends State<Settings> {
               },
               title: Text('Receive Notifications'),
               secondary:
-                  const Icon(Icons.notifications_outlined, color: Colors.red),
+                  const Icon(Icons.notification_important, color: Colors.red),
             ),
             SwitchListTile(
               activeColor: Colors.red,
@@ -108,7 +108,7 @@ class SettingsPage extends State<Settings> {
               },
               title: Text('Receive Notifications'),
               secondary:
-                  const Icon(Icons.notifications_outlined, color: Colors.red),
+                  const Icon(Icons.notification_important, color: Colors.red),
             ),
             SwitchListTile(
               activeColor: Colors.red,
@@ -121,7 +121,7 @@ class SettingsPage extends State<Settings> {
               },
               title: Text('Receive Notifications'),
               secondary:
-                  const Icon(Icons.notifications_outlined, color: Colors.red),
+                  const Icon(Icons.notification_important, color: Colors.red),
             ),
             SwitchListTile(
               activeColor: Colors.red,
@@ -134,7 +134,7 @@ class SettingsPage extends State<Settings> {
               },
               title: Text('Receive Notifications'),
               secondary:
-                  const Icon(Icons.notifications_outlined, color: Colors.red),
+                  const Icon(Icons.notification_important, color: Colors.red),
             ),
           ],
         )));

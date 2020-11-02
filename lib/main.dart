@@ -8,9 +8,17 @@ import 'Settings/settings.dart';
 import 'Settings/profile.dart';
 import 'Settings/password.dart';
 import 'Settings/theme.dart';
+import 'package:provider/provider.dart';
+import 'Database/saved_people_database.dart';
 
-void main() => runApp(MyApp());
-
+void main() {
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => PeopleModel())
+    ],
+    child: MyApp(),
+  ));
+}
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -24,41 +24,26 @@ class DrawerMenu extends StatelessWidget {
               : Navigator.pushReplacementNamed(context, '/'),
         ),
         ListTile(
-            leading: Icon(Icons.map),
-            title: Text('Map'),
-            onTap: () {
-              if (currentRoute == '/map') {
-                Navigator.pop(context);
-              } else if (currentRoute == '/') {
-                Navigator.pushNamed(context, '/map');
-              } else {
-                Navigator.pushReplacementNamed(context, '/map');
-              }
-            }),
+          leading: Icon(Icons.map),
+          title: Text('Map'),
+          onTap: () => currentRoute == '/map'
+              ? Navigator.pop(context)
+              : Navigator.pushReplacementNamed(context, '/map'),
+        ),
         ListTile(
-            leading: Icon(Icons.save),
-            title: Text('Saved'),
-            onTap: () {
-              if (currentRoute == '/saved') {
-                Navigator.pop(context);
-              } else if (currentRoute == '/') {
-                Navigator.pushNamed(context, '/saved');
-              } else {
-                Navigator.pushReplacementNamed(context, '/saved');
-              }
-            }),
+          leading: Icon(Icons.save),
+          title: Text('Saved'),
+          onTap: () => currentRoute == '/saved'
+              ? Navigator.pop(context)
+              : Navigator.pushReplacementNamed(context, '/saved'),
+        ),
         ListTile(
-            leading: Icon(Icons.show_chart),
-            title: Text('Charts'),
-            onTap: () {
-              if (currentRoute == '/charts') {
-                Navigator.pop(context);
-              } else if (currentRoute == '/') {
-                Navigator.pushNamed(context, '/charts');
-              } else {
-                Navigator.pushReplacementNamed(context, '/charts');
-              }
-            }),
+          leading: Icon(Icons.show_chart),
+          title: Text('Charts'),
+          onTap: () => currentRoute == '/charts'
+              ? Navigator.pop(context)
+              : Navigator.pushReplacementNamed(context, '/charts'),
+        ),
       ]),
     );
   }

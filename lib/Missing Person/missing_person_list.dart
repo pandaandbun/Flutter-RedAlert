@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
+import 'missing_person_list_tile.dart';
+import '../Database/missing_person_database.dart';
 
-class MissingPersonList extends StatelessWidget {
+class MissingPersonList extends StatefulWidget {
+  final savedPeople;
+
+  MissingPersonList(this.savedPeople);
+
+  @override
+  _MissingPersonListState createState() => _MissingPersonListState();
+}
+
+class _MissingPersonListState extends State<MissingPersonList> {
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: ListView.separated(
-      itemBuilder: (BuildContext context, int index) => ListTile(
-        leading: Icon(Icons.pregnant_woman),
-        title: Text("Jane Doe"),
-        subtitle: Text("Missing Since 2006"),
+        child: GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
       ),
-      separatorBuilder: (BuildContext context, int index) => Divider(
-        color: Colors.transparent,
+      itemCount: people.length,
+      itemBuilder: (BuildContext context, int index) => MissingPersonListTile(
+        people[index],
+        widget.savedPeople,
       ),
-      itemCount: 10,
     ));
   }
 }
