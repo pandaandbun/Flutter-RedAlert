@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import '../settings_btn.dart';
@@ -12,13 +11,15 @@ import 'missing_person_list.dart';
 
 class SavedPeople {
   List<int> ids = [];
+  List<Function> refreshStates = [];
 }
 
 class MissingPerson extends StatelessWidget {
-  final SavedPeople savedPeople = SavedPeople();
 
   @override
   Widget build(BuildContext context) {
+
+    SavedPeople savedPeople = SavedPeople();
     final PeopleModel peopleModel = Provider.of<PeopleModel>(context);
 
     return Scaffold(
@@ -41,16 +42,17 @@ class MissingPerson extends StatelessWidget {
   }
 }
 
-Widget savedButton(savedPeople, peopleModel) => Builder(
+Widget savedButton(SavedPeople savedPeople, PeopleModel peopleModel) => Builder(
     builder: (context) => IconButton(
           icon: Icon(Icons.save),
           tooltip: "Settings",
           onPressed: () async {
+          
             var snackBar = SnackBar(content: Text('Please first click on someone'));
 
-            if (savedPeople.ids.length != 0) {
-              final PeopleModel peopleModel = PeopleModel();
+            if (savedPeople.ids.length > 0) {
               snackBar = SnackBar(content: Text('Saved'));
+              int i = 0;
 
               for (int id in savedPeople.ids) {
                 Person person = Person(id);
@@ -59,9 +61,13 @@ Widget savedButton(savedPeople, peopleModel) => Builder(
                 if (result != null) {
                   snackBar = SnackBar(content: Text('One Of The Item Is Already Saved'));
                 }
-              }
-            }
 
+                savedPeople.refreshStates[i]();
+                i++;
+              }
+              savedPeople.ids = [];
+              savedPeople.refreshStates = [];
+            }
             Scaffold.of(context).showSnackBar(snackBar);
           },
         ));

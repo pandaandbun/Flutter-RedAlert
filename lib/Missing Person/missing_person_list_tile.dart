@@ -13,6 +13,12 @@ class MissingPersonListTile extends StatefulWidget {
 class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
 
+  void refresh() {
+    setState(() {
+      _selectedIndex = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Ink(
@@ -27,8 +33,10 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
 
           if (_selectedIndex) {
             widget.savedPeople.ids.add(widget.person['id']);
+            widget.savedPeople.refreshStates.add(refresh);
           } else{
             widget.savedPeople.ids.remove(widget.person['id']);
+            widget.savedPeople.refreshStates.remove(refresh);
           }
         }),
       ),
