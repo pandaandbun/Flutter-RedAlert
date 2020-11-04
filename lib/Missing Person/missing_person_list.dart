@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'missing_person_list_tile.dart';
 import '../Database/missing_person_database.dart';
 
