@@ -6,6 +6,7 @@ import '../drawer.dart';
 import '../search_bar.dart';
 import '../sort_by.dart';
 import '../Database/saved_people_database.dart';
+import '../notification.dart';
 
 import 'missing_person_list.dart';
 
@@ -16,11 +17,15 @@ class SavedPeople {
 
 class MissingPerson extends StatelessWidget {
 
+  final _notifications = Notifications();
+
   @override
   Widget build(BuildContext context) {
 
     SavedPeople savedPeople = SavedPeople();
     final PeopleModel peopleModel = Provider.of<PeopleModel>(context);
+    
+    _notifications.init();
 
     return Scaffold(
       appBar: AppBar(
@@ -28,6 +33,10 @@ class MissingPerson extends StatelessWidget {
         actions: [
           savedButton(savedPeople, peopleModel),
           SettingsBtn(),
+          IconButton(
+            icon: Icon(Icons.text_snippet),
+            onPressed: () => _notifyNow(_notifications),
+          )
         ],
       ),
       drawer: DrawerMenu(),
@@ -47,8 +56,8 @@ Widget savedButton(SavedPeople savedPeople, PeopleModel peopleModel) => Builder(
           icon: Icon(Icons.save),
           tooltip: "Settings",
           onPressed: () async {
-          
-            var snackBar = SnackBar(content: Text('Please first click on someone'));
+            var snackBar =
+                SnackBar(content: Text('Please first click on someone'));
 
             if (savedPeople.ids.length > 0) {
               snackBar = SnackBar(content: Text('Saved'));
@@ -59,7 +68,8 @@ Widget savedButton(SavedPeople savedPeople, PeopleModel peopleModel) => Builder(
                 var result = await peopleModel.insertPeople(person);
 
                 if (result != null) {
-                  snackBar = SnackBar(content: Text('One Of The Item Is Already Saved'));
+                  snackBar = SnackBar(
+                      content: Text('One Of The Item Is Already Saved'));
                 }
 
                 savedPeople.refreshStates[i]();
@@ -71,3 +81,7 @@ Widget savedButton(SavedPeople savedPeople, PeopleModel peopleModel) => Builder(
             Scaffold.of(context).showSnackBar(snackBar);
           },
         ));
+
+void _notifyNow(_notifications) {
+  _notifications.sendNotificationNow('title', 'body', 'payload');
+}
