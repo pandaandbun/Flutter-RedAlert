@@ -1,6 +1,8 @@
+import 'pie_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'bar_chart.dart';
+import 'line_chart.dart';
+import 'scatter_chart.dart';
 
 class ChartSelector extends StatefulWidget {
   @override
@@ -19,7 +21,7 @@ class _ChartSelectorState extends State<ChartSelector> {
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Container(child: _barChart())],
+                  children: [Container(child: _barChart1())],
                 ),
                 SizedBox(height: 25),
                 Row(
@@ -44,6 +46,27 @@ class _ChartSelectorState extends State<ChartSelector> {
     );
   }
 
+  Widget _barChart1() {
+    return GestureDetector(
+        child: Container(
+            width: 120,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              image: DecorationImage(
+                  image: AssetImage("barChart.png"),
+                  fit: BoxFit.cover),
+              //child: Text("clickMe") // button text
+            )),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      GroupedBarChart.withSampleData()));
+        });
+  }
+
   Widget _barChart() {
     return Container(
       height: 150.0,
@@ -51,8 +74,13 @@ class _ChartSelectorState extends State<ChartSelector> {
       color: Colors.transparent,
       child: Container(
           decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            image: DecorationImage(
+                image: NetworkImage(
+                    "https://www.mathworks.com/help/examples/graphics/win64/CompareTypesOfBarGraphsExample_01.png"),
+                fit: BoxFit.cover),
+            color: Colors.green,
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
           child: new RaisedButton(
             child: new Text(
               "Bar Chart",
@@ -91,7 +119,13 @@ class _ChartSelectorState extends State<ChartSelector> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
             elevation: 10,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          SimpleLineChart.withSampleData()));
+            },
           )),
     );
   }
@@ -114,7 +148,13 @@ class _ChartSelectorState extends State<ChartSelector> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
             elevation: 10,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          DonutAutoLabelChart.withSampleData()));
+            },
           )),
     );
   }
@@ -137,7 +177,13 @@ class _ChartSelectorState extends State<ChartSelector> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
             elevation: 10,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          SimpleScatterPlotChart.withSampleData()));
+            },
           )),
     );
   }

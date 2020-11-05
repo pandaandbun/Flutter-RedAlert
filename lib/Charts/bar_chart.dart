@@ -20,7 +20,7 @@ class GroupedBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Missing Person'),
+        title: Text('Bar Chart'),
         actions: [
           SettingsBtn(),
         ],
@@ -30,6 +30,7 @@ class GroupedBarChart extends StatelessWidget {
         height: 400,
         padding: EdgeInsets.all(20.0),
         child: Card(
+          elevation: 10,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
