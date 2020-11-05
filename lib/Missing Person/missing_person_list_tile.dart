@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../Database/saved_people_database.dart';
 
 class MissingPersonListTile extends StatefulWidget {
-  final Map<String, dynamic> person;
+  final Person person;
   final savedPeople;
 
   MissingPersonListTile(this.person, this.savedPeople);
@@ -24,18 +25,18 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
     return Ink(
       color: _selectedIndex ? Colors.grey : Colors.transparent,
       child: ListTile(
-        leading: Image.network(widget.person['image']),
+        leading: Image.network(widget.person.image),
         title:
-            Text(widget.person['firstName'] + " " + widget.person['lastName']),
-        subtitle: Text(widget.person['missingSince'].toString()),
+            Text(widget.person.firstName+ " " + widget.person.lastName),
+        subtitle: Text(widget.person.missingSince.toString()),
         onTap: () => setState(() {
           _selectedIndex = !_selectedIndex;
 
           if (_selectedIndex) {
-            widget.savedPeople.ids.add(widget.person['id']);
+            widget.savedPeople.ids.add(widget.person.id);
             widget.savedPeople.refreshStates.add(refresh);
           } else{
-            widget.savedPeople.ids.remove(widget.person['id']);
+            widget.savedPeople.ids.remove(widget.person.id);
             widget.savedPeople.refreshStates.remove(refresh);
           }
         }),

@@ -1,18 +1,33 @@
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Person {
-  int id;
+  DocumentReference reference;
+  int id; //this will probably be deleted but I'm leaving it for now
+  String image;
+  String firstName;
+  String lastName;
+  DateTime missingSince;
 
   Person(this.id);
 
   Map<String, dynamic> toMap() => {
-        'id': id
+        'id': id,
+        'image': image,
+        'firstName': firstName,
+        'lastName': lastName,
+        'missingSince': missingSince
       };
 
-  Person.fromMap(Map<String, dynamic> map) {
+  Person.fromMap(Map<String, dynamic> map, {this.reference}) {
     id = map['id'];
+    image = map['image'];
+    firstName = map['firstName'];
+    lastName = map['lastName'];
+    Timestamp time = map['missingSince'];
+    missingSince = time.toDate();
   }
 }
 
