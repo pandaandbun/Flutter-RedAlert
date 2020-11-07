@@ -54,7 +54,7 @@ class _ChartSelectorState extends State<ChartSelector> {
             decoration: BoxDecoration(
               color: Colors.black,
               image: DecorationImage(
-                  image: AssetImage("barChart.png"),
+                  image: AssetImage("images/barChart.png"),
                   fit: BoxFit.cover),
               //child: Text("clickMe") // button text
             )),
