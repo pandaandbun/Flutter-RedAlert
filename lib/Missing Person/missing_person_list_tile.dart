@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../Database/missing_person_database.dart';
 
 class MissingPersonListTile extends StatefulWidget {
@@ -13,6 +14,7 @@ class MissingPersonListTile extends StatefulWidget {
 
 class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
+  final DateFormat formatter = DateFormat('dd MMMM yyyy');
 
   void refresh() {
     setState(() {
@@ -43,6 +45,8 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   }
 
   Widget _listTile() {
+    String formattedDate = formatter.format(widget.person.missingSince);
+
     return Ink(
       child: ListTile(
         leading: CircleAvatar(
@@ -54,7 +58,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
           style: TextStyle(color: Colors.white),
         ),
         subtitle: Text(
-          widget.person.missingSince.toString(),
+          formattedDate,
           style: TextStyle(color: Colors.white),
         ),
         trailing: Icon(Icons.person),
@@ -74,6 +78,8 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   }
 
   Future<void> _moreInfo() async {
+    String formattedDate = formatter.format(widget.person.missingSince);
+
     switch (await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -85,7 +91,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
                   Row(
                     children: [
                       SimpleDialogOption(
-                        child: Text(widget.person.missingSince.toString()),
+                        child: Text(formattedDate),
                       ),
                     ],
                   ),
