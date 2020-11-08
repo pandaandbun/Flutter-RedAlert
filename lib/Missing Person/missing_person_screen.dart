@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../settings_btn.dart';
 import '../drawer.dart';
 import '../search_bar.dart';
-import '../sort_by.dart';
 import '../Database/saved_people_database.dart';
 import '../notification.dart';
 
@@ -43,7 +42,6 @@ class MissingPerson extends StatelessWidget {
       body: Column(
         children: [
           SearchBar(),
-          SortBy(),
           MissingPersonList(savedPeople),
         ],
       ),

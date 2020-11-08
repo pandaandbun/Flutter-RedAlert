@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../settings_btn.dart';
 import '../search_bar.dart';
-import '../sort_by.dart';
 import '../drawer.dart';
 
 import 'saved_person_list.dart';
@@ -18,7 +17,6 @@ class SavedPersonScreen extends StatelessWidget {
         drawer: DrawerMenu(),
         body: Column(children: [
           SearchBar(),
-          SortBy(),
           SavedPersonList()
         ]));
   }
