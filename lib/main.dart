@@ -15,8 +15,7 @@ import 'Settings/theme.dart';
 import 'package:provider/provider.dart';
 import 'Database/saved_people_database.dart';
 
-
-void main() {  
+void main() {
   runApp(MultiProvider(
     providers: [ChangeNotifierProvider(create: (_) => SavedPeopleModel())],
     child: MyApp(),
@@ -27,39 +26,31 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Firebase.initializeApp(),
-      builder: (context,snapshot) {
-        if(snapshot.hasError) {
-          return Text(
-            "Error initializing database",
-            textDirection: TextDirection.ltr
-          );
-        }
-        else if(snapshot.connectionState == ConnectionState.done) {
-          return MaterialApp(
-            theme: ThemeData(
-              primarySwatch: Colors.red,
-            ),
-            initialRoute: '/',
-            routes: {
-              '/': (context) => MissingPerson(),
-              '/map': (context) => MapView(),
-              '/saved': (context) => SavedPersonScreen(),
-              '/charts': (context) => Charts(),
-              '/settings': (context) => Settings(),
-              '/profile': (context) => Profile(),
-              '/password': (context) => Password(),
-              '/theme': (context) => ThemeP(),
-            },
-          );
-        }
-        else {
-          return Text(
-            "Loading...",
-            textDirection: TextDirection.ltr
-          );
-        }
-      }
-    );
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("Error initializing database",
+                textDirection: TextDirection.ltr);
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return MaterialApp(
+              theme: ThemeData(
+                primarySwatch: Colors.brown,
+              ),
+              initialRoute: '/',
+              routes: {
+                '/': (context) => MissingPerson(),
+                '/map': (context) => MapView(),
+                '/saved': (context) => SavedPersonScreen(),
+                '/charts': (context) => Charts(),
+                '/settings': (context) => Settings(),
+                '/profile': (context) => Profile(),
+                '/password': (context) => Password(),
+                '/theme': (context) => ThemeP(),
+              },
+            );
+          } else {
+            return Text("Loading...", textDirection: TextDirection.ltr);
+          }
+        });
   }
 }

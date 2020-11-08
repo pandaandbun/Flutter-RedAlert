@@ -22,25 +22,85 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
 
   @override
   Widget build(BuildContext context) {
+    return _wrapper();
+  }
+
+  Widget _wrapper() {
+    return Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: _selectedIndex ? Colors.brown[900] : Colors.brown,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(color: Colors.brown[300], spreadRadius: 3),
+          ],
+        ),
+        margin: EdgeInsets.only(left: 20, right: 20, top: 15),
+        child: GestureDetector(
+          child: _listTile(),
+          onLongPress: _moreInfo,
+        ));
+  }
+
+  Widget _listTile() {
     return Ink(
-      color: _selectedIndex ? Colors.grey : Colors.transparent,
       child: ListTile(
-        leading: Image.network(widget.person.image),
-        title:
-            Text(widget.person.firstName+ " " + widget.person.lastName),
-        subtitle: Text(widget.person.missingSince.toString()),
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(widget.person.image),
+          radius: 30,
+        ),
+        title: Text(
+          widget.person.firstName + " " + widget.person.lastName,
+          style: TextStyle(color: Colors.white),
+        ),
+        subtitle: Text(
+          widget.person.missingSince.toString(),
+          style: TextStyle(color: Colors.white),
+        ),
+        trailing: Icon(Icons.person),
         onTap: () => setState(() {
           _selectedIndex = !_selectedIndex;
 
           if (_selectedIndex) {
             widget.savedPeople.ids.add(widget.person.reference.id);
             widget.savedPeople.refreshStates.add(refresh);
-          } else{
+          } else {
             widget.savedPeople.ids.remove(widget.person.reference.id);
             widget.savedPeople.refreshStates.remove(refresh);
           }
         }),
       ),
     );
+  }
+
+  Future<void> _moreInfo() async {
+    switch (await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text(widget.person.firstName + " " + widget.person.lastName),
+            children: [
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      SimpleDialogOption(
+                        child: Text(widget.person.missingSince.toString()),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SimpleDialogOption(
+                        child: const Text('More work to be done...'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          );
+        })) {
+    }
   }
 }

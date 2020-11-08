@@ -15,15 +15,13 @@ class SavedPeople {
 }
 
 class MissingPerson extends StatelessWidget {
-
   final _notifications = Notifications();
 
   @override
   Widget build(BuildContext context) {
-
     SavedPeople savedPeople = SavedPeople();
     final SavedPeopleModel peopleModel = Provider.of<SavedPeopleModel>(context);
-    
+
     _notifications.init();
 
     return Scaffold(
@@ -39,6 +37,7 @@ class MissingPerson extends StatelessWidget {
         ],
       ),
       drawer: DrawerMenu(),
+      backgroundColor: Colors.brown[900],
       body: Column(
         children: [
           SearchBar(),
@@ -49,36 +48,37 @@ class MissingPerson extends StatelessWidget {
   }
 }
 
-Widget savedButton(SavedPeople savedPeople, SavedPeopleModel peopleModel) => Builder(
-    builder: (context) => IconButton(
-          icon: Icon(Icons.save),
-          tooltip: "Settings",
-          onPressed: () async {
-            var snackBar =
-                SnackBar(content: Text('Please first click on someone'));
+Widget savedButton(SavedPeople savedPeople, SavedPeopleModel peopleModel) =>
+    Builder(
+        builder: (context) => IconButton(
+              icon: Icon(Icons.save),
+              tooltip: "Settings",
+              onPressed: () async {
+                var snackBar =
+                    SnackBar(content: Text('Please first click on someone'));
 
-            if (savedPeople.ids.length > 0) {
-              snackBar = SnackBar(content: Text('Saved'));
-              int i = 0;
+                if (savedPeople.ids.length > 0) {
+                  snackBar = SnackBar(content: Text('Saved'));
+                  int i = 0;
 
-              for (String id in savedPeople.ids) {
-                SavedPerson person = SavedPerson(id);
-                var result = await peopleModel.insertPeople(person);
+                  for (String id in savedPeople.ids) {
+                    SavedPerson person = SavedPerson(id);
+                    var result = await peopleModel.insertPeople(person);
 
-                if (result != null) {
-                  snackBar = SnackBar(
-                      content: Text('One Of The Item Is Already Saved'));
+                    if (result != null) {
+                      snackBar = SnackBar(
+                          content: Text('One Of The Item Is Already Saved'));
+                    }
+
+                    savedPeople.refreshStates[i]();
+                    i++;
+                  }
+                  savedPeople.ids = [];
+                  savedPeople.refreshStates = [];
                 }
-
-                savedPeople.refreshStates[i]();
-                i++;
-              }
-              savedPeople.ids = [];
-              savedPeople.refreshStates = [];
-            }
-            Scaffold.of(context).showSnackBar(snackBar);
-          },
-        ));
+                Scaffold.of(context).showSnackBar(snackBar);
+              },
+            ));
 
 void _notifyNow(_notifications) {
   _notifications.sendNotificationNow('title', 'body', 'payload');

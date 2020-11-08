@@ -1,3 +1,4 @@
+import 'package:Red_Alert/Missing%20Person/missing_person_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'missing_person_list_tile.dart';
@@ -26,7 +27,7 @@ class MissingPersonList extends StatelessWidget {
                 .map((DocumentSnapshot document) =>
                     _buildPerson(context, document))
                 .toList();
-            return peopleList(snapshot, people);
+            return peopleList1(snapshot, people);
           } else {
             return elseText();
           }
@@ -37,6 +38,17 @@ class MissingPersonList extends StatelessWidget {
       Text("Error building list", textDirection: TextDirection.ltr);
 
   Widget elseText() => Text("Loading...", textDirection: TextDirection.ltr);
+
+  Widget peopleList1(snapshot, people) => Expanded(
+        child: ListView.builder(
+          itemCount: snapshot.data.size,
+          itemBuilder: (BuildContext context, int index) =>
+              MissingPersonListTile(
+            people[index],
+            savedPeople,
+          ),
+        ),
+      );
 
   Widget peopleList(snapshot, people) => Expanded(
         child: GridView.builder(
