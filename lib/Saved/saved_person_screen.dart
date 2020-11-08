@@ -7,7 +7,7 @@ import '../drawer.dart';
 
 import 'saved_person_list.dart';
 
-class SavedPerson extends StatelessWidget {
+class SavedPersonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

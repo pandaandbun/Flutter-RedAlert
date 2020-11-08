@@ -1,42 +1,45 @@
-List<Map<String, dynamic>> people = [
-  {
-    'id': 1,
-    'image':
-        'https://www.services.rcmp-grc.gc.ca/missing-disparus/showImage?id=26922',
-    'firstName': 'Jami',
-    'lastName': 'Springer',
-    'missingSince': DateTime.parse('2016-08-31')
-  },
-  {
-    'id': 2,
-    'image':
-        'https://www.services.rcmp-grc.gc.ca/missing-disparus/showImage?id=16784&thumb=medium',
-    'firstName': 'Pamela',
-    'lastName': 'Ann',
-    'missingSince': DateTime.parse('1984-11-12')
-  },
-  {
-    'id': 3,
-    'image':
-        'https://www.services.rcmp-grc.gc.ca/missing-disparus/showImage?id=978&thumb=medium',
-    'firstName': 'Aleksander',
-    'lastName': 'Grzegorz',
-    'missingSince': DateTime.parse('2011-09-01')
-  },
-  {
-    'id': 4,
-    'image':
-        'https://www.services.rcmp-grc.gc.ca/missing-disparus/showImage?id=172',
-    'firstName': 'Tamara',
-    'lastName': 'KEEPNESS',
-    'missingSince': DateTime.parse('2004-07-05')
-  },
-  {
-    'id': 5,
-    'image':
-        'https://www.services.rcmp-grc.gc.ca/missing-disparus/showImage?id=999',
-    'firstName': 'Sebastien',
-    'lastName': 'Metivier',
-    'missingSince': DateTime.parse('1984-11-01')
-  },
-];
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class Person {
+  DocumentReference reference;
+  int id; //this will probably be deleted but I'm leaving it for now
+  String image;
+  String firstName;
+  String lastName;
+  DateTime missingSince;
+
+  Person(this.id);
+
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'image': image,
+        'firstName': firstName,
+        'lastName': lastName,
+        'missingSince': missingSince
+      };
+
+  Person.fromMap(Map<String, dynamic> map, {this.reference}) {
+    id = map['id'];
+    image = map['image'];
+    firstName = map['firstName'];
+    lastName = map['lastName'];
+    Timestamp time = map['missingSince'];
+    missingSince = time.toDate();
+  }
+}
+
+class MissingPeopleModel {
+  final people = FirebaseFirestore.instance.collection('persons');
+
+  Stream<QuerySnapshot> getAllPeople() {
+    return people.snapshots();
+  }
+
+  Stream<QuerySnapshot> getPeopleFromIds(List ids) {
+    List<String> docIds = [];
+    for (var id in ids) {
+      docIds.add(id['id']);
+    }
+    return people.where(FieldPath.documentId, whereIn: docIds).snapshots();
+  }
+}

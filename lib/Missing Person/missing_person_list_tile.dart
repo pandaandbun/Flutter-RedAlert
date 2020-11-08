@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Database/saved_people_database.dart';
+import '../Database/missing_person_database.dart';
 
 class MissingPersonListTile extends StatefulWidget {
   final Person person;
@@ -33,10 +33,10 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
           _selectedIndex = !_selectedIndex;
 
           if (_selectedIndex) {
-            widget.savedPeople.ids.add(widget.person.id);
+            widget.savedPeople.ids.add(widget.person.reference.id);
             widget.savedPeople.refreshStates.add(refresh);
           } else{
-            widget.savedPeople.ids.remove(widget.person.id);
+            widget.savedPeople.ids.remove(widget.person.reference.id);
             widget.savedPeople.refreshStates.remove(refresh);
           }
         }),

@@ -11,7 +11,7 @@ import '../notification.dart';
 import 'missing_person_list.dart';
 
 class SavedPeople {
-  List<int> ids = [];
+  List<String> ids = [];
   List<Function> refreshStates = [];
 }
 
@@ -23,7 +23,7 @@ class MissingPerson extends StatelessWidget {
   Widget build(BuildContext context) {
 
     SavedPeople savedPeople = SavedPeople();
-    final PeopleModel peopleModel = Provider.of<PeopleModel>(context);
+    final SavedPeopleModel peopleModel = Provider.of<SavedPeopleModel>(context);
     
     _notifications.init();
 
@@ -51,7 +51,7 @@ class MissingPerson extends StatelessWidget {
   }
 }
 
-Widget savedButton(SavedPeople savedPeople, PeopleModel peopleModel) => Builder(
+Widget savedButton(SavedPeople savedPeople, SavedPeopleModel peopleModel) => Builder(
     builder: (context) => IconButton(
           icon: Icon(Icons.save),
           tooltip: "Settings",
@@ -63,8 +63,8 @@ Widget savedButton(SavedPeople savedPeople, PeopleModel peopleModel) => Builder(
               snackBar = SnackBar(content: Text('Saved'));
               int i = 0;
 
-              for (int id in savedPeople.ids) {
-                Person person = Person(id);
+              for (String id in savedPeople.ids) {
+                SavedPerson person = SavedPerson(id);
                 var result = await peopleModel.insertPeople(person);
 
                 if (result != null) {

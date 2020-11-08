@@ -1,38 +1,20 @@
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Person {
-  DocumentReference reference;
-  int id; //this will probably be deleted but I'm leaving it for now
-  String image;
-  String firstName;
-  String lastName;
-  DateTime missingSince;
+class SavedPerson {
+  String id;
 
-  Person(this.id);
+  SavedPerson(this.id);
 
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'image': image,
-        'firstName': firstName,
-        'lastName': lastName,
-        'missingSince': missingSince
-      };
+  Map<String, dynamic> toMap() => {'id': id};
 
-  Person.fromMap(Map<String, dynamic> map, {this.reference}) {
+  SavedPerson.fromMap(Map<String, dynamic> map) {
     id = map['id'];
-    image = map['image'];
-    firstName = map['firstName'];
-    lastName = map['lastName'];
-    Timestamp time = map['missingSince'];
-    missingSince = time.toDate();
   }
 }
 
-class PeopleModel with ChangeNotifier {
-
+class SavedPeopleModel with ChangeNotifier {
   static Database _database;
 
   Future<Database> get database async {
@@ -47,7 +29,7 @@ class PeopleModel with ChangeNotifier {
         onCreate: (db, version) async {
       await db.execute('''
         CREATE TABLE people (
-          id INTEGER UNIQUE
+          id STRING UNIQUE
         )
         ''');
     }, version: 1);
@@ -64,9 +46,9 @@ class PeopleModel with ChangeNotifier {
     }
   }
 
-  insertPeople(Person person) async {
+  insertPeople(SavedPerson person) async {
     final db = await database;
-    try { 
+    try {
       await db.insert("people", person.toMap());
     } catch (error) {
       return error;
@@ -75,7 +57,7 @@ class PeopleModel with ChangeNotifier {
     notifyListeners();
   }
 
-  deletePeopleId(int id) async {
+  deletePeopleId(String id) async {
     final db = await database;
     await db.delete(
       "people",
