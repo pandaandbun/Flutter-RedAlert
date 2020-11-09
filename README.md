@@ -4,9 +4,7 @@ The starter code for the major group project.
 Group members (3-5) (no Student IDs, only names):
 1. Joseph Fanous (JosephFanous)
 2. Tran Tien Anh Ta (trantienanhta)
-3. Group Member3 (github_username3)
-4. Group Member4 (github_username4)
-5. Group Member5 (github_username5)
+3. Jessica Querido (jessquerido)
 
 ## Overview
 This group project is designed for you to demonstrate the skills that you have learned in this course.  The final project that you submit in the last week of classes will be a completed mobile application.  Non-functional requirements, especially those associated with production-readiness, will be considered extremely important when marking this project.  You are expected to work in a group of three to five students when completing this project.  Students are not permitted to work alone on the project, as this eliminates one of the learning objectives of this assessment.  
