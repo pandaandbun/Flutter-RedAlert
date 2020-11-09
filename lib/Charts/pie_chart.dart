@@ -1,9 +1,9 @@
-/// Donut chart with labels example. This is a simple pie chart with a hole in
-/// the middle.
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
 import '../settings_btn.dart';
+
+//BASE CODE FROM PACKAGE FOR NOW
 
 class DonutAutoLabelChart extends StatelessWidget {
   final List<charts.Series> seriesList;

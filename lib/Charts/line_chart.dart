@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../settings_btn.dart';
 
+//BASE CODE FROM PACKAGE FOR NOW
+
 class SimpleLineChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;

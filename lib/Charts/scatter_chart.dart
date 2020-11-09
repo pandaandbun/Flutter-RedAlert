@@ -1,8 +1,9 @@
-/// Scatter plot chart example
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
 import '../settings_btn.dart';
+
+//BASE CODE FROM PACKAGE FOR NOW
 
 class SimpleScatterPlotChart extends StatelessWidget {
   final List<charts.Series> seriesList;

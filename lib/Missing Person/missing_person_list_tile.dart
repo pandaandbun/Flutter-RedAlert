@@ -14,7 +14,7 @@ class MissingPersonListTile extends StatefulWidget {
 
 class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
-  final DateFormat formatter = DateFormat('dd MMMM yyyy');
+  final DateFormat formatter = DateFormat('MMMM dd, yyyy');
 
   void refresh() {
     setState(() {
@@ -84,26 +84,56 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text(widget.person.firstName + " " + widget.person.lastName),
+            title: Text(
+              widget.person.firstName + " " + widget.person.lastName,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.0),
+            ),
             children: [
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      SimpleDialogOption(
-                        child: Text(formattedDate),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SimpleDialogOption(
-                        child: const Text('More work to be done...'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              SimpleDialogOption(
+                child: Column(
+                  children: <Widget>[
+                    Image(
+                      image: NetworkImage(widget.person.image),
+                      height: 140,
+                      fit: BoxFit.contain,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(children: [
+                      Expanded(
+                          child: Text(
+                        'Last Seen: $formattedDate',
+                        style: TextStyle(fontSize: 15),
+                      )),
+                    ]),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(children: [
+                      Expanded(
+                          child: Text(
+                        'Last Seen: $formattedDate',
+                        style: TextStyle(fontSize: 15),
+                      )),
+                    ]),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(children: [
+                      Expanded(
+                          child: Text(
+                        'Last Seen: $formattedDate',
+                        style: TextStyle(fontSize: 15),
+                      )),
+                    ]),
+                  ],
+                ),
+              )
             ],
           );
         })) {

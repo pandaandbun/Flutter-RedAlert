@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../calendar.dart';
 import '../settings_btn.dart';
 import '../drawer.dart';
 import '../search_bar.dart';
@@ -40,7 +41,10 @@ class MissingPerson extends StatelessWidget {
       backgroundColor: Colors.brown[900],
       body: Column(
         children: [
-          SearchBar(),
+          Row(children: [
+            SearchBar(),
+            Calendar(),
+          ]),
           MissingPersonList(savedPeople),
         ],
       ),

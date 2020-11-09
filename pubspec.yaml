@@ -29,6 +29,7 @@ dependencies:
 
   # Google Map
   google_maps_flutter: ^1.0.6
+  location: ^3.0.2
 
   # Date Format
   intl: ^0.16.1

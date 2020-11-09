@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import '../settings_btn.dart';
 
+//BASE CODE FROM PACKAGE FOR NOW
 class GroupedBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
