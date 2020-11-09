@@ -21,11 +21,11 @@ persons = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20} #will store the d
 for person in data["content"]:
     
     record = {
-        'id': person['id'],
+        'id': int(person['id']),
         'firstName': person['title'].split(",",1)[1],
         'lastName': person['title'].split(",",1)[0],
-        'image': person['image'],
-        'missingSince': person['missingSince'],
+        'image': 'https://www.services.rcmp-grc.gc.ca' + person['image'],
+        'missingSince': datetime.strptime(person['missingSince'], '%Y-%m-%d'),
         'city': person['city'],
         'province': person['province']
     }
