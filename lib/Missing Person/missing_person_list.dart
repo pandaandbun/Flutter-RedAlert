@@ -1,4 +1,3 @@
-import 'package:Red_Alert/Missing%20Person/missing_person_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'missing_person_list_tile.dart';
@@ -28,6 +27,7 @@ class MissingPersonList extends StatelessWidget {
                     _buildPerson(context, document))
                 .toList();
             return peopleList1(snapshot, people);
+            // return Text("data");
           } else {
             return elseText();
           }

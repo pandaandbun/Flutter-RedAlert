@@ -6,6 +6,7 @@ class Person {
   String image;
   String firstName;
   String lastName;
+  String city, province;
   DateTime missingSince;
 
   Person(this.id);
@@ -15,6 +16,8 @@ class Person {
         'image': image,
         'firstName': firstName,
         'lastName': lastName,
+        'city': city,
+        'province': province,
         'missingSince': missingSince
       };
 
@@ -25,6 +28,8 @@ class Person {
     lastName = map['lastName'];
     Timestamp time = map['missingSince'];
     missingSince = time.toDate();
+    city = map['city'];
+    province = map['province'];
   }
 }
 
