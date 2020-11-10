@@ -26,8 +26,7 @@ class MissingPersonList extends StatelessWidget {
                 .map((DocumentSnapshot document) =>
                     _buildPerson(context, document))
                 .toList();
-            return peopleList1(snapshot, people);
-            // return Text("data");
+            return peopleList(snapshot, people);
           } else {
             return elseText();
           }
@@ -39,22 +38,8 @@ class MissingPersonList extends StatelessWidget {
 
   Widget elseText() => Text("Loading...", textDirection: TextDirection.ltr);
 
-  Widget peopleList1(snapshot, people) => Expanded(
-        child: ListView.builder(
-          itemCount: snapshot.data.size,
-          itemBuilder: (BuildContext context, int index) =>
-              MissingPersonListTile(
-            people[index],
-            savedPeople,
-          ),
-        ),
-      );
-
   Widget peopleList(snapshot, people) => Expanded(
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
+        child: ListView.builder(
           itemCount: snapshot.data.size,
           itemBuilder: (BuildContext context, int index) =>
               MissingPersonListTile(

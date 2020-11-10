@@ -47,4 +47,17 @@ class MissingPeopleModel {
     }
     return people.where(FieldPath.documentId, whereIn: docIds).snapshots();
   }
+
+  Stream<QuerySnapshot> getPersonWhereName(name) {
+    if (name.firstName.isNotEmpty && name.lastName.isNotEmpty) {
+      return people
+          .where('firstName', isEqualTo: name.firstName)
+          .where('lastName', isEqualTo: name.lastName)
+          .snapshots();
+    } else if (name.firstName.isNotEmpty) {
+      return people.where('firstName', isEqualTo: name.firstName).snapshots();
+    } else {
+      return people.where('lastName', isEqualTo: name.lastName).snapshots();
+    }
+  }
 }
