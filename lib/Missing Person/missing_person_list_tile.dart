@@ -93,45 +93,48 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
                   letterSpacing: 1.0),
             ),
             children: [
-              SimpleDialogOption(
-                child: Column(
-                  children: <Widget>[
-                    Image(
-                      image: NetworkImage(widget.person.image),
-                      height: 140,
-                      fit: BoxFit.contain,
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(children: [
-                      Expanded(
-                          child: Text(
-                        'Last Seen: $formattedDate',
-                        style: TextStyle(fontSize: 15),
-                      )),
-                    ]),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(children: [
-                      Expanded(
-                          child: Text(
-                        'Last Seen: $formattedDate',
-                        style: TextStyle(fontSize: 15),
-                      )),
-                    ]),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(children: [
-                      Expanded(
-                          child: Text(
-                        'Last Seen: $formattedDate',
-                        style: TextStyle(fontSize: 15),
-                      )),
-                    ]),
-                  ],
+              Image(
+                image: NetworkImage(widget.person.image),
+                height: 140,
+                fit: BoxFit.contain,
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 50),
+                child: SimpleDialogOption(
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(children: [
+                        Expanded(
+                            child: Text(
+                          'Last Seen: $formattedDate',
+                          style: TextStyle(fontSize: 15),
+                        )),
+                      ]),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(children: [
+                        Expanded(
+                            child: Text(
+                          'Last Location: ${widget.person.city}, ${widget.person.province}',
+                          style: TextStyle(fontSize: 15),
+                        )),
+                      ]),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(children: [
+                        Expanded(
+                            child: Text(
+                          'Last Seen: $formattedDate',
+                          style: TextStyle(fontSize: 15),
+                        )),
+                      ]),
+                    ],
+                  ),
                 ),
               )
             ],
