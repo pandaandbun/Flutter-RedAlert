@@ -3,9 +3,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import '../Database/missing_person_database.dart';
 import '../Database/selected_item_model.dart';
+
+import '../notification.dart';
+
+import 'missing_person_dialog.dart';
 
 class MissingPersonListTile extends StatefulWidget {
   final Person person;
@@ -19,6 +25,7 @@ class MissingPersonListTile extends StatefulWidget {
 class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');
+  final _notifications = Notifications();
 
   void refresh(bool bool) {
     setState(() {
@@ -26,8 +33,14 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
     });
   }
 
+  Future<void> _moreInfo() async {
+    showDialog(context: context, child: PeopleDialog(widget.person));
+  }
+
   @override
   Widget build(BuildContext context) {
+    tz.initializeTimeZones();
+    _notifications.init();
     final SelectedPeopleModel selectedPeopleModel =
         context.watch<SelectedPeopleModel>();
 
@@ -76,7 +89,8 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
           formattedDate,
           style: TextStyle(color: Colors.white),
         ),
-        trailing: Icon(Icons.person),
+        trailing: notifyButton(),
+
         onTap: () => setState(() {
           _selectedIndex = !_selectedIndex;
 
@@ -90,67 +104,16 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
     );
   }
 
-  Future<void> _moreInfo() async {
-    String formattedDate = formatter.format(widget.person.missingSince);
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: SimpleDialog(
-              backgroundColor: Colors.brown[400],
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0)),
-              title: Text(
-                widget.person.firstName + " " + widget.person.lastName,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.0),
-              ),
-              children: [
-                Image(
-                  image: NetworkImage(widget.person.image),
-                  height: 140,
-                  fit: BoxFit.contain,
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 50),
-                  child: SimpleDialogOption(
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(children: [
-                          Expanded(
-                              child: Text(
-                            'Missing Since: $formattedDate',
-                            style: TextStyle(fontSize: 15),
-                          )),
-                        ]),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(children: [
-                          Expanded(
-                              child: Text(
-                            'Last Location: ${widget.person.city}, ${widget.person.province}',
-                            style: TextStyle(fontSize: 15),
-                          )),
-                        ]),
-                        SizedBox(
-                          height: 15,
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
+  Widget notifyButton() => IconButton(
+        icon: Icon(Icons.notification_important_sharp),
+        onPressed: () async {
+          var when =
+              tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
+          await _notifications.sendNotificationLater(
+            "Did you find them ?",
+            widget.person.firstName + " " + widget.person.lastName,
+            when,
           );
-        });
-  }
+        },
+      );
 }

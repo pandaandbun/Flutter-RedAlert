@@ -16,11 +16,6 @@ import 'Database/saved_people_database.dart';
 import 'Database/filter_by_date_model.dart';
 import 'Database/selected_item_model.dart';
 
-import 'notification.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
-import 'dart:math';
-
 void main() {
   runApp(MultiProvider(
     providers: [
@@ -33,15 +28,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  //final _notifications = Notifications();
   @override
-  
   Widget build(BuildContext context) {
-    /*tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation('America/Detroit'));
-    _notifications.init();
-    _notifyDaily(_notifications);*/
-
     return FutureBuilder(
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
@@ -66,12 +54,20 @@ class MyApp extends StatelessWidget {
               },
             );
           } else {
-            return Text("Loading...", textDirection: TextDirection.ltr);
+            return Directionality(
+                textDirection: TextDirection.ltr,
+                child: Center(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                    Text("Loading"),
+                  ],
+                )));
           }
         });
   }
-
-  /*void _notifyDaily(_notifications) {
-    _notifications.sendNotificationDaily('test daily', 'test body', tz.TZDateTime.parse(tz.getLocation('America/Detroit'), '2099-01-01 18:50:00'));
-  }*/
 }
