@@ -104,16 +104,53 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
     );
   }
 
+  //_selectDate: opens a DatePicker to choose the date of the notification to set.
+  Future<tz.TZDateTime> _selectDate(BuildContext context) async {
+    final DateTime selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now().add(const Duration(days: 1)),
+      firstDate: DateTime.now().add(const Duration(days: 1)),
+      lastDate: DateTime.now().add(const Duration(days: 365))
+    );
+    
+    if(selectedDate == null) {
+      return null;
+    }
+    else {
+      return tz.TZDateTime.from(selectedDate, tz.local);
+    }
+  }
+
+  //notifyButton: a button which processes a future notification for the accociated person.
   Widget notifyButton() => IconButton(
         icon: Icon(Icons.notification_important_sharp),
         onPressed: () async {
-          var when =
-              tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
-          await _notifications.sendNotificationLater(
-            "Did you find them ?",
-            widget.person.firstName + " " + widget.person.lastName,
-            when,
-          );
+          var when = await _selectDate(context); //function which opens a DatePicker
+          
+          //for debugging:
+          //print(when);
+          //print(widget.person.id);
+          if(when != null)
+          {
+            await _notifications.sendNotificationLater(
+              widget.person.id,
+              "Did you find them?",
+              widget.person.firstName + " " + widget.person.lastName,
+              when,
+            );
+
+            //dialog to alert user that the notification was scheduled
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: new Text('Reminder for ${widget.person.firstName} ${widget.person.lastName} set for ${formatter.format(when)}.'),
+                  backgroundColor: Colors.brown[100],
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0)))
+                );
+              }
+            );
+          }
         },
       );
 }
