@@ -1,13 +1,12 @@
+import 'package:Red_Alert/Database/saved_people_database.dart';
+import 'package:Red_Alert/Search%20Bar/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../calendar.dart';
+import '../notification.dart';
 import '../settings_btn.dart';
 import '../drawer.dart';
-import '../Search Bar/search_bar.dart';
-import '../Database/saved_people_database.dart';
-import '../notification.dart';
-
 import 'missing_person_list.dart';
 
 class SavedPeople {
