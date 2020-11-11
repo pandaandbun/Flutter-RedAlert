@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:async/async.dart';
 
 class Person {
   DocumentReference reference;
@@ -40,12 +41,26 @@ class MissingPeopleModel {
     return people.snapshots();
   }
 
-  Stream<QuerySnapshot> getPeopleFromIds(List ids) {
+  Stream getPeopleFromIds(List ids) {
     List<String> docIds = [];
+    List<Stream> streamChunks = [];
+    List chunkIds = [];
+
     for (var id in ids) {
       docIds.add(id['id']);
     }
-    return people.where(FieldPath.documentId, whereIn: docIds).snapshots();
+
+    for (var i = 0; i < docIds.length; i += 9) {
+      chunkIds.add(
+          docIds.sublist(i, i + 9 > docIds.length ? docIds.length : i + 9));
+    }
+
+    for (var chunk in chunkIds) {
+      streamChunks
+          .add(people.where(FieldPath.documentId, whereIn: chunk).snapshots());
+    }
+
+    return StreamZip(streamChunks);
   }
 
   Stream<QuerySnapshot> getPersonWhereName(name) {

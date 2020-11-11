@@ -57,10 +57,7 @@ class MissingPersonList extends StatelessWidget {
         child: ListView.builder(
           itemCount: snapshot.data.size,
           itemBuilder: (BuildContext context, int index) =>
-              MissingPersonListTile(
-            people[index],
-            savedPeople,
-          ),
+              MissingPersonListTile(people[index]),
         ),
       );
 }

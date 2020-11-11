@@ -33,7 +33,12 @@ Widget savedPersonGridView(missingPeople, peopleIds) => StreamBuilder(
     stream: missingPeople.getPeopleFromIds(peopleIds),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
-        List people = snapshot.data.docs;
+        List people = [];
+
+        for (var i = 0; i < snapshot.data.length; i++) {
+          people.addAll(snapshot.data[i].docs);
+        }
+
         return Expanded(
             child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

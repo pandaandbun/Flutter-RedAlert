@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
 import '../Database/missing_person_database.dart';
+import '../Database/selected_item_model.dart';
 
 class MissingPersonListTile extends StatefulWidget {
   final Person person;
-  final savedPeople;
 
-  MissingPersonListTile(this.person, this.savedPeople);
+  MissingPersonListTile(this.person);
 
   @override
   _MissingPersonListTileState createState() => _MissingPersonListTileState();
@@ -16,18 +18,29 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');
 
-  void refresh() {
+  void refresh(bool bool) {
     setState(() {
-      _selectedIndex = false;
+      _selectedIndex = bool;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return _wrapper();
+    final SelectedPeopleModel selectedPeopleModel =
+        context.watch<SelectedPeopleModel>();
+
+    List<String> selectedPeople = selectedPeopleModel.getDocIds();
+
+    if (selectedPeople.length == 0) {
+      refresh(false);
+    } else if (selectedPeople.contains(widget.person.reference.id)) {
+      refresh(true);
+    }
+
+    return _wrapper(selectedPeopleModel);
   }
 
-  Widget _wrapper() {
+  Widget _wrapper(SelectedPeopleModel selectedPeopleModel) {
     return Container(
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
@@ -39,12 +52,12 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
         ),
         margin: EdgeInsets.only(left: 20, right: 20, top: 15),
         child: GestureDetector(
-          child: _listTile(),
+          child: _listTile(selectedPeopleModel),
           onLongPress: _moreInfo,
         ));
   }
 
-  Widget _listTile() {
+  Widget _listTile(SelectedPeopleModel selectedPeopleModel) {
     String formattedDate = formatter.format(widget.person.missingSince);
 
     return Ink(
@@ -66,11 +79,9 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
           _selectedIndex = !_selectedIndex;
 
           if (_selectedIndex) {
-            widget.savedPeople.ids.add(widget.person.reference.id);
-            widget.savedPeople.refreshStates.add(refresh);
+            selectedPeopleModel.insertDocId(widget.person.reference.id);
           } else {
-            widget.savedPeople.ids.remove(widget.person.reference.id);
-            widget.savedPeople.refreshStates.remove(refresh);
+            selectedPeopleModel.removeDocId(widget.person.reference.id);
           }
         }),
       ),

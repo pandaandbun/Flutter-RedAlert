@@ -5,23 +5,27 @@ import '../calendar.dart';
 import '../settings_btn.dart';
 import '../drawer.dart';
 import '../Search Bar/search_bar.dart';
-import '../Database/saved_people_database.dart';
 import '../notification.dart';
+
+import '../Database/saved_people_database.dart';
+import '../Database/selected_item_model.dart';
 
 import 'missing_person_list.dart';
 
-class SavedPeople {
-  List<String> ids = [];
-  List<Function> refreshStates = [];
-}
+// class SavedPeople {
+//   List<String> ids = [];
+//   List<Function> refreshStates = [];
+// }
 
 class MissingPerson extends StatelessWidget {
   final _notifications = Notifications();
 
   @override
   Widget build(BuildContext context) {
-    SavedPeople savedPeople = SavedPeople();
-    final SavedPeopleModel peopleModel = Provider.of<SavedPeopleModel>(context);
+    final SavedPeopleModel savedPeopleModel =
+        Provider.of<SavedPeopleModel>(context);
+    final SelectedPeopleModel selectedPeopleModel =
+        Provider.of<SelectedPeopleModel>(context);
 
     _notifications.init();
 
@@ -29,7 +33,7 @@ class MissingPerson extends StatelessWidget {
       appBar: AppBar(
         title: Text('Missing Person'),
         actions: [
-          savedButton(savedPeople, peopleModel),
+          savedButton(savedPeopleModel, selectedPeopleModel),
           SettingsBtn(),
           IconButton(
             icon: Icon(Icons.text_snippet),
@@ -45,14 +49,15 @@ class MissingPerson extends StatelessWidget {
             SearchBar(),
             Calendar(),
           ]),
-          MissingPersonList(savedPeople),
+          MissingPersonList(savedPeopleModel),
         ],
       ),
     );
   }
 }
 
-Widget savedButton(SavedPeople savedPeople, SavedPeopleModel peopleModel) =>
+Widget savedButton(SavedPeopleModel savedPeopleModel,
+        SelectedPeopleModel selectedPeopleModel) =>
     Builder(
         builder: (context) => IconButton(
               icon: Icon(Icons.save),
@@ -60,25 +65,27 @@ Widget savedButton(SavedPeople savedPeople, SavedPeopleModel peopleModel) =>
               onPressed: () async {
                 var snackBar =
                     SnackBar(content: Text('Please first click on someone'));
+                List<String> ids = selectedPeopleModel.getDocIds();
 
-                if (savedPeople.ids.length > 0) {
+                if (ids.length > 0) {
                   snackBar = SnackBar(content: Text('Saved'));
-                  int i = 0;
+                  // int i = 0;
 
-                  for (String id in savedPeople.ids) {
+                  for (String id in ids) {
                     SavedPerson person = SavedPerson(id);
-                    var result = await peopleModel.insertPeople(person);
+                    var result = await savedPeopleModel.insertPeople(person);
 
                     if (result != null) {
                       snackBar = SnackBar(
                           content: Text('One Of The Item Is Already Saved'));
                     }
 
-                    savedPeople.refreshStates[i]();
-                    i++;
+                    // savedPeople.refreshStates[i]();
+                    // i++;
                   }
-                  savedPeople.ids = [];
-                  savedPeople.refreshStates = [];
+                  selectedPeopleModel.resetDocIds();
+                  // savedPeople.ids = [];
+                  // savedPeople.refreshStates = [];
                 }
                 Scaffold.of(context).showSnackBar(snackBar);
               },

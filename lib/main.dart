@@ -14,12 +14,14 @@ import 'Settings/theme.dart';
 
 import 'Database/saved_people_database.dart';
 import 'Database/filter_by_date_model.dart';
+import 'Database/selected_item_model.dart';
 
 void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => SavedPeopleModel()),
       ChangeNotifierProvider(create: (_) => DateModel()),
+      ChangeNotifierProvider(create: (_) => SelectedPeopleModel()),
     ],
     child: MyApp(),
   ));
