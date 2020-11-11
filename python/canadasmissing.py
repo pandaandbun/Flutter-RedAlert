@@ -4,7 +4,13 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from datetime import datetime
-#from bs4 import BeautifulSoup
+
+'''
+canadasmissing.py
+
+This script retrieves data used by https://www.canadasmissing.ca/index-eng.htm, by accessing the json script used to
+populate the page. This is used to retrieve real data for use in the application.
+'''
 
 cred = credentials.Certificate('pythonServiceAccountKey.json')
 firebase_admin.initialize_app(cred)
@@ -22,12 +28,12 @@ for person in data["content"]:
     
     record = {
         'id': int(person['id']),
-        'firstName': person['title'].split(",",1)[1],
+        'firstName': (person['title'].split(",",1)[1])[1:],
         'lastName': person['title'].split(",",1)[0],
         'image': 'https://www.services.rcmp-grc.gc.ca' + person['image'],
         'missingSince': datetime.strptime(person['missingSince'], '%Y-%m-%d'),
         'city': person['city'],
-        'province': person['province']
+        'province': (person['province'])[:2]
     }
 
     for key in record:

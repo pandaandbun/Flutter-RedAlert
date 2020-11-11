@@ -41,13 +41,26 @@ class Notifications {
       print("onSelectNotification::payload = $payload");
     }
   }
-  Future<void> sendNotificationNow(String title, String body, String payload) async {
+  
+  sendNotificationNow(String title, String body, String payload) {
     _flutterNotificationPlugin.show(
       _notificationId++, 
       title, 
       body, 
       _platformChannelInfo, 
       payload: payload,
+    );
+  }
+
+  sendNotificationDaily(String title, String body, DateTime date, {String payload}) {
+    _flutterNotificationPlugin.zonedSchedule(
+      1,
+      'Test',
+      'Daily Notification',
+      date,
+      _platformChannelInfo, 
+      matchDateTimeComponents: DateTimeComponents.time,
+      androidAllowWhileIdle: true,
     );
   }
 }
