@@ -87,6 +87,8 @@ class _CalendarState extends State<Calendar> {
                 sort();
               });
               dateModel.setDate(value);
+            } else {
+              dateModel.setDate(value);
             }
           });
         });
