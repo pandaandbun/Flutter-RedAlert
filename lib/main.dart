@@ -1,6 +1,6 @@
-import 'package:Red_Alert/Settings/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 import 'Missing Person/missing_person_screen.dart';
 import 'Map/map_screen.dart';
@@ -12,12 +12,15 @@ import 'Settings/profile.dart';
 import 'Settings/password.dart';
 import 'Settings/theme.dart';
 
-import 'package:provider/provider.dart';
 import 'Database/saved_people_database.dart';
+import 'Database/filter_by_date_model.dart';
 
 void main() {
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => SavedPeopleModel())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => SavedPeopleModel()),
+      ChangeNotifierProvider(create: (_) => DateModel()),
+    ],
     child: MyApp(),
   ));
 }

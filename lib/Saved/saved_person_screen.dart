@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../settings_btn.dart';
-import '../search_bar.dart';
+import '../Search Bar/search_bar.dart';
 import '../drawer.dart';
 
 import 'saved_person_list.dart';

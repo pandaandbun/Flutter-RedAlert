@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 
 import 'Database/missing_person_database.dart';
+
+import 'Database/filter_by_date_model.dart';
 
 class Calendar extends StatefulWidget {
   @override
@@ -18,7 +21,8 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildDoB();
+    final DateModel dateModel = Provider.of<DateModel>(context);
+    return _buildDoB(dateModel);
   }
 
   Widget _getLoc() {
@@ -58,7 +62,7 @@ class _CalendarState extends State<Calendar> {
     print('');
   }
 
-  Widget _buildDoB() {
+  Widget _buildDoB(DateModel dateModel) {
     return GestureDetector(
         child: Icon(Icons.date_range),
         onTap: () {
@@ -68,19 +72,22 @@ class _CalendarState extends State<Calendar> {
                   firstDate: DateTime(1850),
                   lastDate: now)
               .then((value) {
-            setState(() {
-              _doB = value;
-              String formattedDate = formatter.format(_doB);
-              /*
+            if (value != null) {
+              setState(() {
+                _doB = value;
+                String formattedDate = formatter.format(_doB);
+                /*
               var num = toDateString(_doB).split(' ')[2];
               var num2 = toDateString(now).split(' ')[2];
               var tot = int.parse(num);
               var tot2 = int.parse(num2);
               age = tot2 - tot;
               */
-              print(formattedDate);
-              sort();
-            });
+                // print(formattedDate);
+                sort();
+              });
+              dateModel.setDate(value);
+            }
           });
         });
   }

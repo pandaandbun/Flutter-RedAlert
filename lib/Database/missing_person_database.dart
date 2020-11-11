@@ -60,4 +60,15 @@ class MissingPeopleModel {
       return people.where('lastName', isEqualTo: name.lastName).snapshots();
     }
   }
+
+  Stream<QuerySnapshot> getPersonWhereDate(DateTime date) {
+    DateTime tmrwDate = date.add(Duration(days: 1));
+    Timestamp dateTimeStamp = Timestamp.fromDate(date);
+    Timestamp nextDateTimeStamp = Timestamp.fromDate(tmrwDate);
+
+    return people
+        .where('missingSince', isGreaterThanOrEqualTo: dateTimeStamp)
+        .where('missingSince', isLessThan: nextDateTimeStamp)
+        .snapshots();
+  }
 }

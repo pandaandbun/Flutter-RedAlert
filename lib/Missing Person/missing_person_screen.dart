@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../calendar.dart';
 import '../settings_btn.dart';
 import '../drawer.dart';
-import '../search_bar.dart';
+import '../Search Bar/search_bar.dart';
 import '../Database/saved_people_database.dart';
 import '../notification.dart';
 
