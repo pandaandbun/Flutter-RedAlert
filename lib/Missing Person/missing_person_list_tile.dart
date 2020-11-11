@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -91,66 +93,64 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   Future<void> _moreInfo() async {
     String formattedDate = formatter.format(widget.person.missingSince);
 
-    switch (await showDialog(
+    showDialog(
         context: context,
         builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Text(
-              widget.person.firstName + " " + widget.person.lastName,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.0),
-            ),
-            children: [
-              Image(
-                image: NetworkImage(widget.person.image),
-                height: 140,
-                fit: BoxFit.contain,
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: SimpleDialog(
+              backgroundColor: Colors.brown[400],
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0)),
+              title: Text(
+                widget.person.firstName + " " + widget.person.lastName,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0),
               ),
-              Container(
-                margin: EdgeInsets.only(left: 50),
-                child: SimpleDialogOption(
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(children: [
-                        Expanded(
-                            child: Text(
-                          'Last Seen: $formattedDate',
-                          style: TextStyle(fontSize: 15),
-                        )),
-                      ]),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(children: [
-                        Expanded(
-                            child: Text(
-                          'Last Location: ${widget.person.city}, ${widget.person.province}',
-                          style: TextStyle(fontSize: 15),
-                        )),
-                      ]),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(children: [
-                        Expanded(
-                            child: Text(
-                          'Last Seen: $formattedDate',
-                          style: TextStyle(fontSize: 15),
-                        )),
-                      ]),
-                    ],
-                  ),
+              children: [
+                Image(
+                  image: NetworkImage(widget.person.image),
+                  height: 140,
+                  fit: BoxFit.contain,
                 ),
-              )
-            ],
+                Container(
+                  margin: EdgeInsets.only(left: 50),
+                  child: SimpleDialogOption(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(children: [
+                          Expanded(
+                              child: Text(
+                            'Missing Since: $formattedDate',
+                            style: TextStyle(fontSize: 15),
+                          )),
+                        ]),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(children: [
+                          Expanded(
+                              child: Text(
+                            'Last Location: ${widget.person.city}, ${widget.person.province}',
+                            style: TextStyle(fontSize: 15),
+                          )),
+                        ]),
+                        SizedBox(
+                          height: 15,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           );
-        })) {
-    }
+        });
   }
 }

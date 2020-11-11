@@ -9,7 +9,7 @@ class SearchForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return searchForm();
   }
 
   Widget searchForm() => Form(

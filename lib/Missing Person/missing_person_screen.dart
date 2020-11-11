@@ -2,20 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../calendar.dart';
+import '../notification.dart';
 import '../settings_btn.dart';
 import '../drawer.dart';
 import '../Search Bar/search_bar.dart';
-import '../notification.dart';
-
-import '../Database/saved_people_database.dart';
-import '../Database/selected_item_model.dart';
 
 import 'missing_person_list.dart';
 
-// class SavedPeople {
-//   List<String> ids = [];
-//   List<Function> refreshStates = [];
-// }
+import '../Database/saved_people_database.dart';
+import '../Database/selected_item_model.dart';
 
 class MissingPerson extends StatelessWidget {
   final _notifications = Notifications();
@@ -69,7 +64,6 @@ Widget savedButton(SavedPeopleModel savedPeopleModel,
 
                 if (ids.length > 0) {
                   snackBar = SnackBar(content: Text('Saved'));
-                  // int i = 0;
 
                   for (String id in ids) {
                     SavedPerson person = SavedPerson(id);
@@ -79,13 +73,8 @@ Widget savedButton(SavedPeopleModel savedPeopleModel,
                       snackBar = SnackBar(
                           content: Text('One Of The Item Is Already Saved'));
                     }
-
-                    // savedPeople.refreshStates[i]();
-                    // i++;
                   }
                   selectedPeopleModel.resetDocIds();
-                  // savedPeople.ids = [];
-                  // savedPeople.refreshStates = [];
                 }
                 Scaffold.of(context).showSnackBar(snackBar);
               },
