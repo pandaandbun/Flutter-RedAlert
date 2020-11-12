@@ -26,7 +26,7 @@ class SearchForm extends StatelessWidget {
   Widget firstNameForm() => TextFormField(
         decoration: const InputDecoration(
           prefixIcon: Icon(
-            Icons.search,
+            Icons.person,
             color: Colors.grey,
           ),
           hintText: 'John',
@@ -45,7 +45,7 @@ class SearchForm extends StatelessWidget {
   Widget lastNameForm() => TextFormField(
         decoration: const InputDecoration(
           prefixIcon: Icon(
-            Icons.search,
+            Icons.person,
             color: Colors.grey,
           ),
           hintText: 'Doe',

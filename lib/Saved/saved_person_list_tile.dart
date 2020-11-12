@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../Database/missing_person_database.dart';
 import '../Database/saved_people_database.dart';
 
+// Item Card
 class SavedPersonTile extends StatelessWidget {
   final doc;
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');
@@ -21,6 +22,7 @@ class SavedPersonTile extends StatelessWidget {
     return personCard(person, savedPeopleModel);
   }
 
+  // Card delete button
   Widget delBtn(SavedPeopleModel savedPeopleModel) => RaisedButton(
         child: Icon(Icons.delete),
         color: Colors.red[200],
@@ -29,6 +31,7 @@ class SavedPersonTile extends StatelessWidget {
         },
       );
 
+  // Person card
   Widget personCard(Person person, SavedPeopleModel savedPeopleModel) => Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -42,6 +45,7 @@ class SavedPersonTile extends StatelessWidget {
         color: Colors.brown,
       );
 
+  // PErson Card Image
   Widget personCardImage(Person person) => ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Image.network(
@@ -50,18 +54,23 @@ class SavedPersonTile extends StatelessWidget {
         ),
       );
 
+  // Person Card Text
   Widget personCardText(Person person, SavedPeopleModel savedPeopleModel) =>
-      Column(
-        children: [
+      Column(children: [
         SizedBox(height: 10),
         Text(
           person.firstName + " " + person.lastName,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          textAlign: TextAlign.center,
         ),
         SizedBox(height: 10),
         Text(
           formatter.format(person.missingSince),
           style: TextStyle(color: Colors.white),
+          textAlign: TextAlign.center,
         ),
         SizedBox(height: 10),
         Text(

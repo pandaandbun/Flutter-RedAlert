@@ -11,6 +11,7 @@ import 'missing_person_list.dart';
 import '../Database/saved_people_database.dart';
 import '../Database/selected_item_model.dart';
 
+// Missing Person Initial Page
 class MissingPerson extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class MissingPerson extends StatelessWidget {
     );
   }
 
+  // Save button for saving people to local list
   Widget savedButton(SavedPeopleModel savedPeopleModel,
           SelectedPeopleModel selectedPeopleModel) =>
       Builder(

@@ -20,7 +20,10 @@ class _CalendarState extends State<Calendar> {
 
   Widget _buildDoB(DateModel dateModel) {
     return GestureDetector(
-        child: Icon(Icons.date_range),
+        child: Icon(
+          Icons.date_range,
+          color: Colors.white,
+        ),
         onTap: () {
           showDatePicker(
                   context: context,

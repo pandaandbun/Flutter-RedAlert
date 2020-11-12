@@ -6,6 +6,7 @@ import '../drawer.dart';
 
 import 'saved_person_list.dart';
 
+// Save Person Screen Main Page
 class SavedPersonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

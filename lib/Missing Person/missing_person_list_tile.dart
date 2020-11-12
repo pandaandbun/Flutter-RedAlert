@@ -47,8 +47,10 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
     List<String> selectedPeople = selectedPeopleModel.getDocIds();
 
     if (selectedPeople.length == 0) {
+      // deselect item after saving to local db
       refresh(false);
     } else if (selectedPeople.contains(widget.person.reference.id)) {
+      // select even after item is destroy by ListView
       refresh(true);
     }
 
@@ -120,7 +122,10 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
 
   //notifyButton: a button which processes a future notification for the accociated person.
   Widget notifyButton() => IconButton(
-        icon: Icon(Icons.notification_important_sharp),
+        icon: Icon(
+          Icons.add_alert,
+          color: Colors.white,
+        ),
         onPressed: () async {
           var when =
               await _selectDate(context); //function which opens a DatePicker
