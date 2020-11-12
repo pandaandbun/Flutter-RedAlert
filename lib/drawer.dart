@@ -10,7 +10,7 @@ class DrawerMenu extends StatelessWidget {
         drawerHeader(),
         missingScreenDrawer(currentRoute, context),
         savedSceeenDrawer(currentRoute, context),
-        // mapScreenDrawer(currentRoute, context),
+        mapScreenDrawer(currentRoute, context),
         chartScreenDrawer(currentRoute, context),
       ]),
     );

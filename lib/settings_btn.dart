@@ -7,7 +7,7 @@ class SettingsBtn extends StatelessWidget {
       icon: Icon(Icons.settings),
       tooltip: "Settings",
       onPressed: () {
-        Navigator.pushReplacementNamed(context, '/settings');
+        Navigator.pushNamed(context, '/settings');
       },
     );
   }

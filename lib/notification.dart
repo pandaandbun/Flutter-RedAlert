@@ -58,7 +58,7 @@ class Notifications {
         builder: (_) => AlertDialog(
           backgroundColor: Colors.brown,
           title: Text(
-            "Missing Person Of The Day",
+            "Feature Person",
             style: TextStyle(color: Colors.white),
           ),
           content: _missingPersonOfTheyDayStream(personStream),
@@ -157,10 +157,12 @@ Widget _missingPersonOfTheDayContent(db.Person person) {
     Text(
       "Missing Since: " + formatter.format(person.missingSince),
       style: TextStyle(color: Colors.white),
+      textAlign: TextAlign.center,
     ),
     Text(
       "Last Known Location: " + person.city + ", " + person.province,
       style: TextStyle(color: Colors.white),
+      textAlign: TextAlign.center,
     ),
   ]);
 }

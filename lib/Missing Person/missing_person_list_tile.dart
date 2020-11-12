@@ -26,7 +26,6 @@ class MissingPersonListTile extends StatefulWidget {
 class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');
-  // final _notifications = Notifications();
 
   void refresh(bool bool) {
     setState(() {
@@ -40,8 +39,6 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
 
   @override
   Widget build(BuildContext context) {
-    tz.initializeTimeZones();
-    // _notifications.init();
     final SelectedPeopleModel selectedPeopleModel =
         context.watch<SelectedPeopleModel>();
 
@@ -56,6 +53,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
     }
 
     return _wrapper(selectedPeopleModel);
+    // return Text("DAta");
   }
 
   Widget _wrapper(SelectedPeopleModel selectedPeopleModel) {

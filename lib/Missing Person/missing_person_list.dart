@@ -15,8 +15,10 @@ class MissingPersonList extends StatelessWidget {
   final savedPeople;
   final Random random = new Random();
   final Notifications _notifications;
+  final notificationsNum;
 
-  MissingPersonList(this.savedPeople, this._notifications);
+  MissingPersonList(
+      this.savedPeople, this._notifications, this.notificationsNum);
 
   Person _buildPerson(DocumentSnapshot data) {
     return Person.fromMap(data.data(), reference: data.reference);
@@ -24,7 +26,7 @@ class MissingPersonList extends StatelessWidget {
 
   void _notifyMissingPersonOfTheDay(Person person) async {
     await _notifications.sendNotificationNow(
-      "Missing Person Of The Day",
+      "Feature Person",
       person.firstName + " " + person.lastName,
       payload: person.reference.id,
     );
@@ -57,13 +59,16 @@ class MissingPersonList extends StatelessWidget {
         } else if (snapshot.hasData) {
           if (snapshot.data.docs.length > 0) {
             List people = snapshot.data.docs
-                .map((DocumentSnapshot document) =>
-                    _buildPerson(document))
+                .map((DocumentSnapshot document) => _buildPerson(document))
                 .toList();
-            int randomNumber = random.nextInt(people.length);
-            Person randomPerson = people[randomNumber];
 
-            _notifyMissingPersonOfTheDay(randomPerson);
+            if (notificationsNum.num == 0) {
+              int randomNumber = random.nextInt(people.length);
+              Person randomPerson = people[randomNumber];
+
+              _notifyMissingPersonOfTheDay(randomPerson);
+              notificationsNum.num++;
+            }
 
             return peopleList(people);
           } else {

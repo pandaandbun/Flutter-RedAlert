@@ -36,6 +36,8 @@ class _CalendarState extends State<Calendar> {
                 _doB = value;
               });
               dateModel.setDate(value);
+            } else {
+              dateModel.setDate(value);
             }
           });
         });
