@@ -23,7 +23,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => SavedPeopleModel()),
       // Listener for when a date to filter by is picked
       ChangeNotifierProvider(create: (_) => DateModel()),
-      // Listener for when people are save and to deselect them 
+      // Listener for when people are save and to deselect them
       ChangeNotifierProvider(create: (_) => SelectedPeopleModel()),
     ],
     child: MyApp(),
@@ -33,6 +33,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder(
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {

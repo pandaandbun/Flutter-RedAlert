@@ -5,6 +5,7 @@ import '../calendar.dart';
 // import '../settings_btn.dart';
 import '../drawer.dart';
 import '../Search Bar/search_bar.dart';
+import '../notification.dart';
 
 import 'missing_person_list.dart';
 
@@ -13,8 +14,13 @@ import '../Database/selected_item_model.dart';
 
 // Missing Person Initial Page
 class MissingPerson extends StatelessWidget {
+  final Notifications _notifications = Notifications();
+
+  MissingPerson();
+
   @override
   Widget build(BuildContext context) {
+    _notifications.init(scaffoldContext: context);
     final SavedPeopleModel savedPeopleModel =
         Provider.of<SavedPeopleModel>(context);
     final SelectedPeopleModel selectedPeopleModel =
@@ -36,7 +42,7 @@ class MissingPerson extends StatelessWidget {
             SearchBar(),
             Calendar(),
           ]),
-          MissingPersonList(savedPeopleModel),
+          MissingPersonList(savedPeopleModel, _notifications),
         ],
       ),
     );

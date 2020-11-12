@@ -95,7 +95,7 @@ class SettingsPage extends State<Settings> {
                   notification.sendNotificationNow(
                     "Test Notification",
                     "This is an instant notification",
-                    "Received"
+                    // "Received"
                     );
                 }
                 setState(() {
