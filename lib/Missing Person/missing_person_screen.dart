@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../calendar.dart';
-import '../settings_btn.dart';
+// import '../settings_btn.dart';
 import '../drawer.dart';
 import '../Search Bar/search_bar.dart';
 
@@ -24,7 +24,7 @@ class MissingPerson extends StatelessWidget {
         title: Text('Missing Person'),
         actions: [
           savedButton(savedPeopleModel, selectedPeopleModel),
-          SettingsBtn(),
+          // SettingsBtn(),
         ],
       ),
       drawer: DrawerMenu(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import '../Database/missing_person_database.dart';
@@ -18,17 +19,18 @@ class SearchList extends StatelessWidget {
     return Person.fromMap(data.data(), reference: data.reference);
   }
 
-  void savePerson(context, String id, SavedPeopleModel savedPeopleModel) async {
-    var snackBar = SnackBar(content: Text('Saved'));
+  void savePerson(
+      scaffoldContext, String id, SavedPeopleModel savedPeopleModel) async {
+    // var snackBar = SnackBar(content: Text('Saved'));
     SavedPerson person = SavedPerson(id);
-    var result = await savedPeopleModel.insertPeople(person);
+    await savedPeopleModel.insertPeople(person);
 
-    if (result != null) {
-      snackBar = SnackBar(content: Text('One Of The Item Is Already Saved'));
-    }
+    // if (result != null) {
+    // snackBar = SnackBar(content: Text('One Of The Item Is Already Saved'));
+    // }
 
-    Navigator.pop(context);
-    Scaffold.of(context).showSnackBar(snackBar);
+    // Scaffold.of(context).showSnackBar(snackBar);
+    Navigator.pop(scaffoldContext);
   }
 
   @override
@@ -62,7 +64,8 @@ class SearchList extends StatelessWidget {
         },
       ));
 
-  Widget seachCard(context, Person person, SavedPeopleModel savedPeopleModel) =>
+  Widget seachCard(
+          scaffoldContext, Person person, SavedPeopleModel savedPeopleModel) =>
       Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -75,8 +78,8 @@ class SearchList extends StatelessWidget {
               subtitle: Text(formatter.format(person.missingSince)),
               trailing: IconButton(
                 icon: Icon(Icons.save),
-                onPressed: () =>
-                    savePerson(context, person.reference.id, savedPeopleModel),
+                onPressed: () => savePerson(
+                    scaffoldContext, person.reference.id, savedPeopleModel),
               ),
             ),
           ],

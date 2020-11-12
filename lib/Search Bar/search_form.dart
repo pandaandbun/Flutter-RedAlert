@@ -27,17 +27,17 @@ class SearchForm extends StatelessWidget {
         decoration: const InputDecoration(
           prefixIcon: Icon(
             Icons.search,
-            color: Colors.white,
+            color: Colors.grey,
           ),
           hintText: 'John',
           hintStyle: TextStyle(color: Colors.grey),
           labelText: 'First Name',
-          labelStyle: TextStyle(color: Colors.white),
+          labelStyle: TextStyle(color: Colors.grey),
           contentPadding: EdgeInsets.symmetric(horizontal: 20),
           border: OutlineInputBorder(),
         ),
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.grey,
         ),
         onSaved: (String value) => name.firstName = value,
       );
@@ -46,17 +46,17 @@ class SearchForm extends StatelessWidget {
         decoration: const InputDecoration(
           prefixIcon: Icon(
             Icons.search,
-            color: Colors.white,
+            color: Colors.grey,
           ),
           hintText: 'Doe',
           hintStyle: TextStyle(color: Colors.grey),
           labelText: 'Last Name',
-          labelStyle: TextStyle(color: Colors.white),
+          labelStyle: TextStyle(color: Colors.grey),
           contentPadding: EdgeInsets.symmetric(horizontal: 20),
           border: OutlineInputBorder(),
         ),
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.grey,
         ),
         onSaved: (String value) => name.lastName = value,
       );

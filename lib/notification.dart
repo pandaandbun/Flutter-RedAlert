@@ -3,6 +3,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter/material.dart';
 
+// Based on Randy's Lecture Code
 class Notifications {
   final channelId = 'testNotification';
   final channelName = 'Test Notification';

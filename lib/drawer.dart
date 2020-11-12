@@ -24,19 +24,19 @@ class DrawerMenu extends StatelessWidget {
               : Navigator.pushReplacementNamed(context, '/'),
         ),
         ListTile(
-          leading: Icon(Icons.map),
-          title: Text('Map'),
-          onTap: () => currentRoute == '/map'
-              ? Navigator.pop(context)
-              : Navigator.pushReplacementNamed(context, '/map'),
-        ),
-        ListTile(
           leading: Icon(Icons.save),
           title: Text('Saved'),
           onTap: () => currentRoute == '/saved'
               ? Navigator.pop(context)
               : Navigator.pushReplacementNamed(context, '/saved'),
         ),
+        // ListTile(
+        //   leading: Icon(Icons.map),
+        //   title: Text('Map'),
+        //   onTap: () => currentRoute == '/map'
+        //       ? Navigator.pop(context)
+        //       : Navigator.pushReplacementNamed(context, '/map'),
+        // ),
         ListTile(
           leading: Icon(Icons.show_chart),
           title: Text('Charts'),

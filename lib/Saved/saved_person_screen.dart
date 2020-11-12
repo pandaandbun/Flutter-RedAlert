@@ -15,9 +15,14 @@ class SavedPersonScreen extends StatelessWidget {
           actions: [SettingsBtn()],
         ),
         drawer: DrawerMenu(),
+        backgroundColor: Colors.brown[900],
         body: Column(children: [
-          SearchBar(),
-          SavedPersonList()
+          Row(
+            children: [
+              SearchBar(),
+            ],
+          ),
+          SavedPersonList(),
         ]));
   }
 }

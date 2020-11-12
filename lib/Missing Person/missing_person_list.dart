@@ -22,8 +22,6 @@ class MissingPersonList extends StatelessWidget {
     return Person.fromMap(data.data(), reference: data.reference);
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     final MissingPeopleModel missingPeople = MissingPeopleModel();
