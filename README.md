@@ -129,3 +129,24 @@ Of course, you can always ask the TA for help!  However, learning how to find th
 
 ## How to Submit
 Create your flutter project, and copy it into this folder, commit, and then push your code to this repository to submit your major group project.
+
+## Instructions
+![main page](images/main_page.png)
+
+1. Expandable search field
+2. Filter people missing by the day they went missing
+3. Remind "Did you find me?" on the day you set
+4. Tap 1 to multiple people and hit save, this will save this specific profile in your Saved Screen
+5. Long Press each tile for more information about that person
+
+![drawer](images/drawer.png)
+
+6. Main/Initial Page
+7. Saved Page - Request specific item from Firebase, this does not store the profile offline, they just save that item id and request those specific ids instead of the entire Firebase
+
+![search field](images/search.png)
+
+8. Search people by First Name and/or Last Name, currently you have to give exact match with correct Capitialization (WIP for better search)
+
+![saved page](images/saved_page.png)
+9. Delete the save profile from your list

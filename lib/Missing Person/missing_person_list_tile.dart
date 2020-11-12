@@ -140,7 +140,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
                 "payload");
             await _notifications.sendNotificationLater(
               widget.person.id,
-              "Did you find them?",
+              "Did you find me?",
               widget.person.firstName + " " + widget.person.lastName,
               when,
             );
