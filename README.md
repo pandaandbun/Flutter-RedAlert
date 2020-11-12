@@ -149,4 +149,5 @@ Create your flutter project, and copy it into this folder, commit, and then push
 8. Search people by First Name and/or Last Name, currently you have to give exact match with correct Capitialization (WIP for better search)
 
 ![saved page](images/saved_page.png)
+
 9. Delete the save profile from your list
