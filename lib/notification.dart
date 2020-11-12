@@ -83,10 +83,11 @@ class Notifications {
   //   );
   // }
 
-  sendNotificationLater(String title, String body, tz.TZDateTime when,
+  sendNotificationLater(int id, String title, String body, tz.TZDateTime when,
       {String payload}) {
     _flutterNotificationPlugin.zonedSchedule(
-      _notificationId++,
+      //_notificationId++,
+      id,
       title,
       body,
       when,
