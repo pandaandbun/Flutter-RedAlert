@@ -17,6 +17,7 @@ class SearchBar extends StatelessWidget {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('People Found'),
+            backgroundColor: Colors.brown[100],
             content: SearchList(name),
           );
         });

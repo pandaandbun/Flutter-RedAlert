@@ -7,15 +7,7 @@ class DrawerMenu extends StatelessWidget {
 
     return Drawer(
       child: ListView(padding: EdgeInsets.zero, children: [
-        DrawerHeader(
-          child: Text(
-            'Red Alert',
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 24,
-            ),
-          ),
-        ),
+        drawerHeader(),
         ListTile(
           leading: Icon(Icons.list),
           title: Text('Missing Person'),
@@ -47,4 +39,19 @@ class DrawerMenu extends StatelessWidget {
       ]),
     );
   }
+
+  Widget drawerHeader() => DrawerHeader(
+      decoration: BoxDecoration(
+        color: Colors.brown[900],
+      ),
+      child: Center(
+        child: Text(
+          'Red Alert',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+          ),
+          // textAlign: TextAlign.center,
+        ),
+      ));
 }

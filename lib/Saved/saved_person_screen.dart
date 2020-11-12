@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../settings_btn.dart';
+// import '../settings_btn.dart';
 import '../Search Bar/search_bar.dart';
 import '../drawer.dart';
 
@@ -12,7 +12,7 @@ class SavedPersonScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text('Saved'),
-          actions: [SettingsBtn()],
+          // actions: [SettingsBtn()],
         ),
         drawer: DrawerMenu(),
         backgroundColor: Colors.brown[900],

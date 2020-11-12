@@ -19,8 +19,11 @@ import 'Database/selected_item_model.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
+      // Listener for when someone is saved
       ChangeNotifierProvider(create: (_) => SavedPeopleModel()),
+      // Listener for when a date to filter by is picked
       ChangeNotifierProvider(create: (_) => DateModel()),
+      // Listener for when people are save and to deselect them 
       ChangeNotifierProvider(create: (_) => SelectedPeopleModel()),
     ],
     child: MyApp(),
@@ -37,6 +40,7 @@ class MyApp extends StatelessWidget {
             return Text("Error initializing database",
                 textDirection: TextDirection.ltr);
           } else if (snapshot.connectionState == ConnectionState.done) {
+            // Main
             return MaterialApp(
               theme: ThemeData(
                 primarySwatch: Colors.brown,
@@ -54,6 +58,7 @@ class MyApp extends StatelessWidget {
               },
             );
           } else {
+            // Before Start up loading Screen
             return Directionality(
                 textDirection: TextDirection.ltr,
                 child: Center(

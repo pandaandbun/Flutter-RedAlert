@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import '../Database/missing_person_database.dart';
@@ -19,6 +18,7 @@ class SearchList extends StatelessWidget {
     return Person.fromMap(data.data(), reference: data.reference);
   }
 
+  // Save person to Saved Person Screen
   void savePerson(
       scaffoldContext, String id, SavedPeopleModel savedPeopleModel) async {
     // var snackBar = SnackBar(content: Text('Saved'));
@@ -41,6 +41,7 @@ class SearchList extends StatelessWidget {
     return searchList(context, savedPeopleModel);
   }
 
+  // List response
   Widget searchList(scaffoldContext, savedPeopleModel) => Container(
       width: double.maxFinite,
       child: StreamBuilder(
@@ -64,25 +65,41 @@ class SearchList extends StatelessWidget {
         },
       ));
 
+  // Search Cards
   Widget seachCard(
           scaffoldContext, Person person, SavedPeopleModel savedPeopleModel) =>
       Card(
+        color: Colors.brown,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(person.image),
-              ),
-              title: Text(person.firstName + " " + person.lastName),
-              subtitle: Text(formatter.format(person.missingSince)),
-              trailing: IconButton(
-                icon: Icon(Icons.save),
-                onPressed: () => savePerson(
-                    scaffoldContext, person.reference.id, savedPeopleModel),
-              ),
-            ),
+            searchCardText(scaffoldContext, person, savedPeopleModel),
           ],
+        ),
+      );
+
+  // Search Card Text Content
+  Widget searchCardText(
+          scaffoldContext, Person person, SavedPeopleModel savedPeopleModel) =>
+      ListTile(
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(person.image),
+        ),
+        title: Text(
+          person.firstName + " " + person.lastName,
+          style: TextStyle(color: Colors.white),
+        ),
+        subtitle: Text(
+          formatter.format(person.missingSince),
+          style: TextStyle(color: Colors.white),
+        ),
+        trailing: IconButton(
+          icon: Icon(
+            Icons.save,
+            color: Colors.white,
+          ),
+          onPressed: () => savePerson(
+              scaffoldContext, person.reference.id, savedPeopleModel),
         ),
       );
 }

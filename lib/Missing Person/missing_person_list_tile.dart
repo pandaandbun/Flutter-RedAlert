@@ -90,7 +90,6 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
           style: TextStyle(color: Colors.white),
         ),
         trailing: notifyButton(),
-
         onTap: () => setState(() {
           _selectedIndex = !_selectedIndex;
 
@@ -107,16 +106,14 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   //_selectDate: opens a DatePicker to choose the date of the notification to set.
   Future<tz.TZDateTime> _selectDate(BuildContext context) async {
     final DateTime selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now().add(const Duration(days: 1)),
-      firstDate: DateTime.now().add(const Duration(days: 1)),
-      lastDate: DateTime.now().add(const Duration(days: 365))
-    );
-    
-    if(selectedDate == null) {
+        context: context,
+        initialDate: DateTime.now().add(const Duration(days: 1)),
+        firstDate: DateTime.now().add(const Duration(days: 1)),
+        lastDate: DateTime.now().add(const Duration(days: 365)));
+
+    if (selectedDate == null) {
       return null;
-    }
-    else {
+    } else {
       return tz.TZDateTime.from(selectedDate, tz.local);
     }
   }
@@ -125,13 +122,17 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   Widget notifyButton() => IconButton(
         icon: Icon(Icons.notification_important_sharp),
         onPressed: () async {
-          var when = await _selectDate(context); //function which opens a DatePicker
-          
+          var when =
+              await _selectDate(context); //function which opens a DatePicker
+
           //for debugging:
           //print(when);
           //print(widget.person.id);
-          if(when != null)
-          {
+          if (when != null) {
+            await _notifications.sendNotificationNow(
+                "Reminder Set For " + formatter.format(when),
+                widget.person.firstName + " " + widget.person.lastName,
+                "payload");
             await _notifications.sendNotificationLater(
               widget.person.id,
               "Did you find them?",
@@ -141,15 +142,16 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
 
             //dialog to alert user that the notification was scheduled
             showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  content: new Text('Reminder for ${widget.person.firstName} ${widget.person.lastName} set for ${formatter.format(when)}.'),
-                  backgroundColor: Colors.brown[100],
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0)))
-                );
-              }
-            );
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                      content: new Text(
+                          'Reminder for ${widget.person.firstName} ${widget.person.lastName} set for ${formatter.format(when)}.'),
+                      backgroundColor: Colors.brown[100],
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(20.0))));
+                });
           }
         },
       );
