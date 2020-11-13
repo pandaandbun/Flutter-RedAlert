@@ -157,3 +157,7 @@ Create your flutter project, and copy it into this folder, commit, and then push
 When viewing the missing persons list, a featured person will appear as a notification. Tapping the notification will bring the user to a page with more details about the person.
 
 ![notification](images/featured_notifications.png) ![notification_2](images/featured_notifications_2.png)
+
+### References
+
+Missing persons information was retrieved from https://www.canadasmissing.ca/index-eng.htm using a python script, found in the python folder of the project.
