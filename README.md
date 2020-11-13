@@ -134,7 +134,7 @@ Create your flutter project, and copy it into this folder, commit, and then push
 ![main page](images/main_page.png)
 
 1. Expandable search field
-2. Filter people missing by the day they went missing
+2. Filter people missing by the day they went missing, to reset the list tap the icon again and tap outside of the dialog to dismiss it. This will reset the filter.
 3. Remind "Did you find me?" on the day you set
 4. Tap 1 to multiple people and hit save, this will save this specific profile in your Saved Screen
 5. Long Press each tile for more information about that person
