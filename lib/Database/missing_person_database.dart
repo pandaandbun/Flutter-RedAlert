@@ -41,6 +41,10 @@ class MissingPeopleModel {
     return people.snapshots();
   }
 
+  Stream<QuerySnapshot> getPeopleFromId(String id) {
+    return people.where(FieldPath.documentId, isEqualTo: id).snapshots();
+  }
+
   Stream getPeopleFromIds(List ids) {
     List<String> docIds = [];
     List<Stream> streamChunks = [];

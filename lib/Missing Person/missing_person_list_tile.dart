@@ -15,8 +15,9 @@ import 'missing_person_dialog.dart';
 
 class MissingPersonListTile extends StatefulWidget {
   final Person person;
+  final Notifications _notifications;
 
-  MissingPersonListTile(this.person);
+  MissingPersonListTile(this.person, this._notifications);
 
   @override
   _MissingPersonListTileState createState() => _MissingPersonListTileState();
@@ -25,7 +26,6 @@ class MissingPersonListTile extends StatefulWidget {
 class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');
-  final _notifications = Notifications();
 
   void refresh(bool bool) {
     setState(() {
@@ -39,8 +39,6 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
 
   @override
   Widget build(BuildContext context) {
-    tz.initializeTimeZones();
-    _notifications.init();
     final SelectedPeopleModel selectedPeopleModel =
         context.watch<SelectedPeopleModel>();
 
@@ -55,6 +53,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
     }
 
     return _wrapper(selectedPeopleModel);
+    // return Text("DAta");
   }
 
   Widget _wrapper(SelectedPeopleModel selectedPeopleModel) {
@@ -131,14 +130,13 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
               await _selectDate(context); //function which opens a DatePicker
 
           //for debugging:
-          //print(when);
+          // print(when);
           //print(widget.person.id);
           if (when != null) {
-            await _notifications.sendNotificationNow(
+            await widget._notifications.sendNotificationNow(
                 "Reminder Set For " + formatter.format(when),
-                widget.person.firstName + " " + widget.person.lastName,
-                "payload");
-            await _notifications.sendNotificationLater(
+                widget.person.firstName + " " + widget.person.lastName);
+            await widget._notifications.sendNotificationLater(
               widget.person.id,
               "Did you find me?",
               widget.person.firstName + " " + widget.person.lastName,

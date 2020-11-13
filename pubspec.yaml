@@ -31,6 +31,9 @@ dependencies:
   google_maps_flutter: ^1.0.6
   location: ^3.0.2
 
+  # Google API Check
+  google_api_availability: ^2.0.4
+
   # Date Format
   intl: ^0.16.1
 

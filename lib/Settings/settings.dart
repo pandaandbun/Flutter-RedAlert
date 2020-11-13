@@ -16,6 +16,8 @@ class SettingsPage extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     Notifications notification = new Notifications();
+    notification.init();
+
     return Scaffold(
         appBar: AppBar(title: Text('Settings')),
         drawer: DrawerMenu(),
@@ -91,12 +93,12 @@ class SettingsPage extends State<Settings> {
               contentPadding: const EdgeInsets.all(0),
               value: _isOn1,
               onChanged: (bool value) {
-                if(value) {
+                if (value) {
                   notification.sendNotificationNow(
                     "Test Notification",
                     "This is an instant notification",
-                    "Received"
-                    );
+                    // "Received"
+                  );
                 }
                 setState(() {
                   _isOn1 = value;

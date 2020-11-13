@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import 'Missing Person/missing_person_screen.dart';
 import 'Map/map_screen.dart';
@@ -23,7 +25,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => SavedPeopleModel()),
       // Listener for when a date to filter by is picked
       ChangeNotifierProvider(create: (_) => DateModel()),
-      // Listener for when people are save and to deselect them 
+      // Listener for when people are save and to deselect them
       ChangeNotifierProvider(create: (_) => SelectedPeopleModel()),
     ],
     child: MyApp(),
@@ -33,6 +35,9 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    tz.initializeTimeZones();
+
     return FutureBuilder(
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
