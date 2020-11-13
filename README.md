@@ -151,3 +151,9 @@ Create your flutter project, and copy it into this folder, commit, and then push
 ![saved page](images/saved_page.png)
 
 9. Delete the save profile from your list
+
+### Featured Person Notifications
+
+When viewing the missing persons list, a featured person will appear as a notification. Tapping the notification will bring the user to a page with more details about the person.
+
+![notification](images/featured_notifications.png) ![notification_2](images/featured_notifications_2.png)
