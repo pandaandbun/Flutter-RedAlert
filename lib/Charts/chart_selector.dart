@@ -21,7 +21,7 @@ class _ChartSelectorState extends State<ChartSelector> {
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Container(child: _barChart1())],
+                  children: [Container(child: _barChart())],
                 ),
                 SizedBox(height: 25),
                 Row(
