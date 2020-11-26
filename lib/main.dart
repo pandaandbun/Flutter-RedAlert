@@ -7,7 +7,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'Missing Person/missing_person_screen.dart';
 import 'Map/map_screen.dart';
 import 'Saved/saved_person_screen.dart';
-import 'Charts/charts_screen.dart';
+import 'Breakdown/breakdown_screen.dart';
 
 import 'Settings/settings.dart';
 import 'Settings/profile.dart';
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
                 '/': (context) => MissingPerson(),
                 '/map': (context) => MapView(),
                 '/saved': (context) => SavedPersonScreen(),
-                '/charts': (context) => Charts(),
+                '/charts': (context) => Breakdown(),
                 '/settings': (context) => Settings(),
                 '/profile': (context) => Profile(),
                 '/password': (context) => Password(),
