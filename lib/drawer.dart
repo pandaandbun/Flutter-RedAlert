@@ -64,7 +64,7 @@ class DrawerMenu extends StatelessWidget {
 
   Widget chartScreenDrawer(String currentRoute, context) => ListTile(
         leading: Icon(Icons.show_chart),
-        title: Text('Charts'),
+        title: Text('Breakdown'),
         onTap: () => currentRoute == '/charts'
             ? Navigator.pop(context)
             : Navigator.pushReplacementNamed(context, '/charts'),

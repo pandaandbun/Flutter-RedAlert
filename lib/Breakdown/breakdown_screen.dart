@@ -1,3 +1,4 @@
+import 'package:Red_Alert/Breakdown/Chart/chart_selector.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +9,6 @@ import '../drawer.dart';
 import '../Database/missing_person_database.dart';
 
 import 'Data Table/data_table.dart';
-import 'Chart/chart_selector.dart';
 import 'breakdown_func.dart';
 
 class Breakdown extends StatelessWidget {
@@ -69,8 +69,9 @@ class Breakdown extends StatelessWidget {
   Widget _mainTabBarView() => TabBarView(
         dragStartBehavior: DragStartBehavior.down,
         children: [
-          BreakdownTable(_breakdownFunc.getByCity()),
-          ChartSelector(_breakdownFunc.getByProvince()),
+          BreakdownTable(_breakdownFunc),
+          // ProvinceBarChart(_breakdownFunc.getByProvince()),
+          ChartSelector(_breakdownFunc),
         ],
       );
 
