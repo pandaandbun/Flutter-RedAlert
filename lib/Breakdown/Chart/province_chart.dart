@@ -20,11 +20,16 @@ class ProvinceBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BarChart(
-      _createSeriesData(breakdown),
-      animate: true,
-      defaultRenderer: new BarRendererConfig(
-          groupingType: BarGroupingType.grouped, strokeWidthPx: 2.0),
+    return Padding(
+      padding: EdgeInsets.only(left: 10),
+      child: _barChart(),
     );
   }
+
+  Widget _barChart() => BarChart(
+        _createSeriesData(breakdown),
+        animate: true,
+        defaultRenderer: new BarRendererConfig(
+            groupingType: BarGroupingType.grouped, strokeWidthPx: 2.0),
+      );
 }

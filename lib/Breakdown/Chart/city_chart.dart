@@ -1,4 +1,4 @@
-import 'package:charts_flutter/flutter.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
 class CityBarChart extends StatefulWidget {
@@ -14,9 +14,9 @@ class CityBarChart extends StatefulWidget {
 class _CityBarChartState extends State<CityBarChart> {
   String selectedProvince = '';
 
-  List<Series<dynamic, String>> _createSeriesData(List people) {
+  List<charts.Series<dynamic, String>> _createSeriesData(List people) {
     return [
-      Series<dynamic, String>(
+      charts.Series<dynamic, String>(
         id: 'Default',
         measureFn: (var e, _) => e.value,
         domainFn: (var e, _) => e.key.split("*")[1],
@@ -52,19 +52,26 @@ class _CityBarChartState extends State<CityBarChart> {
       );
 
   Widget _pieChart() => Expanded(
-          child: PieChart(
-        _createSeriesData(widget.breakdown.entries
-            .toList()
-            .where((e) => e.key.contains(selectedProvince))
-            .toList()),
-        animate: true,
-        defaultRenderer: new ArcRendererConfig(
-          arcWidth: 110,
-          arcRendererDecorators: [
-            new ArcLabelDecorator(
-              labelPosition: ArcLabelPosition.outside,
-            )
-          ],
+          child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          width: 1000,
+          padding: EdgeInsets.all(8),
+          child: charts.PieChart(
+            _createSeriesData(widget.breakdown.entries
+                .toList()
+                .where((e) => e.key.contains(selectedProvince))
+                .toList()),
+            animate: true,
+            defaultRenderer: new charts.ArcRendererConfig(
+              arcWidth: 110,
+              arcRendererDecorators: [
+                new charts.ArcLabelDecorator(
+                  labelPosition: charts.ArcLabelPosition.outside,
+                )
+              ],
+            ),
+          ),
         ),
       ));
 }

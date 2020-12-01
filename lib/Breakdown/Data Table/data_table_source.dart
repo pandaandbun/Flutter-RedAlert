@@ -69,7 +69,7 @@ class DataSource extends DataTableSource {
   }
   
   @override
-  bool get isRowCountApproximate => true;
+  bool get isRowCountApproximate => false;
 
   @override
   int get rowCount => _breakdown.length;
