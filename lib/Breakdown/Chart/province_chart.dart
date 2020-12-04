@@ -6,13 +6,13 @@ class ProvinceBarChart extends StatelessWidget {
 
   ProvinceBarChart(this.breakdown);
 
-  List<Series<dynamic, String>> _createSeriesData(Map people) {
+  List<Series<dynamic, String>> _createSeriesData() {
     return [
       Series<dynamic, String>(
         id: 'Default',
         measureFn: (var e, _) => e.value,
-        data: people.entries.toList(),
-        colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+        data: breakdown.entries.toList(),
+        colorFn: (_, __) => MaterialPalette.red.shadeDefault,
         domainFn: (var e, _) => e.key,
       ),
     ];
@@ -27,7 +27,7 @@ class ProvinceBarChart extends StatelessWidget {
   }
 
   Widget _barChart() => BarChart(
-        _createSeriesData(breakdown),
+        _createSeriesData(),
         animate: true,
         defaultRenderer: new BarRendererConfig(
             groupingType: BarGroupingType.grouped, strokeWidthPx: 2.0),

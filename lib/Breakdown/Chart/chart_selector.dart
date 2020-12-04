@@ -1,9 +1,11 @@
-import 'package:Red_Alert/Breakdown/Chart/city_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../breakdown_func.dart';
 
 import 'province_chart.dart';
+import 'month_chart.dart';
+import 'city_chart.dart';
+import 'year_chart.dart';
 
 class ChartSelector extends StatelessWidget {
   final BreakdownFunc _breakdownFunc;
@@ -18,6 +20,14 @@ class ChartSelector extends StatelessWidget {
       return CityBarChart(
         _breakdownFunc.byCity,
         _breakdownFunc.provinces,
+      );
+    } else if (_breakdownFunc.currentTable == 'Year') {
+      return YearTimeChart(_breakdownFunc.byYear);
+    } else if (_breakdownFunc.currentTable == 'Month') {
+      List sorted = _breakdownFunc.years.toList()..sort();
+      return MonthTimeChart(
+        _breakdownFunc.byMonth,
+        sorted.reversed.toList(),
       );
     }
 

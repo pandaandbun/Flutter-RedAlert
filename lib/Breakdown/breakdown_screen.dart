@@ -70,7 +70,6 @@ class Breakdown extends StatelessWidget {
         dragStartBehavior: DragStartBehavior.down,
         children: [
           BreakdownTable(_breakdownFunc),
-          // ProvinceBarChart(_breakdownFunc.getByProvince()),
           ChartSelector(_breakdownFunc),
         ],
       );

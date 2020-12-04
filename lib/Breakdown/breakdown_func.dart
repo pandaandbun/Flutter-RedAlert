@@ -3,10 +3,14 @@ import '../Database/missing_person_database.dart';
 class BreakdownFunc {
   List<Person> people;
   Set<String> provinces = Set();
+  Set<String> years = Set();
+
   String currentTable;
 
   Map<String, int> _ctiyStat = {};
   Map<String, int> _provinceStat = {};
+  Map<String, int> _yearStat = {};
+  Map<String, int> _monthStat = {};
 
   BreakdownFunc({this.people});
 
@@ -28,6 +32,24 @@ class BreakdownFunc {
       _provinceStat = _getByProvince();
     }
     return _provinceStat;
+  }
+
+  Map<String, int> get byYear {
+    currentTable = 'Year';
+
+    if (_yearStat.isEmpty) {
+      _yearStat = _getByYear();
+    }
+    return _yearStat;
+  }
+
+  Map<String, int> get byMonth {
+    currentTable = 'Month';
+
+    if (_monthStat.isEmpty) {
+      _monthStat = _getByMonth();
+    }
+    return _monthStat;
   }
 
   // ----------------------------------------
@@ -58,6 +80,38 @@ class BreakdownFunc {
         breakdown[location] = 0;
       }
       breakdown[location] += 1;
+    }
+    return breakdown;
+  }
+
+  Map<String, int> _getByYear() {
+    Map<String, int> breakdown = {};
+
+    for (Person person in people) {
+      DateTime dateTime = person.missingSince;
+      String year = dateTime.year.toString();
+
+      if (!breakdown.containsKey(year)) {
+        breakdown[year] = 0;
+      }
+      breakdown[year] += 1;
+    }
+    return breakdown;
+  }
+
+  Map<String, int> _getByMonth() {
+    Map<String, int> breakdown = {};
+
+    for (Person person in people) {
+      DateTime dateTime = person.missingSince;
+      String date = dateTime.year.toString() + "*" + dateTime.month.toString();
+
+      years.add(dateTime.year.toString());
+
+      if (!breakdown.containsKey(date)) {
+        breakdown[date] = 0;
+      }
+      breakdown[date] += 1;
     }
     return breakdown;
   }

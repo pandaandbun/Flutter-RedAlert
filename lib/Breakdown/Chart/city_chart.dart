@@ -14,13 +14,17 @@ class CityBarChart extends StatefulWidget {
 class _CityBarChartState extends State<CityBarChart> {
   String selectedProvince = '';
 
-  List<charts.Series<dynamic, String>> _createSeriesData(List people) {
+  List<charts.Series<dynamic, String>> _createSeriesData() {
     return [
       charts.Series<dynamic, String>(
         id: 'Default',
         measureFn: (var e, _) => e.value,
         domainFn: (var e, _) => e.key.split("*")[1],
-        data: people,
+        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+        data: widget.breakdown.entries
+            .toList()
+            .where((e) => e.key.contains(selectedProvince))
+            .toList(),
       ),
     ];
   }
@@ -58,10 +62,7 @@ class _CityBarChartState extends State<CityBarChart> {
           width: 1000,
           padding: EdgeInsets.all(8),
           child: charts.PieChart(
-            _createSeriesData(widget.breakdown.entries
-                .toList()
-                .where((e) => e.key.contains(selectedProvince))
-                .toList()),
+            _createSeriesData(),
             animate: true,
             defaultRenderer: new charts.ArcRendererConfig(
               arcWidth: 110,

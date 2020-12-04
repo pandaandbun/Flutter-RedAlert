@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 class DataSource extends DataTableSource {
   List _breakdown;
-  String sourceBy;
+  String sourceBy, category;
 
-  void setSource(List src, String srcBy) {
+  void setSource(List src, String srcBy, String cat) {
     _breakdown = src;
     sourceBy = srcBy;
+    category = cat;
 
     notifyListeners();
   }
@@ -17,23 +18,21 @@ class DataSource extends DataTableSource {
           ascending ? a.value.compareTo(b.value) : b.value.compareTo(a.value));
     }
 
-    if (colName == 'City') {
+    if (colName == 'City' || colName == 'Month') {
       _breakdown.sort((a, b) {
-        String citya = a.key.split('*')[1];
-        String cityb = b.key.split('*')[1];
+        String aKey = a.key.split('*')[1];
+        String bKey = b.key.split('*')[1];
 
-        return ascending ? citya.compareTo(cityb) : cityb.compareTo(citya);
+        return ascending ? aKey.compareTo(bKey) : bKey.compareTo(aKey);
       });
     }
 
-    if (colName == 'Province') {
+    if (colName == 'Province' || colName == 'Year') {
       _breakdown.sort((a, b) {
-        String provincea = a.key.split('*')[0];
-        String provinceb = b.key.split('*')[0];
+        String aKey = a.key.split('*')[0];
+        String bKey = b.key.split('*')[0];
 
-        return ascending
-            ? provincea.compareTo(provinceb)
-            : provinceb.compareTo(provincea);
+        return ascending ? aKey.compareTo(bKey) : bKey.compareTo(aKey);
       });
     }
 
@@ -44,16 +43,19 @@ class DataSource extends DataTableSource {
   DataRow getRow(int index) {
     final e = _breakdown[index];
 
+    if (index >= _breakdown.length) return null;
+
     if (e.key.contains('*')) {
       List<String> splitted = e.key.split('*');
-      String province = splitted[0];
-      String city = splitted[1];
+
+      String firstCol = splitted[0];
+      String secondCol = splitted[1];
 
       return DataRow.byIndex(
         index: index,
         cells: [
-          DataCell(Text(province)),
-          DataCell(Text(city)),
+          DataCell(Text(firstCol)),
+          DataCell(Text(secondCol)),
           DataCell(Text(e.value.toString())),
         ],
       );
@@ -67,7 +69,7 @@ class DataSource extends DataTableSource {
       );
     }
   }
-  
+
   @override
   bool get isRowCountApproximate => false;
 
