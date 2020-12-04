@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 
 // Pop up dialog for main page
 class PeopleDialog extends StatelessWidget {
-
   final person;
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');
 

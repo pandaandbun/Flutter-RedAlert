@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class SearchForm extends StatelessWidget {
-
   final _formKey;
   final name;
 

@@ -25,20 +25,6 @@ class SettingsPage extends State<Settings> {
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Card(
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                margin: const EdgeInsets.all(10),
-                color: Colors.red,
-                child: ListTile(
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, '/profile');
-                  },
-                  title: Text('Profile'),
-                  leading: Icon(Icons.person),
-                  trailing: Icon(Icons.edit),
-                )),
             const SizedBox(height: 10),
             Card(
               elevation: 8,

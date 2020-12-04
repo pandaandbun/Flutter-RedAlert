@@ -30,6 +30,8 @@ dependencies:
   # Google Map
   google_maps_flutter: ^1.0.6
   location: ^3.0.2
+  geolocator: 5.1.1
+  geocoding: ^1.0.5
 
   # Google API Check
   google_api_availability: ^2.0.4

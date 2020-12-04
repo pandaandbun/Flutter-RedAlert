@@ -11,7 +11,6 @@ import 'Breakdown/breakdown_screen.dart';
 
 import 'Settings/settings.dart';
 import 'Settings/profile.dart';
-import 'Settings/password.dart';
 import 'Settings/theme.dart';
 
 import 'Database/saved_people_database.dart';
@@ -35,7 +34,6 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     tz.initializeTimeZones();
 
     return FutureBuilder(
@@ -58,7 +56,6 @@ class MyApp extends StatelessWidget {
                 '/charts': (context) => Breakdown(),
                 '/settings': (context) => Settings(),
                 '/profile': (context) => Profile(),
-                '/password': (context) => Password(),
                 '/theme': (context) => ThemeP(),
               },
             );

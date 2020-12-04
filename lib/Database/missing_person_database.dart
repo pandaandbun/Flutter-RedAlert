@@ -41,6 +41,10 @@ class MissingPeopleModel {
     return people.snapshots();
   }
 
+  Stream<QuerySnapshot> getCityProvince() {
+    return people.where('city').where('province').snapshots();
+  }
+
   Stream<QuerySnapshot> getPeopleFromId(String id) {
     return people.where(FieldPath.documentId, isEqualTo: id).snapshots();
   }
