@@ -67,7 +67,7 @@ class DataSource extends DataTableSource {
       );
     }
   }
-  
+
   @override
   bool get isRowCountApproximate => false;
 
