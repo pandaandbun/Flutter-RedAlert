@@ -18,21 +18,41 @@ class DataSource extends DataTableSource {
           ascending ? a.value.compareTo(b.value) : b.value.compareTo(a.value));
     }
 
-    if (colName == 'City' || colName == 'Month') {
+    if (colName == 'City') {
       _breakdown.sort((a, b) {
-        String aKey = a.key.split('*')[1];
-        String bKey = b.key.split('*')[1];
+        String cityA = a.key.split('*')[1];
+        String cityB = b.key.split('*')[1];
 
-        return ascending ? aKey.compareTo(bKey) : bKey.compareTo(aKey);
+        return ascending ? cityA.compareTo(cityB) : cityB.compareTo(cityA);
       });
     }
 
-    if (colName == 'Province' || colName == 'Year') {
+    if (colName == 'Province') {
       _breakdown.sort((a, b) {
-        String aKey = a.key.split('*')[0];
-        String bKey = b.key.split('*')[0];
+        String provinceA = a.key.split('*')[0];
+        String provinceB = b.key.split('*')[0];
 
-        return ascending ? aKey.compareTo(bKey) : bKey.compareTo(aKey);
+        return ascending
+            ? provinceA.compareTo(provinceB)
+            : provinceB.compareTo(provinceA);
+      });
+    }
+
+    if (colName == 'Month') {
+      _breakdown.sort((a, b) {
+        int monthA = int.parse(a.key.split('*')[1]);
+        int monthB = int.parse(b.key.split('*')[1]);
+
+        return ascending ? monthA.compareTo(monthB) : monthB.compareTo(monthA);
+      });
+    }
+
+    if (colName == 'Year') {
+      _breakdown.sort((a, b) {
+        int yearA = int.parse(a.key.split('*')[0]);
+        int yearB = int.parse(b.key.split('*')[0]);
+
+        return ascending ? yearA.compareTo(yearB) : yearB.compareTo(yearA);
       });
     }
 

@@ -24,7 +24,6 @@ class _BreakdownTableState extends State<BreakdownTable> {
   List<String> _locSources = ["Province", "City"];
   List<String> _dateSources = ["Year", "Month"];
   List<String> _category = ["Location", "Date"];
-  // String _curCategory = "Location";
 
   void sort(int index, String colName, bool ascending) {
     setState(() {
@@ -112,9 +111,9 @@ class _BreakdownTableState extends State<BreakdownTable> {
       );
 
   Widget _header() => Row(children: [
-        Text("With"),
+        Text("Under"),
         _categoryBtn(),
-        Text(", by"),
+        Text("Show"),
         _sourceBtn(),
       ]);
 
