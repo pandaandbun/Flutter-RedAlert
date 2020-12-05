@@ -44,7 +44,7 @@ class MissingPersonList extends StatelessWidget {
       stream = missingPeople.getPersonWhereDate(filterByDate);
     } else {
       // list with everyone
-      stream = missingPeople.getAllPeople();
+      stream = missingPeople.getPeopleAfter();
     }
 
     return streamList(stream);
@@ -75,14 +75,14 @@ class MissingPersonList extends StatelessWidget {
             return errorText();
           }
         } else {
-          return errorText();
+          return loadingText();
         }
       });
 
   Widget errorText() =>
-      Text("Error building list", textDirection: TextDirection.ltr);
+      Text("No One Was Found", textDirection: TextDirection.ltr);
 
-  Widget elseText() => Text("Loading...", textDirection: TextDirection.ltr);
+  Widget loadingText() => Text("Loading...", textDirection: TextDirection.ltr);
 
   Widget peopleList(List people) => Expanded(
         child: ListView.builder(

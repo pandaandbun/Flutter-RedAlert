@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -37,6 +38,17 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
     showDialog(context: context, child: PeopleDialog(widget.person));
   }
 
+  void _tileSelectionHandler(SelectedPeopleModel selectedPeopleModel) =>
+      setState(() {
+        _selectedIndex = !_selectedIndex;
+
+        if (_selectedIndex) {
+          selectedPeopleModel.insertDocId(widget.person.reference.id);
+        } else {
+          selectedPeopleModel.removeDocId(widget.person.reference.id);
+        }
+      });
+
   @override
   Widget build(BuildContext context) {
     final SelectedPeopleModel selectedPeopleModel =
@@ -52,57 +64,64 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
       refresh(true);
     }
 
-    return _wrapper(selectedPeopleModel);
-    // return Text("DAta");
+    return _personTile(selectedPeopleModel);
   }
 
-  Widget _wrapper(SelectedPeopleModel selectedPeopleModel) {
-    return Container(
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: _selectedIndex ? Colors.brown[900] : Colors.brown,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(color: Colors.brown[300], spreadRadius: 3),
-          ],
+  Widget _personTile(SelectedPeopleModel selectedPeopleModel) => Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: _selectedIndex ? Colors.brown[900] : Colors.brown,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(color: Colors.brown[300], spreadRadius: 3),
+        ],
+      ),
+      margin: EdgeInsets.only(left: 20, right: 20, top: 15),
+      child: GestureDetector(
+        child: _tileContent(selectedPeopleModel),
+        onLongPress: _moreInfo,
+      ));
+
+  Widget _tileContent(SelectedPeopleModel selectedPeopleModel) => Ink(
+        child: ListTile(
+          leading: _tileImage(),
+          title: _tileTitle(),
+          subtitle: _tileSubTitle(),
+          trailing: notifyButton(),
+          onTap: () => _tileSelectionHandler(selectedPeopleModel),
         ),
-        margin: EdgeInsets.only(left: 20, right: 20, top: 15),
-        child: GestureDetector(
-          child: _listTile(selectedPeopleModel),
-          onLongPress: _moreInfo,
-        ));
-  }
+      );
 
-  Widget _listTile(SelectedPeopleModel selectedPeopleModel) {
-    String formattedDate = formatter.format(widget.person.missingSince);
-
-    return Ink(
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(widget.person.image),
+  Widget _tileImage() => CachedNetworkImage(
+        imageUrl: widget.person.image,
+        imageBuilder: (context, imageProvider) => CircleAvatar(
+          backgroundImage: imageProvider,
           radius: 30,
         ),
-        title: Text(
-          widget.person.firstName + " " + widget.person.lastName,
-          style: TextStyle(color: Colors.white),
-        ),
-        subtitle: Text(
-          formattedDate,
-          style: TextStyle(color: Colors.white),
-        ),
-        trailing: notifyButton(),
-        onTap: () => setState(() {
-          _selectedIndex = !_selectedIndex;
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      );
 
-          if (_selectedIndex) {
-            selectedPeopleModel.insertDocId(widget.person.reference.id);
-          } else {
-            selectedPeopleModel.removeDocId(widget.person.reference.id);
-          }
-        }),
-      ),
-    );
-  }
+  // CircleAvatar(
+  //   // backgroundImage: CachedNetworkImageProvider(widget.person.image),
+  //   radius: 30,
+  //   child: CachedNetworkImage(
+  //     imageUrl: widget.person.image,
+  //     progressIndicatorBuilder: (context, url, downloadProgress) =>
+  //         CircularProgressIndicator(value: downloadProgress.progress),
+  //     errorWidget: (context, url, error) => Icon(Icons.error),
+  //   ),
+  // );
+
+  Widget _tileTitle() => Text(
+        widget.person.firstName + " " + widget.person.lastName,
+        style: TextStyle(color: Colors.white),
+      );
+
+  Widget _tileSubTitle() => Text(
+        formatter.format(widget.person.missingSince),
+        style: TextStyle(color: Colors.white),
+      );
 
   //_selectDate: opens a DatePicker to choose the date of the notification to set.
   Future<tz.TZDateTime> _selectDate(BuildContext context) async {

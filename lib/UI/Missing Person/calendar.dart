@@ -9,37 +9,37 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  DateTime _doB;
-  var now = DateTime.now();
+  DateTime _selectDate;
+  DateTime now = DateTime.now();
+
+  void _calendarHandler(value, dateModel) {
+    if (value != null) {
+      setState(() {
+        _selectDate = value;
+      });
+      dateModel.setDate(value);
+    } else {
+      dateModel.setDate(value);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final DateModel dateModel = Provider.of<DateModel>(context);
-    return _buildDoB(dateModel);
+    return _calendar(dateModel);
   }
 
-  Widget _buildDoB(DateModel dateModel) {
-    return GestureDetector(
-        child: Icon(
-          Icons.date_range,
-          color: Colors.white,
-        ),
-        onTap: () {
-          showDatePicker(
-                  context: context,
-                  initialDate: _doB == null ? now : _doB,
-                  firstDate: DateTime(1850),
-                  lastDate: now)
-              .then((value) {
-            if (value != null) {
-              setState(() {
-                _doB = value;
-              });
-              dateModel.setDate(value);
-            } else {
-              dateModel.setDate(value);
-            }
-          });
-        });
-  }
+  Widget _calendar(DateModel dateModel) => GestureDetector(
+      child: Icon(
+        Icons.date_range,
+        color: Colors.white,
+      ),
+      onTap: () => _calendarDatePicker()
+          .then((value) => _calendarHandler(value, dateModel)));
+
+  Future<DateTime> _calendarDatePicker() => showDatePicker(
+      context: context,
+      initialDate: _selectDate == null ? now : _selectDate,
+      firstDate: DateTime(1850),
+      lastDate: now);
 }

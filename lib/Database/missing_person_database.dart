@@ -38,11 +38,19 @@ class MissingPeopleModel {
   final people = FirebaseFirestore.instance.collection('persons');
 
   Stream<QuerySnapshot> getAllPeople() {
-    return people.snapshots();
+    return people.limit(10).snapshots();
+  }
+
+  Stream<QuerySnapshot> getFirst10People() {
+    return people.limit(10).snapshots();
+  }
+
+  Stream<QuerySnapshot> getPeopleAfter() {
+    return people.orderBy('id').startAfter([2492]).limit(10).snapshots();
   }
 
   Stream<QuerySnapshot> getCityProvince() {
-    return people.where('city').where('province').snapshots();
+    return people.where('city').where('province').limit(10).snapshots();
   }
 
   Stream<QuerySnapshot> getPeopleFromId(String id) {

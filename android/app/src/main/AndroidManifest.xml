@@ -10,7 +10,6 @@
   <uses-permission android:name="android.permission.WAKE_LOCK" />
   <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
-
   <application android:name="io.flutter.app.FlutterApplication" android:label="Red Alert" android:icon="@mipmap/ic_launcher">
 
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAphm1Co8YQpbUIFc5PMsgaMUnX_-UM8n0" />

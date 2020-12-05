@@ -80,7 +80,7 @@ class DrawerMenu extends StatelessWidget {
         aboutBoxChildren: [
           SizedBox(height: 24),
           Text(
-              "Missing persons information was retrieved from https://www.canadasmissing.ca/index-eng.htm"),
+              "Missing persons information was retrieved from canadasmissing.ca"),
         ],
       );
 }

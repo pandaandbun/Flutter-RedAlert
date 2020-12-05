@@ -4,6 +4,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../Database/missing_person_database.dart' as db;
 
@@ -117,52 +118,57 @@ class Notifications {
       androidAllowWhileIdle: true,
     );
   }
-}
 
-Widget _missingPersonOfTheyDayStream(Stream personStream) => StreamBuilder(
-    stream: personStream,
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        if (snapshot.data.docs.length > 0) {
-          db.Person person = db.Person.fromMap(
-            snapshot.data.docs[0].data(),
-            reference: snapshot.data.docs[0].reference,
-          );
+  Widget _missingPersonOfTheyDayStream(Stream personStream) => StreamBuilder(
+      stream: personStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.docs.length > 0) {
+            db.Person person = db.Person.fromMap(
+              snapshot.data.docs[0].data(),
+              reference: snapshot.data.docs[0].reference,
+            );
 
-          return _missingPersonOfTheDayContent(person);
+            return _missingPersonOfTheDayContent(person);
+          } else {
+            return Text("No Data");
+          }
         } else {
-          return Text("No Data");
+          return Text("Fetching Data");
         }
-      } else {
-        return Text("Fetching Data");
-      }
-    });
+      });
 
-Widget _missingPersonOfTheDayContent(db.Person person) {
-  final DateFormat formatter = DateFormat('MMMM dd, yyyy');
+  Widget _missingPersonOfTheDayContent(db.Person person) {
+    final DateFormat formatter = DateFormat('MMMM dd, yyyy');
 
-  return Column(mainAxisSize: MainAxisSize.min, children: [
-    Image.network(person.image),
-    SizedBox(
-      height: 10,
-    ),
-    Text(
-      person.firstName + " " + person.lastName,
-      style: TextStyle(color: Colors.white, fontSize: 20),
-      textAlign: TextAlign.center,
-    ),
-    SizedBox(
-      height: 10,
-    ),
-    Text(
-      "Missing Since: " + formatter.format(person.missingSince),
-      style: TextStyle(color: Colors.white),
-      textAlign: TextAlign.center,
-    ),
-    Text(
-      "Last Known Location: " + person.city + ", " + person.province,
-      style: TextStyle(color: Colors.white),
-      textAlign: TextAlign.center,
-    ),
-  ]);
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      // Image.network(person.image),
+      CachedNetworkImage(
+        imageUrl: person.image,
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Text(
+        person.firstName + " " + person.lastName,
+        style: TextStyle(color: Colors.white, fontSize: 20),
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Text(
+        "Missing Since: " + formatter.format(person.missingSince),
+        style: TextStyle(color: Colors.white),
+        textAlign: TextAlign.center,
+      ),
+      Text(
+        "Last Known Location: " + person.city + ", " + person.province,
+        style: TextStyle(color: Colors.white),
+        textAlign: TextAlign.center,
+      ),
+    ]);
+  }
 }
