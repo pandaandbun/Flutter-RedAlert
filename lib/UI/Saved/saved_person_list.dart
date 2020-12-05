@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../Database/saved_people_database.dart';
-import '../Database/missing_person_database.dart';
+import '../../Database/saved_people_database.dart';
+import '../../Database/missing_person_database.dart';
 
 import 'saved_person_list_tile.dart';
 

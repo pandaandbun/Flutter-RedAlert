@@ -8,8 +8,8 @@ import 'missing_person_list_tile.dart';
 
 import '../notification.dart';
 
-import '../Database/missing_person_database.dart';
-import '../Database/filter_by_date_model.dart';
+import '../../Database/missing_person_database.dart';
+import '../../Database/filter_by_date_model.dart';
 
 class MissingPersonList extends StatelessWidget {
   final savedPeople;

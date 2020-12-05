@@ -5,7 +5,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'Database/missing_person_database.dart' as db;
+import '../Database/missing_person_database.dart' as db;
 
 // Based on Randy's Lecture Code
 class Notifications {

@@ -12,6 +12,7 @@ class DrawerMenu extends StatelessWidget {
         savedSceeenDrawer(currentRoute, context),
         mapScreenDrawer(currentRoute, context),
         chartScreenDrawer(currentRoute, context),
+        _about(),
       ]),
     );
   }
@@ -68,5 +69,18 @@ class DrawerMenu extends StatelessWidget {
         onTap: () => currentRoute == '/charts'
             ? Navigator.pop(context)
             : Navigator.pushReplacementNamed(context, '/charts'),
+      );
+
+  Widget _about() => AboutListTile(
+        icon: Icon(Icons.info),
+        applicationIcon: FlutterLogo(),
+        applicationName: 'Red Alert',
+        applicationVersion: 'December 2020',
+        applicationLegalese: '\u{a9} Rico, Jessica, Joseph',
+        aboutBoxChildren: [
+          SizedBox(height: 24),
+          Text(
+              "Missing persons information was retrieved from https://www.canadasmissing.ca/index-eng.htm"),
+        ],
       );
 }

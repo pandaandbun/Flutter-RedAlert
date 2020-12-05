@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import '../Database/missing_person_database.dart';
-import '../Database/selected_item_model.dart';
+import '../../Database/missing_person_database.dart';
+import '../../Database/selected_item_model.dart';
 
 import '../notification.dart';
 

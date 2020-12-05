@@ -1,4 +1,3 @@
-import 'package:Red_Alert/Breakdown/Chart/chart_selector.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,7 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../settings_btn.dart';
 import '../drawer.dart';
 
-import '../Database/missing_person_database.dart';
+import '../../Database/missing_person_database.dart';
+
+import 'Chart/chart_selector.dart';
 
 import 'Data Table/data_table.dart';
 import 'breakdown_func.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../calendar.dart';
+import 'calendar.dart';
 import '../settings_btn.dart';
 import '../drawer.dart';
 import '../Search Bar/search_bar.dart';
@@ -9,8 +9,8 @@ import '../notification.dart';
 
 import 'missing_person_list.dart';
 
-import '../Database/saved_people_database.dart';
-import '../Database/selected_item_model.dart';
+import '../../Database/saved_people_database.dart';
+import '../../Database/selected_item_model.dart';
 
 class NotificationsNum {
   int num = 0;

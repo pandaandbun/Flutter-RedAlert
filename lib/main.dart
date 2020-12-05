@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import 'Missing Person/missing_person_screen.dart';
-import 'Map/map_screen.dart';
-import 'Saved/saved_person_screen.dart';
-import 'Breakdown/breakdown_screen.dart';
+import 'UI/Missing Person/missing_person_screen.dart';
+import 'UI/Map/map_screen.dart';
+import 'UI/Saved/saved_person_screen.dart';
+import 'UI/Breakdown/breakdown_screen.dart';
 
-import 'Settings/settings.dart';
-import 'Settings/profile.dart';
-import 'Settings/theme.dart';
+import 'UI/Settings/settings.dart';
+import 'UI/Settings/profile.dart';
+import 'UI/Settings/theme.dart';
 
 import 'Database/saved_people_database.dart';
 import 'Database/filter_by_date_model.dart';

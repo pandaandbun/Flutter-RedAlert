@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import '../Database/missing_person_database.dart';
-import '../Database/saved_people_database.dart';
+import '../../Database/missing_person_database.dart';
+import '../../Database/saved_people_database.dart';
 
 // Item Card
 class SavedPersonTile extends StatelessWidget {

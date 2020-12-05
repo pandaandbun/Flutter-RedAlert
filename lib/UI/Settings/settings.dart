@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Red_Alert/drawer.dart';
+import 'package:Red_Alert/UI/drawer.dart';
 import '../notification.dart';
 
 class Settings extends StatefulWidget {

@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../Database/missing_person_database.dart';
-import '../Database/saved_people_database.dart';
+import '../../Database/missing_person_database.dart';
+import '../../Database/saved_people_database.dart';
 
 class SearchList extends StatelessWidget {
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');

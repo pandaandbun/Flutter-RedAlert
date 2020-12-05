@@ -1,4 +1,4 @@
-import '../Database/missing_person_database.dart';
+import '../../Database/missing_person_database.dart';
 
 class BreakdownFunc {
   List<Person> people;
