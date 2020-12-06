@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +13,6 @@ class SearchList extends StatelessWidget {
 
   SearchList(this.name);
 
-  Person _buildPerson(BuildContext context, DocumentSnapshot data) {
-    return Person.fromMap(data.data(), reference: data.reference);
-  }
-
   // Save person to Saved Person Screen
   void savePerson(
       scaffoldContext, String id, SavedPeopleModel savedPeopleModel) async {
@@ -25,11 +20,6 @@ class SearchList extends StatelessWidget {
     SavedPerson person = SavedPerson(id);
     await savedPeopleModel.insertPeople(person);
 
-    // if (result != null) {
-    // snackBar = SnackBar(content: Text('One Of The Item Is Already Saved'));
-    // }
-
-    // Scaffold.of(context).showSnackBar(snackBar);
     Navigator.pop(scaffoldContext);
   }
 
@@ -44,15 +34,12 @@ class SearchList extends StatelessWidget {
   // List response
   Widget searchList(scaffoldContext, savedPeopleModel) => Container(
       width: double.maxFinite,
-      child: StreamBuilder(
-        stream: missingPeople.getPersonWhereName(name),
+      child: FutureBuilder(
+        future: missingPeople.getPersonWhereName(name),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data.docs.length > 0) {
-              List people = snapshot.data.docs
-                  .map((DocumentSnapshot document) =>
-                      _buildPerson(context, document))
-                  .toList();
+            if (snapshot.data.length > 0) {
+              List people = snapshot.data;
 
               return ListView.builder(
                 itemCount: people.length,
@@ -67,7 +54,7 @@ class SearchList extends StatelessWidget {
 
   // Search Cards
   Widget seachCard(
-          scaffoldContext, Person person, SavedPeopleModel savedPeopleModel) =>
+          scaffoldContext, Map person, SavedPeopleModel savedPeopleModel) =>
       Card(
         color: Colors.brown,
         child: Column(
@@ -80,26 +67,40 @@ class SearchList extends StatelessWidget {
 
   // Search Card Text Content
   Widget searchCardText(
-          scaffoldContext, Person person, SavedPeopleModel savedPeopleModel) =>
-      ListTile(
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(person.image),
+      scaffoldContext, Map person, SavedPeopleModel savedPeopleModel) {
+    String url = person['image'];
+    String name = person['firstName'] + " " + person['lastName'];
+    String date = formatter.format(DateTime.parse(person['missingSince']));
+    String id = person['id'].toString();
+
+    return ListTile(
+        leading: _cardImg(url),
+        title: _cardTitle(name),
+        subtitle: _cardSubTitle(date),
+        trailing: _cardSaveBtn(scaffoldContext, id, savedPeopleModel));
+  }
+
+  Widget _cardImg(String url) => CircleAvatar(
+        backgroundImage: NetworkImage(url),
+        onBackgroundImageError: (_, __) {},
+      );
+
+  Widget _cardTitle(String name) => Text(
+        name,
+        style: TextStyle(color: Colors.white),
+      );
+
+  Widget _cardSubTitle(String date) => Text(
+        date,
+        style: TextStyle(color: Colors.white),
+      );
+
+  Widget _cardSaveBtn(scaffoldContext, String id, savedPeopleModel) =>
+      IconButton(
+        icon: Icon(
+          Icons.save,
+          color: Colors.white,
         ),
-        title: Text(
-          person.firstName + " " + person.lastName,
-          style: TextStyle(color: Colors.white),
-        ),
-        subtitle: Text(
-          formatter.format(person.missingSince),
-          style: TextStyle(color: Colors.white),
-        ),
-        trailing: IconButton(
-          icon: Icon(
-            Icons.save,
-            color: Colors.white,
-          ),
-          onPressed: () => savePerson(
-              scaffoldContext, person.reference.id, savedPeopleModel),
-        ),
+        onPressed: () => savePerson(scaffoldContext, id, savedPeopleModel),
       );
 }

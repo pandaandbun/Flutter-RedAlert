@@ -7,36 +7,32 @@ import '../../Database/missing_person_database.dart';
 import 'saved_person_list_tile.dart';
 
 class SavedPersonList extends StatelessWidget {
+  final MissingPeopleModel missingPeople = MissingPeopleModel();
+
   @override
   Widget build(BuildContext context) {
     final SavedPeopleModel savedPeopleModel = context.watch<SavedPeopleModel>();
-    Future<List> savePeople = savedPeopleModel.getAllPeople();
-
-    final MissingPeopleModel missingPeople = MissingPeopleModel();
 
     return FutureBuilder(
-      future: savePeople,
+      future: savedPeopleModel.getAllSavedPeople(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List peopleIds = snapshot.data;
+          Set<String> peopleIds =
+              snapshot.data.map((e) => e['id'].toString()).toSet().cast<String>();
 
-          return savedPersonListView(missingPeople, peopleIds);
+          return savedPersonListView(peopleIds);
         } else {
-          return Text("Data Loading....");
+          return Text("Data Loading or Data is Empty");
         }
       },
     );
   }
 
-  Widget savedPersonListView(missingPeople, peopleIds) => StreamBuilder(
-      stream: missingPeople.getPeopleFromIds(peopleIds),
+  Widget savedPersonListView(Set<String> peopleIds) => FutureBuilder(
+      future: missingPeople.getPeopleFromIds(peopleIds),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List people = [];
-
-          for (var i = 0; i < snapshot.data.length; i++) {
-            people.addAll(snapshot.data[i].docs);
-          }
+          List people = snapshot.data;
 
           return Expanded(
             child: ListView.separated(
@@ -47,7 +43,7 @@ class SavedPersonList extends StatelessWidget {
             ),
           );
         } else {
-          return Text("Stream Loading....");
+          return Text("Data Loading....");
         }
       });
 }

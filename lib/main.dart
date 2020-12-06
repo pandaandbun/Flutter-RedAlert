@@ -1,3 +1,4 @@
+import 'package:Red_Alert/Database/missing_person_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'UI/Missing Person/missing_person_screen.dart';
 import 'UI/Map/map_screen.dart';
 import 'UI/Saved/saved_person_screen.dart';
 import 'UI/Breakdown/breakdown_screen.dart';
+import 'UI/Sync/sync_screen.dart';
 
 import 'UI/Settings/settings.dart';
 import 'UI/Settings/profile.dart';
@@ -32,6 +34,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  // final MissingPeopleModel missingPeopleModel = MissingPeopleModel();
   @override
   Widget build(BuildContext context) {
     tz.initializeTimeZones();
@@ -40,41 +43,66 @@ class MyApp extends StatelessWidget {
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text("Error initializing database",
-                textDirection: TextDirection.ltr);
+            return Text(
+              "Error initializing database",
+              textDirection: TextDirection.ltr,
+            );
           } else if (snapshot.connectionState == ConnectionState.done) {
             // Main
-            return MaterialApp(
-              theme: ThemeData(
-                primarySwatch: Colors.brown,
-              ),
-              initialRoute: '/',
-              routes: {
-                '/': (context) => MissingPerson(),
-                '/map': (context) => MapView(),
-                '/saved': (context) => SavedPersonScreen(),
-                '/charts': (context) => Breakdown(),
-                '/settings': (context) => Settings(),
-                '/profile': (context) => Profile(),
-                '/theme': (context) => ThemeP(),
-              },
-            );
+            return _checkIfDbIsEmpty();
           } else {
             // Before Start up loading Screen
-            return Directionality(
-                textDirection: TextDirection.ltr,
-                child: Center(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    ),
-                    Text("Loading"),
-                  ],
-                )));
+            return _loadingIcon();
           }
         });
   }
+
+  Widget _checkIfDbIsEmpty() {
+    MissingPeopleModel missingPeopleModel = MissingPeopleModel();
+    return FutureBuilder(
+        future: missingPeopleModel.isDbEmpty(),
+        builder: (_, dbSnapshot) {
+          if (dbSnapshot.hasData) {
+            if (dbSnapshot.data) {
+              return _startingPageIs("sync");
+            } else {
+              return _startingPageIs("missing");
+            }
+          } else {
+            // Waiting for if local DB is empty
+            return _loadingIcon();
+          }
+        });
+  }
+
+  Widget _loadingIcon() => Directionality(
+      textDirection: TextDirection.ltr,
+      child: Center(
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
+          Text("Loading"),
+        ],
+      )));
+
+  Widget _startingPageIs(String main) => MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.brown,
+        ),
+        initialRoute: '/' + main,
+        routes: {
+          '/sync': (context) => SyncScreen(),
+          '/missing': (context) => MissingPerson(),
+          '/map': (context) => MapView(),
+          '/saved': (context) => SavedPersonScreen(),
+          '/charts': (context) => Breakdown(),
+          '/settings': (context) => Settings(),
+          '/profile': (context) => Profile(),
+          '/theme': (context) => ThemeP(),
+        },
+      );
 }

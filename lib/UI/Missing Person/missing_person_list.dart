@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 import 'missing_person_list_tile.dart';
@@ -20,51 +19,43 @@ class MissingPersonList extends StatelessWidget {
   MissingPersonList(
       this.savedPeople, this._notifications, this.notificationsNum);
 
-  Person _buildPerson(DocumentSnapshot data) {
-    return Person.fromMap(data.data(), reference: data.reference);
-  }
-
-  void _notifyMissingPersonOfTheDay(Person person) async {
+  void _notifyMissingPersonOfTheDay(Map person) async {
     await _notifications.sendNotificationNow(
-      "Feature Person",
-      person.firstName + " " + person.lastName,
-      payload: person.reference.id,
-    );
+        "Feature Person", person['firstName'] + " " + person['lastName'],
+        payload: person['id'].toString());
   }
 
   @override
   Widget build(BuildContext context) {
     final MissingPeopleModel missingPeople = MissingPeopleModel();
     final DateModel dateModel = context.watch<DateModel>();
-    Stream stream;
+    Future future;
 
     DateTime filterByDate = dateModel.getDate();
     if (filterByDate != null) {
       // Filter List after selecting date
-      stream = missingPeople.getPersonWhereDate(filterByDate);
+      future = missingPeople.getPersonWhereDate(filterByDate);
     } else {
       // list with everyone
-      stream = missingPeople.getPeopleAfter();
+      future = missingPeople.getAllPeople();
     }
 
-    return streamList(stream);
+    return _futureList(future);
   }
 
   // Wait for list from firebase
-  Widget streamList(stream) => StreamBuilder(
-      stream: stream,
+  Widget _futureList(Future future) => FutureBuilder(
+      future: future,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return errorText();
         } else if (snapshot.hasData) {
-          if (snapshot.data.docs.length > 0) {
-            List people = snapshot.data.docs
-                .map((DocumentSnapshot document) => _buildPerson(document))
-                .toList();
+          if (snapshot.data.length > 0) {
+            List people = snapshot.data;
 
             if (notificationsNum.num == 0) {
               int randomNumber = random.nextInt(people.length);
-              Person randomPerson = people[randomNumber];
+              Map randomPerson = people[randomNumber];
 
               _notifyMissingPersonOfTheDay(randomPerson);
               notificationsNum.num++;

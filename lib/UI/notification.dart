@@ -1,19 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
-import '../Database/missing_person_database.dart' as db;
+import '../Database/missing_person_database.dart';
 
 // Based on Randy's Lecture Code
 class Notifications {
   final channelId = 'testNotification';
   final channelName = 'Test Notification';
   final channelDescription = 'Test Notification Channel';
-  final db.MissingPeopleModel missingPeople = db.MissingPeopleModel();
+  final MissingPeopleModel missingPeople = MissingPeopleModel();
   BuildContext context;
   bool sent = false;
 
@@ -49,35 +47,41 @@ class Notifications {
     );
   }
 
+  // ---------------------------------------------------------
+
   Future onSelectNotification(String payload) async {
     if (payload.isNotEmpty && sent) {
-      Stream<QuerySnapshot> personStream =
-          missingPeople.getPeopleFromId(payload);
+      Future personFuture = missingPeople.getPeopleFromId(payload);
+      await _notificationDialog(personFuture);
+    }
+  }
 
-      await showDialog(
+  Future _notificationDialog(Future personFuture) => showDialog(
         context: context,
         builder: (_) => AlertDialog(
           backgroundColor: Colors.brown,
-          title: Text(
-            "Feature Person",
-            style: TextStyle(color: Colors.white),
-          ),
-          content: _missingPersonOfTheyDayStream(personStream),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                "OK",
-                style: TextStyle(color: Colors.blue[300]),
-              ),
-            )
-          ],
+          title: _dialogTitle(),
+          content: _missingPersonOfTheyDay(personFuture),
+          actions: [_dialogBtn()],
         ),
       );
-    }
-  }
+
+  Widget _dialogTitle() => Text(
+        "Feature Person",
+        style: TextStyle(color: Colors.white),
+      );
+
+  Widget _dialogBtn() => TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text(
+          "OK",
+          style: TextStyle(color: Colors.blue[300]),
+        ),
+      );
+
+  // ---------------------------------------------------------
 
   sendNotificationNow(String title, String body, {String payload}) {
     sent = true;
@@ -119,17 +123,14 @@ class Notifications {
     );
   }
 
-  Widget _missingPersonOfTheyDayStream(Stream personStream) => StreamBuilder(
-      stream: personStream,
+  // ---------------------------------------------------------
+
+  Widget _missingPersonOfTheyDay(Future personFuture) => FutureBuilder(
+      future: personFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.docs.length > 0) {
-            db.Person person = db.Person.fromMap(
-              snapshot.data.docs[0].data(),
-              reference: snapshot.data.docs[0].reference,
-            );
-
-            return _missingPersonOfTheDayContent(person);
+          if (snapshot.data.length > 0) {
+            return _missingPersonOfTheDayContent(snapshot.data[0]);
           } else {
             return Text("No Data");
           }
@@ -138,37 +139,44 @@ class Notifications {
         }
       });
 
-  Widget _missingPersonOfTheDayContent(db.Person person) {
+  Widget _missingPersonOfTheDayContent(Map person) {
     final DateFormat formatter = DateFormat('MMMM dd, yyyy');
+    String url = person['image'];
+    String name = person['firstName'] + " " + person['lastName'];
+    String missingSince =
+        formatter.format(DateTime.parse(person['missingSince']));
+    String lastKnownLoc = person['city'] + ", " + person['province'];
 
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      // Image.network(person.image),
-      CachedNetworkImage(
-        imageUrl: person.image,
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Text(
-        person.firstName + " " + person.lastName,
-        style: TextStyle(color: Colors.white, fontSize: 20),
-        textAlign: TextAlign.center,
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Text(
-        "Missing Since: " + formatter.format(person.missingSince),
-        style: TextStyle(color: Colors.white),
-        textAlign: TextAlign.center,
-      ),
-      Text(
-        "Last Known Location: " + person.city + ", " + person.province,
-        style: TextStyle(color: Colors.white),
-        textAlign: TextAlign.center,
-      ),
+      _dialogImg(url),
+      SizedBox(height: 10),
+      _dialogName(name),
+      SizedBox(height: 10),
+      _dialogDate(missingSince),
+      _dialogLoc(lastKnownLoc),
     ]);
   }
+
+  Widget _dialogImg(String url) => Image.network(
+        url,
+        errorBuilder: (context, exception, stacktrace) => Icon(Icons.error),
+      );
+
+  Widget _dialogName(String name) => Text(
+        name,
+        style: TextStyle(color: Colors.white, fontSize: 20),
+        textAlign: TextAlign.center,
+      );
+
+  Widget _dialogDate(String missingSince) => Text(
+        "Missing Since: " + missingSince,
+        style: TextStyle(color: Colors.white),
+        textAlign: TextAlign.center,
+      );
+
+  Widget _dialogLoc(String lastKnownLoc) => Text(
+        "Last Known Location: " + lastKnownLoc,
+        style: TextStyle(color: Colors.white),
+        textAlign: TextAlign.center,
+      );
 }

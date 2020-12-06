@@ -12,6 +12,7 @@ class DrawerMenu extends StatelessWidget {
         savedSceeenDrawer(currentRoute, context),
         mapScreenDrawer(currentRoute, context),
         chartScreenDrawer(currentRoute, context),
+        _syncScreen(currentRoute, context),
         _about(),
       ]),
     );
@@ -42,9 +43,9 @@ class DrawerMenu extends StatelessWidget {
   Widget missingScreenDrawer(String currentRoute, context) => ListTile(
         leading: Icon(Icons.list),
         title: Text('Missing Person'),
-        onTap: () => currentRoute == '/'
+        onTap: () => currentRoute == '/missing'
             ? Navigator.pop(context)
-            : Navigator.pushReplacementNamed(context, '/'),
+            : Navigator.pushReplacementNamed(context, '/missing'),
       );
 
   Widget savedSceeenDrawer(String currentRoute, context) => ListTile(
@@ -69,6 +70,14 @@ class DrawerMenu extends StatelessWidget {
         onTap: () => currentRoute == '/charts'
             ? Navigator.pop(context)
             : Navigator.pushReplacementNamed(context, '/charts'),
+      );
+
+  Widget _syncScreen(String currentRoute, context) => ListTile(
+        leading: Icon(Icons.cloud_download),
+        title: Text('Sync'),
+        onTap: () => currentRoute == '/sync'
+            ? Navigator.pop(context)
+            : Navigator.pushReplacementNamed(context, '/sync'),
       );
 
   Widget _about() => AboutListTile(

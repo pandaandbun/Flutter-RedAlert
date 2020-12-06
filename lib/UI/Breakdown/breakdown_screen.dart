@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../settings_btn.dart';
 import '../drawer.dart';
@@ -17,10 +16,6 @@ class Breakdown extends StatelessWidget {
   final BreakdownFunc _breakdownFunc = BreakdownFunc();
   final int _numOfTabs = 2;
 
-  Person _buildPerson(DocumentSnapshot data) {
-    return Person.fromMap(data.data(), reference: data.reference);
-  }
-
   @override
   Widget build(BuildContext context) {
     return _tabs();
@@ -35,7 +30,7 @@ class Breakdown extends StatelessWidget {
           bottom: _tabBar(),
         ),
         drawer: DrawerMenu(),
-        body: _streamTable(),
+        body: _futureTable(),
       ));
 
   Widget _tabBar() => TabBar(
@@ -45,17 +40,12 @@ class Breakdown extends StatelessWidget {
         ],
       );
 
-  Widget _streamTable() => StreamBuilder(
-        stream: missingPerson.getAllPeople(),
+  Widget _futureTable() => FutureBuilder(
+        future: missingPerson.getAllPeople(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data.docs.length > 0) {
-              List<Person> people = snapshot.data.docs
-                  .map((DocumentSnapshot document) => _buildPerson(document))
-                  .toList()
-                  .cast<Person>();
-
-              _breakdownFunc.people = people;
+            if (snapshot.data.length > 0) {
+              _breakdownFunc.people = snapshot.data;
 
               return _mainTabBarView();
             } else {

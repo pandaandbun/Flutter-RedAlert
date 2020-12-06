@@ -25,19 +25,20 @@ class SavedPeopleModel with ChangeNotifier {
   }
 
   initDB() async {
-    return await openDatabase(join(await getDatabasesPath(), 'people.db'),
+    return await openDatabase(join(await getDatabasesPath(), 'saved_people.db'),
         onCreate: (db, version) async {
       await db.execute('''
-        CREATE TABLE people (
+        CREATE TABLE saved_people (
           id STRING UNIQUE
         )
         ''');
     }, version: 1);
   }
 
-  Future<List> getAllPeople() async {
+  Future<Set> getAllSavedPeople() async {
     final db = await database;
-    var res = await db.query("people");
+    List temp = await db.query("saved_people");
+    Set res = temp.toSet();
 
     if (res.length == 0)
       return null;
@@ -49,7 +50,7 @@ class SavedPeopleModel with ChangeNotifier {
   insertPeople(SavedPerson person) async {
     final db = await database;
     try {
-      await db.insert("people", person.toMap());
+      await db.insert("saved_people", person.toMap());
     } catch (error) {
       return error;
     }
@@ -60,7 +61,7 @@ class SavedPeopleModel with ChangeNotifier {
   deletePeopleId(String id) async {
     final db = await database;
     await db.delete(
-      "people",
+      "saved_people",
       where: 'id = ?',
       whereArgs: [id],
     );

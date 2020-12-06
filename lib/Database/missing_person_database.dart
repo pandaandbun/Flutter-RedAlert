@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:async/async.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 class Person {
   DocumentReference reference;
@@ -22,6 +23,16 @@ class Person {
         'missingSince': missingSince
       };
 
+  Map<String, dynamic> toDbMap() => {
+        'id': id,
+        'image': image,
+        'firstName': firstName,
+        'lastName': lastName,
+        'city': city,
+        'province': province,
+        'missingSince': missingSince.toString()
+      };
+
   Person.fromMap(Map<String, dynamic> map, {this.reference}) {
     id = map['id'];
     image = map['image'];
@@ -34,72 +45,154 @@ class Person {
   }
 }
 
+// -------------------------------------------------------------------
+
 class MissingPeopleModel {
+  // Local SQL
+  static Database _database;
+
+  Future<Database> get database async {
+    if (_database != null) return _database;
+
+    _database = await initDB();
+    return _database;
+  }
+
+  initDB() async {
+    return await openDatabase(
+        join(await getDatabasesPath(), 'missing_people.db'),
+        onCreate: (db, version) async {
+      await db.execute('''
+        CREATE TABLE missing_people (
+          id INT UNIQUE,
+          image STRING,
+          firstName STRING,
+          lastName STRING,
+          city STRING,
+          province STRING,
+          missingSince STRING
+        )
+        ''');
+    }, version: 1);
+  }
+
+  // Firebase
   final people = FirebaseFirestore.instance.collection('persons');
 
-  Stream<QuerySnapshot> getAllPeople() {
-    return people.limit(10).snapshots();
+  // -------------------------------------------------------------------
+
+  Future<bool> isDbEmpty() async {
+    final db = await database;
+    var res = await db.query("missing_people");
+    return res.length == 0;
   }
 
-  Stream<QuerySnapshot> getFirst10People() {
-    return people.limit(10).snapshots();
+  Future refreshLocalDb() async {
+    await deleteAllPeople();
+    await downloadAllPeopleToDb();
+    return;
   }
 
-  Stream<QuerySnapshot> getPeopleAfter() {
-    return people.orderBy('id').startAfter([2492]).limit(10).snapshots();
+  Future downloadAllPeopleToDb() async {
+    final db = await database;
+    var res = await db.query("missing_people");
+
+    if (res.length == 0) {
+      try {
+        QuerySnapshot cloudDb = await _getAllPeopleFromFirebase();
+        cloudDb.docs.forEach((DocumentSnapshot element) async {
+          Person person = Person.fromMap(element.data());
+          await db.insert("missing_people", person.toDbMap());
+        });
+      } catch (error) {
+        print(error);
+      }
+    }
+
+    return;
+  }
+
+  Future<List> getAllPeople() async {
+    final db = await database;
+    var res = await db.query("missing_people");
+
+    if (res.length == 0)
+      return null;
+    else {
+      return res;
+    }
+  }
+
+  Future deleteAllPeople() async {
+    final db = await database;
+    await db.execute('''
+    DELETE FROM missing_people
+    ''');
+    return;
+  }
+
+  Future getPeopleFromId(String id) async {
+    String query = '''
+    SELECT * 
+    FROM missing_people
+    WHERE id = $id
+    ''';
+    final db = await database;
+    var res = await db.rawQuery(query);
+    return res;
+  }
+
+  Future getPeopleFromIds(Set<String> id) async {
+    String inClause = id.toString();
+    inClause = inClause.substring(1, inClause.length - 1);
+
+    String query = '''
+    SELECT * 
+    FROM missing_people
+    WHERE id IN ($inClause)
+    ''';
+    final db = await database;
+    var res = await db.rawQuery(query);
+    if (res.length == 0)
+      return null;
+    else
+      return res;
+  }
+
+  Future getPersonWhereName(name) async {
+    String quaeryAndOr =
+        name.firstName.isNotEmpty && name.lastName.isNotEmpty ? "AND" : "OR";
+    String query = '''
+    SELECT * 
+    FROM missing_people
+    WHERE firstName = '${name.firstName}'
+    $quaeryAndOr lastName = '${name.lastName}'
+    ''';
+    final db = await database;
+    var res = await db.rawQuery(query);
+    return res;
+  }
+
+  Future getPersonWhereDate(DateTime date) async {
+    DateTime tmrwDate = date.add(Duration(days: 1));
+    String query = '''
+    SELECT * 
+    FROM missing_people
+    WHERE missingSince > '${date.toString()}'
+    AND missingSince < '${tmrwDate.toString()}'
+    ''';
+    final db = await database;
+    var res = await db.rawQuery(query);
+    return res;
+  }
+
+  // -------------------------------------------------------------------
+
+  Future<QuerySnapshot> _getAllPeopleFromFirebase() {
+    return people.get();
   }
 
   Stream<QuerySnapshot> getCityProvince() {
     return people.where('city').where('province').limit(10).snapshots();
-  }
-
-  Stream<QuerySnapshot> getPeopleFromId(String id) {
-    return people.where(FieldPath.documentId, isEqualTo: id).snapshots();
-  }
-
-  Stream getPeopleFromIds(List ids) {
-    List<String> docIds = [];
-    List<Stream> streamChunks = [];
-    List chunkIds = [];
-
-    for (var id in ids) {
-      docIds.add(id['id']);
-    }
-
-    for (var i = 0; i < docIds.length; i += 9) {
-      chunkIds.add(
-          docIds.sublist(i, i + 9 > docIds.length ? docIds.length : i + 9));
-    }
-
-    for (var chunk in chunkIds) {
-      streamChunks
-          .add(people.where(FieldPath.documentId, whereIn: chunk).snapshots());
-    }
-
-    return StreamZip(streamChunks);
-  }
-
-  Stream<QuerySnapshot> getPersonWhereName(name) {
-    if (name.firstName.isNotEmpty && name.lastName.isNotEmpty) {
-      return people
-          .where('firstName', isEqualTo: name.firstName)
-          .where('lastName', isEqualTo: name.lastName)
-          .snapshots();
-    } else if (name.firstName.isNotEmpty) {
-      return people.where('firstName', isEqualTo: name.firstName).snapshots();
-    } else {
-      return people.where('lastName', isEqualTo: name.lastName).snapshots();
-    }
-  }
-
-  Stream<QuerySnapshot> getPersonWhereDate(DateTime date) {
-    DateTime tmrwDate = date.add(Duration(days: 1));
-    Timestamp dateTimeStamp = Timestamp.fromDate(date);
-    Timestamp nextDateTimeStamp = Timestamp.fromDate(tmrwDate);
-
-    return people
-        .where('missingSince', isGreaterThanOrEqualTo: dateTimeStamp)
-        .where('missingSince', isLessThan: nextDateTimeStamp)
-        .snapshots();
   }
 }

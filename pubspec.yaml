@@ -39,9 +39,6 @@ dependencies:
   # Date Format
   intl: ^0.16.1
 
-  # Image Caching
-  cached_network_image: ^2.4.1
-
 
 dev_dependencies:
   flutter_test:

@@ -2,24 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import '../../Database/missing_person_database.dart';
 import '../../Database/saved_people_database.dart';
 
 // Item Card
 class SavedPersonTile extends StatelessWidget {
-  final doc;
+  final Map person;
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');
 
-  SavedPersonTile(this.doc);
+  SavedPersonTile(this.person);
 
   @override
   Widget build(BuildContext context) {
     final SavedPeopleModel savedPeopleModel =
         Provider.of<SavedPeopleModel>(context);
 
-    Person person = Person.fromMap(doc.data(), reference: doc.reference);
+    // Person person = Person.fromMap(doc.data(), reference: doc.reference);
 
-    return personCard(person, savedPeopleModel);
+    return personCard(savedPeopleModel);
   }
 
   // Card delete button
@@ -27,57 +26,63 @@ class SavedPersonTile extends StatelessWidget {
         child: Icon(Icons.delete),
         color: Colors.red[200],
         onPressed: () {
-          savedPeopleModel.deletePeopleId(doc.reference.id);
+          savedPeopleModel.deletePeopleId(person['id'].toString());
         },
       );
 
   // Person card
-  Widget personCard(Person person, SavedPeopleModel savedPeopleModel) => Card(
+  Widget personCard(SavedPeopleModel savedPeopleModel) => Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
                 contentPadding: EdgeInsets.all(16.0),
-                title: personCardImage(person),
-                subtitle: personCardText(person, savedPeopleModel)),
+                title: personCardImage(),
+                subtitle: personCardText(savedPeopleModel)),
           ],
         ),
         color: Colors.brown,
       );
 
   // PErson Card Image
-  Widget personCardImage(Person person) => ClipRRect(
+  Widget personCardImage() => ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Image.network(
-          person.image,
+          person['image'],
           fit: BoxFit.fill,
+          errorBuilder: (_, __, ___) => Icon(Icons.error),
         ),
       );
 
   // Person Card Text
-  Widget personCardText(Person person, SavedPeopleModel savedPeopleModel) =>
-      Column(children: [
+  Widget personCardText(SavedPeopleModel savedPeopleModel) => Column(children: [
         SizedBox(height: 10),
-        Text(
-          person.firstName + " " + person.lastName,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-          ),
-          textAlign: TextAlign.center,
-        ),
+        _personCardName(),
         SizedBox(height: 10),
-        Text(
-          formatter.format(person.missingSince),
-          style: TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
+        _personCardDate(),
         SizedBox(height: 10),
-        Text(
-          person.city + " " + person.province,
-          style: TextStyle(color: Colors.white),
-        ),
+        _personCardLoc(),
         SizedBox(height: 10),
         delBtn(savedPeopleModel),
       ]);
+
+  Widget _personCardName() => Text(
+        person['firstName'] + " " + person['lastName'],
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+        ),
+        textAlign: TextAlign.center,
+      );
+
+  Widget _personCardDate() => Text(
+        formatter.format(DateTime.parse(person['missingSince'])),
+        style: TextStyle(color: Colors.white),
+        textAlign: TextAlign.center,
+      );
+
+  Widget _personCardLoc() => Text(
+        person['city'] + " " + person['province'],
+        style: TextStyle(color: Colors.white),
+      );
 }
