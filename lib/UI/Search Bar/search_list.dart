@@ -16,7 +16,6 @@ class SearchList extends StatelessWidget {
   // Save person to Saved Person Screen
   void savePerson(
       scaffoldContext, String id, SavedPeopleModel savedPeopleModel) async {
-    // var snackBar = SnackBar(content: Text('Saved'));
     SavedPerson person = SavedPerson(id);
     await savedPeopleModel.insertPeople(person);
 

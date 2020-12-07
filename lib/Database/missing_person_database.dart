@@ -186,13 +186,27 @@ class MissingPeopleModel {
     return res;
   }
 
+  Future getPeopleWhereCityAndProvince(String city, {String province}) async {
+    String provinceQuery =
+        province.isNotEmpty ? "AND province = '$province'" : '';
+    String query = '''
+    SELECT * 
+    FROM missing_people
+    WHERE city = '$city'
+    $provinceQuery
+    ''';
+    final db = await database;
+    var res = await db.rawQuery(query);
+    return res;
+  }
+
   // -------------------------------------------------------------------
 
   Future<QuerySnapshot> _getAllPeopleFromFirebase() {
     return people.get();
   }
 
-  Stream<QuerySnapshot> getCityProvince() {
-    return people.where('city').where('province').limit(10).snapshots();
-  }
+  // Stream<QuerySnapshot> getCityProvince() {
+  //   return people.where('city').where('province').limit(10).snapshots();
+  // }
 }
