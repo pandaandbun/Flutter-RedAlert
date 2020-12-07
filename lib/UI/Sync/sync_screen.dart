@@ -67,13 +67,39 @@ class _SyncScreenState extends State<SyncScreen> {
         },
       );
 
-  Widget _btns() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _refreshBtn(),
-          _downloadBtn(),
-          _deleteBtn(),
-        ],
+  Widget _btns() => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            FloatingActionButton(
+              child: _refreshBtn(),
+              onPressed: null,
+              heroTag: "btn1",
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            FloatingActionButton(
+              child: _downloadBtn(),
+              onPressed: null,
+              heroTag: "btn2",
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            FloatingActionButton(
+              child: _deleteBtn(),
+              onPressed: null,
+              heroTag: "btn3",
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
       );
 
   Widget _refreshBtn() => IconButton(
