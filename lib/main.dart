@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/sync': (context) => SyncScreen(),
           '/missing': (context) => MissingPerson(),
-          '/map': (context) => MapView(),
+          '/map': (context) => MapScreen(),
           '/saved': (context) => SavedPersonScreen(),
           '/charts': (context) => Breakdown(),
           '/settings': (context) => Settings(),

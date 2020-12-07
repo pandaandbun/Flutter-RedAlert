@@ -44,7 +44,6 @@ class PeopleDialog extends StatelessWidget {
       );
 
   Widget _dialogBody() => Container(
-        margin: EdgeInsets.only(left: 50),
         child: SimpleDialogOption(
           child: Column(
             children: <Widget>[
@@ -68,6 +67,7 @@ class PeopleDialog extends StatelessWidget {
             child: Text(
           'Missing Since: $missingSince',
           style: TextStyle(fontSize: 15),
+          textAlign: TextAlign.center,
         ))
       ],
     );
@@ -78,6 +78,7 @@ class PeopleDialog extends StatelessWidget {
             child: Text(
           'Last Location: ${person['city']}, ${person['province']}',
           style: TextStyle(fontSize: 15),
+          textAlign: TextAlign.center,
         )),
       ]);
 }
