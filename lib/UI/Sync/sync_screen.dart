@@ -25,7 +25,7 @@ class _SyncScreenState extends State<SyncScreen> {
     );
   }
 
-  Widget _content(missingPeopleModel) => Column(
+  Widget _content(MissingPeopleModel missingPeopleModel) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -37,7 +37,8 @@ class _SyncScreenState extends State<SyncScreen> {
 
   // ----------------------------------------------------
 
-  Widget _localDbStatusText(missingPeopleModel) => FutureBuilder(
+  Widget _localDbStatusText(MissingPeopleModel missingPeopleModel) =>
+      FutureBuilder(
         future: missingPeopleModel.isDbEmpty(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -72,43 +73,49 @@ class _SyncScreenState extends State<SyncScreen> {
 
   // ----------------------------------------------------
 
-  Widget _btns(missingPeopleModel) => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _refreshBtn(missingPeopleModel),
-          _downloadBtn(missingPeopleModel),
-          _deleteBtn(missingPeopleModel),
-        ],
+  Widget _btns(MissingPeopleModel missingPeopleModel) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 10),
+            _refreshBtn(missingPeopleModel),
+            SizedBox(height: 10),
+            _downloadBtn(missingPeopleModel),
+            SizedBox(height: 10),
+            _deleteBtn(missingPeopleModel),
+            SizedBox(height: 10),
+          ],
+        ),
       );
 
-  Widget _refreshBtn(missingPeopleModel) => IconButton(
-        icon: Icon(
+  Widget _refreshBtn(MissingPeopleModel missingPeopleModel) =>
+      FloatingActionButton(
+        child: Icon(
           Icons.refresh,
           color: Colors.white,
         ),
-        onPressed: () {
-          missingPeopleModel.refreshLocalDb();
-        },
+        onPressed: () => missingPeopleModel.refreshLocalDb(),
+        heroTag: "btn1",
       );
 
-  Widget _downloadBtn(missingPeopleModel) => IconButton(
-        icon: Icon(
+  Widget _downloadBtn(MissingPeopleModel missingPeopleModel) =>
+      FloatingActionButton(
+        child: Icon(
           Icons.cloud_download,
           color: Colors.white,
         ),
-        onPressed: () {
-          missingPeopleModel.downloadAllPeopleToDb();
-        },
+        onPressed: () => missingPeopleModel.downloadAllPeopleToDb(),
+        heroTag: "btn2",
       );
 
-  Widget _deleteBtn(missingPeopleModel) => IconButton(
-        icon: Icon(
+  Widget _deleteBtn(MissingPeopleModel missingPeopleModel) =>
+      FloatingActionButton(
+        child: Icon(
           Icons.delete,
           color: Colors.white,
         ),
-        onPressed: () {
-          missingPeopleModel.deleteAllPeople();
-        },
+        onPressed: () => missingPeopleModel.deleteAllPeople(),
+        heroTag: "btn3",
       );
 
   // ----------------------------------------------------
