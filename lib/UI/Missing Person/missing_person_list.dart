@@ -27,7 +27,8 @@ class MissingPersonList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MissingPeopleModel missingPeople = MissingPeopleModel();
+    final MissingPeopleModel missingPeople =
+        context.watch<MissingPeopleModel>();
     final DateModel dateModel = context.watch<DateModel>();
     Future future;
 

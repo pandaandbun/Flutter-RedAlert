@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -47,7 +48,7 @@ class Person {
 
 // -------------------------------------------------------------------
 
-class MissingPeopleModel {
+class MissingPeopleModel with ChangeNotifier {
   // Local SQL
   static Database _database;
 
@@ -87,13 +88,12 @@ class MissingPeopleModel {
     return res.length == 0;
   }
 
-  Future refreshLocalDb() async {
-    await deleteAllPeople();
-    await downloadAllPeopleToDb();
-    return;
+  void refreshLocalDb() async {
+    deleteAllPeople();
+    downloadAllPeopleToDb();
   }
 
-  Future downloadAllPeopleToDb() async {
+  void downloadAllPeopleToDb() async {
     final db = await database;
     var res = await db.query("missing_people");
 
@@ -109,7 +109,7 @@ class MissingPeopleModel {
       }
     }
 
-    return;
+    notifyListeners();
   }
 
   Future<List> getAllPeople() async {
@@ -123,12 +123,12 @@ class MissingPeopleModel {
     }
   }
 
-  Future deleteAllPeople() async {
+  void deleteAllPeople() async {
     final db = await database;
     await db.execute('''
     DELETE FROM missing_people
     ''');
-    return;
+    notifyListeners();
   }
 
   Future getPeopleFromId(String id) async {

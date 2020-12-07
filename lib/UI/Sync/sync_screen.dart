@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../Database/missing_person_database.dart';
 
@@ -10,103 +11,107 @@ class SyncScreen extends StatefulWidget {
 }
 
 class _SyncScreenState extends State<SyncScreen> {
-  final MissingPeopleModel missingPeopleModel = MissingPeopleModel();
-
   @override
   Widget build(BuildContext context) {
+    MissingPeopleModel missingPeopleModel = context.watch<MissingPeopleModel>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Sync'),
       ),
       drawer: DrawerMenu(),
       backgroundColor: Colors.brown[900],
-      body: _content(),
+      body: _content(missingPeopleModel),
     );
   }
 
-  Future<bool> myTypedFuture() async {
-    return Future.delayed(
-      Duration(seconds: 1),
-    );
-  }
-
-  Widget _content() => Column(
+  Widget _content(missingPeopleModel) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _localDbStatusText(),
-          _btns(),
+          _localDbStatusText(missingPeopleModel),
+          _btns(missingPeopleModel),
           _backToMainPageBtn(),
         ],
       );
 
-  Widget _localDbStatusText() => FutureBuilder(
+  // ----------------------------------------------------
+
+  Widget _localDbStatusText(missingPeopleModel) => FutureBuilder(
         future: missingPeopleModel.isDbEmpty(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data) {
-              return Text(
-                "Local DB is Empty",
-                style: TextStyle(color: Colors.white),
-                textScaleFactor: 2,
-              );
+              return _emptyText();
             } else {
-              return Text(
-                "Local DB is Sync",
-                style: TextStyle(color: Colors.white),
-                textScaleFactor: 2,
-              );
+              return _fullText();
             }
           } else {
-            return Text(
-              "Loading Status....",
-              style: TextStyle(color: Colors.white),
-              textScaleFactor: 2,
-            );
+            return _loadingText();
           }
         },
       );
 
-  Widget _btns() => Row(
+  Widget _emptyText() => Text(
+        "Local DB is Empty",
+        style: TextStyle(color: Colors.white),
+        textScaleFactor: 2,
+      );
+
+  Widget _fullText() => Text(
+        "Local DB is Sync",
+        style: TextStyle(color: Colors.white),
+        textScaleFactor: 2,
+      );
+
+  Widget _loadingText() => Text(
+        "Loading Status....",
+        style: TextStyle(color: Colors.white),
+        textScaleFactor: 2,
+      );
+
+  // ----------------------------------------------------
+
+  Widget _btns(missingPeopleModel) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _refreshBtn(),
-          _downloadBtn(),
-          _deleteBtn(),
+          _refreshBtn(missingPeopleModel),
+          _downloadBtn(missingPeopleModel),
+          _deleteBtn(missingPeopleModel),
         ],
       );
 
-  Widget _refreshBtn() => IconButton(
+  Widget _refreshBtn(missingPeopleModel) => IconButton(
         icon: Icon(
           Icons.refresh,
           color: Colors.white,
         ),
         onPressed: () {
-          missingPeopleModel.refreshLocalDb().then((value) => setState(() {}));
+          missingPeopleModel.refreshLocalDb();
         },
       );
 
-  Widget _downloadBtn() => IconButton(
+  Widget _downloadBtn(missingPeopleModel) => IconButton(
         icon: Icon(
           Icons.cloud_download,
           color: Colors.white,
         ),
         onPressed: () {
-          missingPeopleModel
-              .downloadAllPeopleToDb()
-              .then((value) => setState(() {}));
+          missingPeopleModel.downloadAllPeopleToDb();
         },
       );
 
-  Widget _deleteBtn() => IconButton(
+  Widget _deleteBtn(missingPeopleModel) => IconButton(
         icon: Icon(
           Icons.delete,
           color: Colors.white,
         ),
         onPressed: () {
-          missingPeopleModel.deleteAllPeople().then((value) => setState(() {}));
+          missingPeopleModel.deleteAllPeople();
         },
       );
+
+  // ----------------------------------------------------
 
   Widget _backToMainPageBtn() => ElevatedButton(
         onPressed: () => Navigator.pushReplacementNamed(context, '/missing'),

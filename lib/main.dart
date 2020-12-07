@@ -1,4 +1,3 @@
-import 'package:Red_Alert/Database/missing_person_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -18,10 +17,13 @@ import 'UI/Settings/theme.dart';
 import 'Database/saved_people_database.dart';
 import 'Database/filter_by_date_model.dart';
 import 'Database/selected_item_model.dart';
+import 'Database/missing_person_database.dart';
 
 void main() {
   runApp(MultiProvider(
     providers: [
+      // Listener for when the Local DB is synced
+      ChangeNotifierProvider(create: (_) => MissingPeopleModel()),
       // Listener for when someone is saved
       ChangeNotifierProvider(create: (_) => SavedPeopleModel()),
       // Listener for when a date to filter by is picked
