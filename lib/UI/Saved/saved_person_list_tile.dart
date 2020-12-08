@@ -4,12 +4,24 @@ import 'package:intl/intl.dart';
 
 import '../../Database/saved_people_database.dart';
 
+import '../popup_map.dart';
+
 // Item Card
 class SavedPersonTile extends StatelessWidget {
   final Map person;
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');
 
   SavedPersonTile(this.person);
+
+  Future _showMapDialog(BuildContext scaffoldContext) async => await showDialog(
+      context: scaffoldContext,
+      builder: (_) {
+        return PopUpMap(
+          person['city'],
+          person['province'],
+          person['image'],
+        );
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +93,17 @@ class SavedPersonTile extends StatelessWidget {
         textAlign: TextAlign.center,
       );
 
-  Widget _personCardLoc() => Text(
-        person['city'] + " " + person['province'],
-        style: TextStyle(color: Colors.white),
-      );
+  Widget _personCardLoc() => Builder(
+      builder: (context) => Row(children: [
+            Expanded(
+              child: ElevatedButton(
+                child: Text(
+                  'Last Location: ${person['city']}, ${person['province']}',
+                  style: TextStyle(fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () => _showMapDialog(context),
+              ),
+            ),
+          ]));
 }

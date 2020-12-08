@@ -16,6 +16,8 @@ class MapDialog extends StatelessWidget {
     await savedPeopleModel.insertPeople(person);
   }
 
+  // --------------------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -24,6 +26,8 @@ class MapDialog extends StatelessWidget {
       actions: [_exitBtn(context)],
     );
   }
+
+  // --------------------------------------------------------------
 
   Widget _exitBtn(context) => TextButton(
         onPressed: () => Navigator.pop(context),
@@ -37,6 +41,8 @@ class MapDialog extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) => _peopleCard(index),
         ),
       );
+
+  // --------------------------------------------------------------
 
   Widget _peopleCard(int index) => Card(
         color: Colors.brown,

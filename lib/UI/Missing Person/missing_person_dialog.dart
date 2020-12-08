@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../popup_map.dart';
+
 // Pop up dialog for main page
 class PeopleDialog extends StatelessWidget {
   final Map person;
@@ -10,10 +12,24 @@ class PeopleDialog extends StatelessWidget {
 
   PeopleDialog(this.person);
 
+  Future _showMapDialog(BuildContext scaffoldContext) async => await showDialog(
+      context: scaffoldContext,
+      builder: (_) {
+        return PopUpMap(
+          person['city'],
+          person['province'],
+          person['image'],
+        );
+      });
+
+  // ----------------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
     return _blurBackGround();
   }
+
+  // ----------------------------------------------------------
 
   Widget _blurBackGround() => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -42,6 +58,8 @@ class PeopleDialog extends StatelessWidget {
         fit: BoxFit.contain,
         errorBuilder: (_, __, ___) => Icon(Icons.error),
       );
+
+  // ----------------------------------------------------------
 
   Widget _dialogBody() => Container(
         child: SimpleDialogOption(
@@ -73,12 +91,17 @@ class PeopleDialog extends StatelessWidget {
     );
   }
 
-  Widget _dialogBodyLoc() => Row(children: [
-        Expanded(
-            child: Text(
-          'Last Location: ${person['city']}, ${person['province']}',
-          style: TextStyle(fontSize: 15),
-          textAlign: TextAlign.center,
-        )),
-      ]);
+  Widget _dialogBodyLoc() => Builder(
+      builder: (context) => Row(children: [
+            Expanded(
+              child: ElevatedButton(
+                child: Text(
+                  'Last Location: ${person['city']}, ${person['province']}',
+                  style: TextStyle(fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () => _showMapDialog(context),
+              ),
+            ),
+          ]));
 }

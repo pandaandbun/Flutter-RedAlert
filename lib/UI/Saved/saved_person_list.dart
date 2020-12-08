@@ -13,37 +13,41 @@ class SavedPersonList extends StatelessWidget {
   Widget build(BuildContext context) {
     final SavedPeopleModel savedPeopleModel = context.watch<SavedPeopleModel>();
 
-    return FutureBuilder(
-      future: savedPeopleModel.getAllSavedPeople(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          Set<String> peopleIds =
-              snapshot.data.map((e) => e['id'].toString()).toSet().cast<String>();
-
-          return savedPersonListView(peopleIds);
-        } else {
-          return Text("Data Loading or Data is Empty");
-        }
-      },
-    );
+    return _futureList(savedPeopleModel);
   }
+
+  Widget _futureList(SavedPeopleModel savedPeopleModel) => FutureBuilder(
+        future: savedPeopleModel.getAllSavedPeople(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            Set<String> peopleIds = snapshot.data
+                .map((e) => e['id'].toString())
+                .toSet()
+                .cast<String>();
+
+            return savedPersonListView(peopleIds);
+          } else {
+            return Text("Data Loading or Data is Empty");
+          }
+        },
+      );
 
   Widget savedPersonListView(Set<String> peopleIds) => FutureBuilder(
       future: missingPeople.getPeopleFromIds(peopleIds),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List people = snapshot.data;
-
-          return Expanded(
-            child: ListView.separated(
-              itemCount: people.length,
-              itemBuilder: (BuildContext context, int index) =>
-                  SavedPersonTile(people[index]),
-              separatorBuilder: (BuildContext context, int index) => Divider(),
-            ),
-          );
+          return _savePersonListViewBuilder(snapshot.data);
         } else {
           return Text("Data Loading....");
         }
       });
+
+  Widget _savePersonListViewBuilder(List people) => Expanded(
+        child: ListView.separated(
+          itemCount: people.length,
+          itemBuilder: (BuildContext context, int index) =>
+              SavedPersonTile(people[index]),
+          separatorBuilder: (BuildContext context, int index) => Divider(),
+        ),
+      );
 }

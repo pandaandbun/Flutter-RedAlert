@@ -1,8 +1,9 @@
-import 'package:Red_Alert/UI/Map/map_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+
+import 'map_dialog.dart';
 
 class MapBox extends StatelessWidget {
   final List people;
@@ -45,20 +46,20 @@ class MapBox extends StatelessWidget {
         options: MapOptions(
           minZoom: 10.0,
           center: LatLng(loc.latitude, loc.longitude),
-          // onTap: (e) => print(e),
         ),
         layers: [
-          TileLayerOptions(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            subdomains: ['a', 'b', 'c'],
-          ),
-          MarkerLayerOptions(
-              markers: [_cityMarkerHandler(loc, scaffoldContext)]),
-        ],
-        children: [
-          RaisedButton(child: Icon(Icons.add), onPressed: () => print("value"))
+          _openMapLayer(),
+          _markerLayer(loc, scaffoldContext),
         ],
       );
+
+  TileLayerOptions _openMapLayer() => TileLayerOptions(
+        urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        subdomains: ['a', 'b', 'c'],
+      );
+
+  MarkerLayerOptions _markerLayer(Position loc, BuildContext scaffoldContext) =>
+      MarkerLayerOptions(markers: [_cityMarkerHandler(loc, scaffoldContext)]);
 
   Marker _cityMarkerHandler(Position loc, BuildContext scaffoldContext) =>
       people.isNotEmpty
@@ -78,26 +79,4 @@ class MapBox extends StatelessWidget {
                 onPressed: () => _missingPeopleDialog(scaffoldContext),
                 iconSize: 80,
               ));
-
-  // Marker _yourLocationMarker(Position e) => Marker(
-  //       point: LatLng(e.latitude, e.longitude),
-  //       builder: (context) => Icon(
-  //         Icons.home,
-  //         color: Colors.brown,
-  //         size: 80,
-  //       ),
-  //     );
-
-  // List<Marker> _missingPeopleMarkers(Position yourLocation) => people
-  //     .map((e) => Marker(
-  //           point: LatLng(yourLocation.latitude, yourLocation.longitude),
-  //           builder: (context) => Icon(
-  //             Icons.person,
-  //             color: Colors.red,
-  //             size: 80,
-  //             semanticLabel: e['firstName'],
-  //           ),
-  //         ))
-  //     .toList()
-  //     .cast<Marker>();
 }
