@@ -9,7 +9,7 @@ class SearchList extends StatelessWidget {
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');
   final MissingPeopleModel missingPeople = MissingPeopleModel();
 
-  final name;
+  final String name;
 
   SearchList(this.name);
 
@@ -22,16 +22,20 @@ class SearchList extends StatelessWidget {
     Navigator.pop(scaffoldContext);
   }
 
+  // --------------------------------------
+
   @override
   Widget build(BuildContext context) {
     final SavedPeopleModel savedPeopleModel =
         Provider.of<SavedPeopleModel>(context);
 
-    return searchList(context, savedPeopleModel);
+    return searchList(savedPeopleModel);
   }
 
+  // --------------------------------------
+
   // List response
-  Widget searchList(scaffoldContext, savedPeopleModel) => Container(
+  Widget searchList(savedPeopleModel) => Container(
       width: double.maxFinite,
       child: FutureBuilder(
         future: missingPeople.getPersonWhereName(name),
@@ -43,7 +47,7 @@ class SearchList extends StatelessWidget {
               return ListView.builder(
                 itemCount: people.length,
                 itemBuilder: (BuildContext context, int index) =>
-                    seachCard(scaffoldContext, people[index], savedPeopleModel),
+                    seachCard(people[index], savedPeopleModel),
               );
             }
           }
@@ -52,21 +56,18 @@ class SearchList extends StatelessWidget {
       ));
 
   // Search Cards
-  Widget seachCard(
-          scaffoldContext, Map person, SavedPeopleModel savedPeopleModel) =>
-      Card(
+  Widget seachCard(Map person, SavedPeopleModel savedPeopleModel) => Card(
         color: Colors.brown,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            searchCardText(scaffoldContext, person, savedPeopleModel),
+            searchCardText(person, savedPeopleModel),
           ],
         ),
       );
 
   // Search Card Text Content
-  Widget searchCardText(
-      scaffoldContext, Map person, SavedPeopleModel savedPeopleModel) {
+  Widget searchCardText(Map person, SavedPeopleModel savedPeopleModel) {
     String url = person['image'];
     String name = person['firstName'] + " " + person['lastName'];
     String date = formatter.format(DateTime.parse(person['missingSince']));
@@ -76,7 +77,7 @@ class SearchList extends StatelessWidget {
         leading: _cardImg(url),
         title: _cardTitle(name),
         subtitle: _cardSubTitle(date),
-        trailing: _cardSaveBtn(scaffoldContext, id, savedPeopleModel));
+        trailing: _cardSaveBtn(id, savedPeopleModel));
   }
 
   Widget _cardImg(String url) => CircleAvatar(
@@ -94,12 +95,13 @@ class SearchList extends StatelessWidget {
         style: TextStyle(color: Colors.white),
       );
 
-  Widget _cardSaveBtn(scaffoldContext, String id, savedPeopleModel) =>
-      IconButton(
-        icon: Icon(
-          Icons.save,
-          color: Colors.white,
+  Widget _cardSaveBtn(String id, SavedPeopleModel savedPeopleModel) => Builder(
+        builder: (context) => IconButton(
+          icon: Icon(
+            Icons.save,
+            color: Colors.white,
+          ),
+          onPressed: () => savePerson(context, id, savedPeopleModel),
         ),
-        onPressed: () => savePerson(scaffoldContext, id, savedPeopleModel),
       );
 }

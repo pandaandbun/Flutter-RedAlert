@@ -4,8 +4,7 @@ import 'search_form.dart';
 
 // Class to store text field value
 class Name {
-  String firstName;
-  String lastName;
+  String fullName;
 }
 
 // Search Bar
@@ -21,10 +20,12 @@ class SearchBar extends StatelessWidget {
           return AlertDialog(
             title: const Text('People Found'),
             backgroundColor: Colors.brown[100],
-            content: SearchList(name),
+            content: SearchList(name.fullName),
           );
         });
   }
+
+  // ---------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -36,23 +37,27 @@ class SearchBar extends StatelessWidget {
       ),
       children: [
         SearchForm(_formKey, name),
-        searchBtn(context),
+        searchBtn(),
       ],
     ));
   }
 
+  // ---------------------------------------------------
+
   // Search Icon Button
-  Widget searchBtn(context) => RaisedButton(
-        color: Colors.brown,
-        child: Icon(
-          Icons.search,
-          color: Colors.white,
+  Widget searchBtn() => Builder(
+        builder: (context) => RaisedButton(
+          color: Colors.brown,
+          child: Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            _formKey.currentState.save();
+            if (name.fullName.isNotEmpty) {
+              _findPeople(context);
+            }
+          },
         ),
-        onPressed: () {
-          _formKey.currentState.save();
-          if (name.firstName.isNotEmpty || name.lastName.isNotEmpty) {
-            _findPeople(context);
-          }
-        },
       );
 }

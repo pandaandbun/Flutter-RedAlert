@@ -159,17 +159,15 @@ class MissingPeopleModel with ChangeNotifier {
       return res;
   }
 
-  Future getPersonWhereName(name) async {
-    String quaeryAndOr =
-        name.firstName.isNotEmpty && name.lastName.isNotEmpty ? "AND" : "OR";
+  Future getPersonWhereName(String fullName) async {
     String query = '''
     SELECT * 
     FROM missing_people
-    WHERE firstName = '${name.firstName}'
-    $quaeryAndOr lastName = '${name.lastName}'
+    WHERE LOWER(firstName || ' ' || lastName) LIKE '%${fullName.toLowerCase()}%'
     ''';
     final db = await database;
     var res = await db.rawQuery(query);
+
     return res;
   }
 
@@ -205,8 +203,4 @@ class MissingPeopleModel with ChangeNotifier {
   Future<QuerySnapshot> _getAllPeopleFromFirebase() {
     return people.get();
   }
-
-  // Stream<QuerySnapshot> getCityProvince() {
-  //   return people.where('city').where('province').limit(10).snapshots();
-  // }
 }

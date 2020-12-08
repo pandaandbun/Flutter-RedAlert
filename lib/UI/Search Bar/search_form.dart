@@ -12,25 +12,22 @@ class SearchForm extends StatelessWidget {
   }
 
   Widget searchForm() => Form(
-        key: _formKey,
-        child: Container(
-            width: 300,
-            margin: EdgeInsets.only(left: 25, right: 25),
-            child: Column(children: [
-              firstNameForm(),
-              lastNameForm(),
-            ])),
-      );
+      key: _formKey,
+      child: Container(
+        width: 300,
+        margin: EdgeInsets.only(left: 25, right: 25),
+        child: nameForm(),
+      ));
 
-  Widget firstNameForm() => TextFormField(
+  Widget nameForm() => TextFormField(
         decoration: const InputDecoration(
           prefixIcon: Icon(
             Icons.person,
             color: Colors.grey,
           ),
-          hintText: 'John',
+          hintText: 'John Smith',
           hintStyle: TextStyle(color: Colors.grey),
-          labelText: 'First Name',
+          labelText: 'Name',
           labelStyle: TextStyle(color: Colors.grey),
           contentPadding: EdgeInsets.symmetric(horizontal: 20),
           border: OutlineInputBorder(),
@@ -38,25 +35,6 @@ class SearchForm extends StatelessWidget {
         style: TextStyle(
           color: Colors.grey,
         ),
-        onSaved: (String value) => name.firstName = value,
-      );
-
-  Widget lastNameForm() => TextFormField(
-        decoration: const InputDecoration(
-          prefixIcon: Icon(
-            Icons.person,
-            color: Colors.grey,
-          ),
-          hintText: 'Doe',
-          hintStyle: TextStyle(color: Colors.grey),
-          labelText: 'Last Name',
-          labelStyle: TextStyle(color: Colors.grey),
-          contentPadding: EdgeInsets.symmetric(horizontal: 20),
-          border: OutlineInputBorder(),
-        ),
-        style: TextStyle(
-          color: Colors.grey,
-        ),
-        onSaved: (String value) => name.lastName = value,
+        onSaved: (String value) => name.fullName = value,
       );
 }
