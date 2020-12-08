@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../settings_btn.dart';
 import '../drawer.dart';
+import '../are_you_sure_you_want_to_exit.dart';
 
 import '../../Database/missing_person_database.dart';
 
@@ -24,14 +25,27 @@ class Breakdown extends StatelessWidget {
   Widget _tabs() => DefaultTabController(
       length: _numOfTabs,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Breakdowns'),
-          actions: [SettingsBtn()],
-          bottom: _tabBar(),
-        ),
+        appBar: _appBar(),
         drawer: DrawerMenu(),
-        body: _futureTable(),
+        body: _areYourSureYouWantToExitWarpper(),
       ));
+
+  Widget _areYourSureYouWantToExitWarpper() => Builder(
+      builder: (context) => WillPopScope(
+          child: _futureTable(),
+          onWillPop: () async {
+            bool value = await showDialog<bool>(
+                context: context, builder: (context) => ExitDialog());
+            return value;
+          }));
+
+  // ---------------------------------------------------------
+
+  AppBar _appBar() => AppBar(
+        title: Text('Breakdowns'),
+        actions: [SettingsBtn()],
+        bottom: _tabBar(),
+      );
 
   Widget _tabBar() => TabBar(
         tabs: [
@@ -39,6 +53,8 @@ class Breakdown extends StatelessWidget {
           Tab(icon: Icon(Icons.stacked_line_chart)),
         ],
       );
+
+  // ---------------------------------------------------------
 
   Widget _futureTable() => FutureBuilder(
         future: missingPerson.getAllPeople(),
@@ -49,10 +65,10 @@ class Breakdown extends StatelessWidget {
 
               return _mainTabBarView();
             } else {
-              return _loadingTabBarView('Empty');
+              return _waitingForMainViewTabBarView('Empty');
             }
           } else {
-            return _loadingTabBarView('Loading');
+            return _waitingForMainViewTabBarView('Loading');
           }
         },
       );
@@ -65,15 +81,15 @@ class Breakdown extends StatelessWidget {
         ],
       );
 
-  Widget _loadingTabBarView(String type) => TabBarView(
+  Widget _waitingForMainViewTabBarView(String type) => TabBarView(
         children: _loadingText(type),
       );
 
   List<Widget> _loadingText(String type) {
-    List<Widget> temp = [];
+    List<Widget> text = [];
     for (int i = 0; i < _numOfTabs; i++) {
-      temp.add(Text(type));
+      text.add(Text(type));
     }
-    return temp;
+    return text;
   }
 }

@@ -8,6 +8,7 @@ import '../../Database/missing_person_database.dart';
 
 import '../settings_btn.dart';
 import '../drawer.dart';
+import '../are_you_sure_you_want_to_exit.dart';
 
 import 'map_box.dart';
 
@@ -103,17 +104,28 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Map'),
-        actions: [SettingsBtn()],
-      ),
-      drawer: DrawerMenu(),
-      body: _futureMap(),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add), onPressed: () => _setCurrentLocation()),
-    );
+    return _scaffold();
   }
+
+  Widget _scaffold() => Scaffold(
+        appBar: AppBar(
+          title: Text('Map'),
+          actions: [SettingsBtn()],
+        ),
+        drawer: DrawerMenu(),
+        body: _areYourSureYouWantToExitWarpper(),
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add), onPressed: () => _setCurrentLocation()),
+      );
+
+  Widget _areYourSureYouWantToExitWarpper() => Builder(
+      builder: (context) => WillPopScope(
+          child: _futureMap(),
+          onWillPop: () async {
+            bool value = await showDialog<bool>(
+                context: context, builder: (context) => ExitDialog());
+            return value;
+          }));
 
   Widget _futureMap() => FutureBuilder(
         future: widget.missingPeopleModel.getPeopleWhereCityAndProvince(

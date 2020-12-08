@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'calendar.dart';
+import 'missing_person_list.dart';
+
 import '../settings_btn.dart';
 import '../drawer.dart';
 import '../Search Bar/search_bar.dart';
 import '../notification.dart';
-
-import 'missing_person_list.dart';
+import '../are_you_sure_you_want_to_exit.dart';
 
 import '../../Database/saved_people_database.dart';
 import '../../Database/selected_item_model.dart';
@@ -32,17 +33,35 @@ class MissingPerson extends StatelessWidget {
     final SelectedPeopleModel selectedPeopleModel =
         Provider.of<SelectedPeopleModel>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Missing Person'),
-        actions: [
-          savedButton(savedPeopleModel, selectedPeopleModel),
-          SettingsBtn(),
-        ],
-      ),
-      drawer: DrawerMenu(),
-      backgroundColor: Colors.brown[900],
-      body: Column(
+    return _scaffold(savedPeopleModel, selectedPeopleModel);
+  }
+
+  Widget _scaffold(SavedPeopleModel savedPeopleModel,
+          SelectedPeopleModel selectedPeopleModel) =>
+      Scaffold(
+        appBar: AppBar(
+          title: Text('Missing Person'),
+          actions: [
+            savedButton(savedPeopleModel, selectedPeopleModel),
+            SettingsBtn(),
+          ],
+        ),
+        drawer: DrawerMenu(),
+        backgroundColor: Colors.brown[900],
+        body: _areYourSureYouWantToExitWarpper(savedPeopleModel),
+      );
+
+  Widget _areYourSureYouWantToExitWarpper(SavedPeopleModel savedPeopleModel) =>
+      Builder(
+          builder: (context) => WillPopScope(
+              child: _body(savedPeopleModel),
+              onWillPop: () async {
+                bool value = await showDialog<bool>(
+                    context: context, builder: (context) => ExitDialog());
+                return value;
+              }));
+
+  Widget _body(SavedPeopleModel savedPeopleModel) => Column(
         children: [
           Row(children: [
             SearchBar(),
@@ -50,9 +69,7 @@ class MissingPerson extends StatelessWidget {
           ]),
           MissingPersonList(savedPeopleModel, _notifications, notificationsNum),
         ],
-      ),
-    );
-  }
+      );
 
   // Save button for saving people to local list
   Widget savedButton(SavedPeopleModel savedPeopleModel,

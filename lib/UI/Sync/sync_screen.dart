@@ -4,28 +4,37 @@ import 'package:provider/provider.dart';
 import '../../Database/missing_person_database.dart';
 
 import '../drawer.dart';
+import '../are_you_sure_you_want_to_exit.dart';
 
-class SyncScreen extends StatefulWidget {
-  @override
-  _SyncScreenState createState() => _SyncScreenState();
-}
-
-class _SyncScreenState extends State<SyncScreen> {
+class SyncScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MissingPeopleModel missingPeopleModel = context.watch<MissingPeopleModel>();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sync'),
-      ),
-      drawer: DrawerMenu(),
-      backgroundColor: Colors.brown[900],
-      body: _content(missingPeopleModel),
-    );
+    return _scaffold(missingPeopleModel);
   }
 
-  Widget _content(MissingPeopleModel missingPeopleModel) => Column(
+  Widget _scaffold(MissingPeopleModel missingPeopleModel) => Scaffold(
+        appBar: AppBar(
+          title: Text('Sync'),
+        ),
+        drawer: DrawerMenu(),
+        backgroundColor: Colors.brown[900],
+        body: _areYourSureYouWantToExitWarpper(missingPeopleModel),
+      );
+
+  Widget _areYourSureYouWantToExitWarpper(
+          MissingPeopleModel missingPeopleModel) =>
+      Builder(
+          builder: (context) => WillPopScope(
+              child: _body(missingPeopleModel),
+              onWillPop: () async {
+                bool value = await showDialog<bool>(
+                    context: context, builder: (context) => ExitDialog());
+                return value;
+              }));
+
+  Widget _body(MissingPeopleModel missingPeopleModel) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -120,8 +129,10 @@ class _SyncScreenState extends State<SyncScreen> {
 
   // ----------------------------------------------------
 
-  Widget _backToMainPageBtn() => ElevatedButton(
-        onPressed: () => Navigator.pushReplacementNamed(context, '/missing'),
-        child: Text("To Main Page"),
+  Widget _backToMainPageBtn() => Builder(
+        builder: (context) => ElevatedButton(
+          onPressed: () => Navigator.pushReplacementNamed(context, '/missing'),
+          child: Text("To Main Page"),
+        ),
       );
 }
