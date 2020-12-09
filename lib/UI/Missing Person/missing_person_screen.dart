@@ -15,6 +15,8 @@ import '../../Database/saved_people_database.dart';
 import '../../Database/selected_item_model.dart';
 import '../../Database/tutorial_database.dart';
 
+import 'package:flutter_i18n/flutter_i18n.dart';
+
 class NotificationsNum {
   int num = 0;
 }
@@ -47,16 +49,17 @@ class MissingPerson extends StatelessWidget {
 
     _tutorial(context);
 
-    return _scaffold(savedPeopleModel, selectedPeopleModel);
+    return _scaffold(savedPeopleModel, selectedPeopleModel, context);
   }
 
   // ------------------------------------------------------------
 
   Widget _scaffold(SavedPeopleModel savedPeopleModel,
-          SelectedPeopleModel selectedPeopleModel) =>
+          SelectedPeopleModel selectedPeopleModel,
+          BuildContext context) =>
       Scaffold(
         appBar: AppBar(
-          title: Text('Missing Person'),
+          title: Text(FlutterI18n.translate(context, "drawer.missing_persons")),
           actions: [
             _turnOnTutorialBtn(),
             savedButton(savedPeopleModel, selectedPeopleModel),

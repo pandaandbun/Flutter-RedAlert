@@ -1,0 +1,18 @@
+{
+    "drawer": {
+        "missing_persons": "Personnes",
+        "saved": "Enregistré",
+        "map": "Carte",
+        "breakdown": "Graphiques",
+        "sync": "Synchroniser"
+    },
+
+    "person_dialog": {
+        "missing_since": "Disparu Depuis: ",
+        "last_location": "Dernier Emplacement: "
+    },
+
+    "settings": {
+        "title": "Réglages"
+    }
+}

@@ -12,6 +12,8 @@ import 'Chart/chart_selector.dart';
 import 'Data Table/data_table.dart';
 import 'breakdown_func.dart';
 
+import 'package:flutter_i18n/flutter_i18n.dart';
+
 class Breakdown extends StatelessWidget {
   final MissingPeopleModel missingPerson = MissingPeopleModel();
   final BreakdownFunc _breakdownFunc = BreakdownFunc();
@@ -19,13 +21,13 @@ class Breakdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _tabs();
+    return _tabs(context);
   }
 
-  Widget _tabs() => DefaultTabController(
+  Widget _tabs(BuildContext context) => DefaultTabController(
       length: _numOfTabs,
       child: Scaffold(
-        appBar: _appBar(),
+        appBar: _appBar(context),
         drawer: DrawerMenu(),
         body: _areYourSureYouWantToExitWarpper(),
       ));
@@ -41,8 +43,8 @@ class Breakdown extends StatelessWidget {
 
   // ---------------------------------------------------------
 
-  AppBar _appBar() => AppBar(
-        title: Text('Breakdowns'),
+  AppBar _appBar(BuildContext context) => AppBar(
+        title: Text(FlutterI18n.translate(context, "drawer.breakdown")),
         actions: [SettingsBtn()],
         bottom: _tabBar(),
       );

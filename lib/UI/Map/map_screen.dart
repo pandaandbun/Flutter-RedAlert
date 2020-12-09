@@ -12,6 +12,8 @@ import '../are_you_sure_you_want_to_exit.dart';
 
 import 'map_box.dart';
 
+import 'package:flutter_i18n/flutter_i18n.dart';
+
 class MapScreen extends StatefulWidget {
   final MissingPeopleModel missingPeopleModel = MissingPeopleModel();
   final MapController mapController = MapController();
@@ -109,7 +111,7 @@ class _MapScreenState extends State<MapScreen> {
 
   Widget _scaffold() => Scaffold(
         appBar: AppBar(
-          title: Text('Map'),
+          title: Text(FlutterI18n.translate(context, "drawer.map")),
           actions: [SettingsBtn()],
         ),
         drawer: DrawerMenu(),

@@ -28,7 +28,7 @@ Future main() async {
     translationLoader: FileTranslationLoader(
         useCountryCode: false,
         fallbackFile: 'en',
-        basePath: 'assets/flutter_i18n'),
+        basePath: 'assets/flutter_i18n',),
   );
   WidgetsFlutterBinding.ensureInitialized();
   await flutterI18nDelegate.load(null);
@@ -124,6 +124,10 @@ class MyApp extends StatelessWidget {
           flutterI18nDelegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en'),
+          const Locale('fr'),
         ],
       );
 }

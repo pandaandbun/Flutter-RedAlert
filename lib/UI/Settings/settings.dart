@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Red_Alert/UI/drawer.dart';
 import '../notification.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class SettingsPage extends State<Settings> {
     notification.init();
 
     return Scaffold(
-        appBar: AppBar(title: Text('Settings')),
+        appBar: AppBar(title: Text(FlutterI18n.translate(context, "drawer.settings"))),
         drawer: DrawerMenu(),
         body: SingleChildScrollView(
             child: Column(

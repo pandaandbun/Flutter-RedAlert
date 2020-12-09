@@ -7,16 +7,18 @@ import '../are_you_sure_you_want_to_exit.dart';
 
 import 'saved_person_list.dart';
 
+import 'package:flutter_i18n/flutter_i18n.dart';
+
 // Save Person Screen Main Page
 class SavedPersonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return _scaffold();
+    return _scaffold(context);
   }
 
-  Widget _scaffold() => Scaffold(
+  Widget _scaffold(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Saved'),
+          title: Text(FlutterI18n.translate(context, "drawer.saved")),
           actions: [SettingsBtn()],
         ),
         drawer: DrawerMenu(),
