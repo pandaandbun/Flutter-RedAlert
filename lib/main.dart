@@ -19,7 +19,19 @@ import 'Database/filter_by_date_model.dart';
 import 'Database/selected_item_model.dart';
 import 'Database/missing_person_database.dart';
 
-void main() {
+import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_i18n/flutter_i18n_delegate.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+Future main() async {
+  final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
+    translationLoader: FileTranslationLoader(
+        useCountryCode: false,
+        fallbackFile: 'en',
+        basePath: 'assets/flutter_i18n'),
+  );
+  WidgetsFlutterBinding.ensureInitialized();
+  await flutterI18nDelegate.load(null);
   runApp(MultiProvider(
     providers: [
       // Listener for when the Local DB is synced
@@ -31,12 +43,14 @@ void main() {
       // Listener for when people are save and to deselect them
       ChangeNotifierProvider(create: (_) => SelectedPeopleModel()),
     ],
-    child: MyApp(),
+    child: MyApp(flutterI18nDelegate),
   ));
 }
 
 class MyApp extends StatelessWidget {
   // final MissingPeopleModel missingPeopleModel = MissingPeopleModel();
+  final FlutterI18nDelegate flutterI18nDelegate;
+  MyApp(this.flutterI18nDelegate);
   @override
   Widget build(BuildContext context) {
     tz.initializeTimeZones();
@@ -106,5 +120,10 @@ class MyApp extends StatelessWidget {
           '/profile': (context) => Profile(),
           '/theme': (context) => ThemeP(),
         },
+        localizationsDelegates: [
+          flutterI18nDelegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
       );
 }

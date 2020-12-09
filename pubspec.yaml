@@ -27,6 +27,9 @@ dependencies:
   firebase_core:
   cloud_firestore:
 
+  # Internationalization
+  flutter_i18n:
+
   # Map
   flutter_map: any
   geolocator: ^6.1.7
@@ -58,4 +61,5 @@ flutter:
     - images/
     - images/tutorials/missing_person/
     - assets/
+    - assets/flutter_i18n/
 
