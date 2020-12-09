@@ -5,16 +5,20 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
+  final SharedPreferences prefs;
+  Settings(this.prefs);
   @override
-  SettingsPage createState() => SettingsPage();
+  SettingsPage createState() => SettingsPage(prefs);
 }
 
 class SettingsPage extends State<Settings> {
+  final SharedPreferences prefs;
   bool _isOn1 = false;
   bool _isOn2 = false;
   bool _isOn3 = false;
   bool _isOn4 = false;
 
+  SettingsPage(this.prefs);
   @override
   Widget build(BuildContext context) {
     Notifications notification = new Notifications();
@@ -90,13 +94,14 @@ class SettingsPage extends State<Settings> {
                               'English',
                               textScaleFactor: 1.2,
                             ),
-                            (true) ? Icon(Icons.check) : Text(""), //update this to actually check language
+                            (prefs.getString('language')=="en") ? Icon(Icons.check) : Text(""), //update this to actually check language
                           ]
                         ),
                         shape: RoundedRectangleBorder(  
                           borderRadius: BorderRadius.circular(15)),
                         onPressed: () async {
                           print('Language Select: English');
+                          prefs.setString("language", "en");
                           Locale newLocale = Locale('en');
                           await FlutterI18n.refresh(context, newLocale);
                           setState(() {});
@@ -113,13 +118,14 @@ class SettingsPage extends State<Settings> {
                             'French',
                             textScaleFactor: 1.2,
                             ),
-                            (false) ? Icon(Icons.check) : Text(""), //update this to actually check language
+                            (prefs.getString('language')=="fr") ? Icon(Icons.check) : Text(""), //update this to actually check language
                           ]
                         ),
                         shape: RoundedRectangleBorder(  
                           borderRadius: BorderRadius.circular(15)),
                         onPressed: () async {
                           print('Language Select: French');
+                          prefs.setString("language", "fr");
                           Locale newLocale = Locale('fr');
                           await FlutterI18n.refresh(context, newLocale);
                           setState(() {});

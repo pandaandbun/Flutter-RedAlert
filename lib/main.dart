@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 import 'UI/Missing Person/missing_person_screen.dart';
 import 'UI/Map/map_screen.dart';
@@ -24,15 +26,35 @@ import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //load user settings
+  final prefs = await SharedPreferences.getInstance();
+  String language = prefs.getString('language') ?? "none";
+  if(language == "none") {
+    print("No language selected, using default: ${Platform.localeName.substring(0,2)}.");
+    language = Platform.localeName.substring(0,2);
+    if(language == "en" || language == "fr")
+      prefs.setString("language", language);
+    else
+      prefs.setString("language", "en");
+  }
+  else {
+    print("Selected language is: $language");
+  }
+
+  //load internationalization files
   final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
     translationLoader: FileTranslationLoader(
-      useCountryCode: false,
-      fallbackFile: 'en',
-      basePath: 'assets/flutter_i18n',
-    ),
+        useCountryCode: false,
+        fallbackFile: 'en',
+        forcedLocale: Locale(language),
+        basePath: 'assets/flutter_i18n',),
   );
-  WidgetsFlutterBinding.ensureInitialized();
-  await flutterI18nDelegate.load(null);
+  await flutterI18nDelegate.load(Locale(language));
+
+  //run app with providers
   runApp(MultiProvider(
     providers: [
       // Listener for when the Local DB is synced
@@ -44,14 +66,15 @@ Future main() async {
       // Listener for when people are save and to deselect them
       ChangeNotifierProvider(create: (_) => SelectedPeopleModel()),
     ],
-    child: MyApp(flutterI18nDelegate),
+    child: MyApp(flutterI18nDelegate, prefs),
   ));
 }
 
 class MyApp extends StatelessWidget {
   // final MissingPeopleModel missingPeopleModel = MissingPeopleModel();
   final FlutterI18nDelegate flutterI18nDelegate;
-  MyApp(this.flutterI18nDelegate);
+  final SharedPreferences prefs;
+  MyApp(this.flutterI18nDelegate, this.prefs);
   @override
   Widget build(BuildContext context) {
     tz.initializeTimeZones();
@@ -66,7 +89,7 @@ class MyApp extends StatelessWidget {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             // Main
-            return _checkIfDbIsEmpty();
+            return _checkIfDbIsEmpty(prefs);
           } else {
             // Before Start up loading Screen
             return _loadingIcon();
@@ -74,16 +97,16 @@ class MyApp extends StatelessWidget {
         });
   }
 
-  Widget _checkIfDbIsEmpty() {
+  Widget _checkIfDbIsEmpty(SharedPreferences prefs) {
     MissingPeopleModel missingPeopleModel = MissingPeopleModel();
     return FutureBuilder(
         future: missingPeopleModel.isDbEmpty(),
         builder: (_, dbSnapshot) {
           if (dbSnapshot.hasData) {
             if (dbSnapshot.data) {
-              return _startingPageIs("sync");
+              return _startingPageIs("sync", prefs);
             } else {
-              return _startingPageIs("missing");
+              return _startingPageIs("missing", prefs);
             }
           } else {
             // Waiting for if local DB is empty
@@ -106,7 +129,7 @@ class MyApp extends StatelessWidget {
         ],
       )));
 
-  Widget _startingPageIs(String main) => MaterialApp(
+  Widget _startingPageIs(String main, SharedPreferences prefs) => MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.brown,
         ),
@@ -117,7 +140,7 @@ class MyApp extends StatelessWidget {
           '/map': (context) => MapScreen(),
           '/saved': (context) => SavedPersonScreen(),
           '/charts': (context) => Breakdown(),
-          '/settings': (context) => Settings(),
+          '/settings': (context) => Settings(prefs),
           '/profile': (context) => Profile(),
           '/theme': (context) => ThemeP(),
         },
