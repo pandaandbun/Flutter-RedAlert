@@ -1,7 +1,19 @@
 {
+    "drawer": {
+        "missing_persons": "Missing Persons",
+        "saved": "Saved",
+        "map": "Map",
+        "breakdown": "Breakdown",
+        "sync": "Sync",
+        "about": "About Red Alert"
+    },
+
     "person_dialog": {
         "missing_since": "Missing Since: ",
         "last_location": "Last Location: "
+    },
 
+    "settings": {
+        "title": "Settings"
     }
 }

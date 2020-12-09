@@ -5,17 +5,19 @@ import '../../Database/missing_person_database.dart';
 
 import '../drawer.dart';
 import '../are_you_sure_you_want_to_exit.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 
 class SyncScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MissingPeopleModel missingPeopleModel = context.watch<MissingPeopleModel>();
-    return _scaffold(missingPeopleModel);
+
+    return _scaffold(missingPeopleModel, context);
   }
 
-  Widget _scaffold(MissingPeopleModel missingPeopleModel) => Scaffold(
+  Widget _scaffold(MissingPeopleModel missingPeopleModel, BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Sync'),
+          title: Text(FlutterI18n.translate(context, "drawer.sync")),
         ),
         drawer: DrawerMenu(),
         backgroundColor: Colors.brown[900],

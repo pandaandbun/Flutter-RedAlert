@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 
 class DrawerMenu extends StatelessWidget {
   @override
@@ -42,7 +43,7 @@ class DrawerMenu extends StatelessWidget {
 
   Widget missingScreenDrawer(String currentRoute, context) => ListTile(
         leading: Icon(Icons.list),
-        title: Text('Missing Person'),
+        title: Text(FlutterI18n.translate(context, "drawer.missing_persons")),
         onTap: () => currentRoute == '/missing'
             ? Navigator.pop(context)
             : Navigator.pushReplacementNamed(context, '/missing'),
@@ -50,7 +51,7 @@ class DrawerMenu extends StatelessWidget {
 
   Widget savedSceeenDrawer(String currentRoute, context) => ListTile(
         leading: Icon(Icons.save),
-        title: Text('Saved'),
+        title: Text(FlutterI18n.translate(context, "drawer.saved")),
         onTap: () => currentRoute == '/saved'
             ? Navigator.pop(context)
             : Navigator.pushReplacementNamed(context, '/saved'),
@@ -58,7 +59,7 @@ class DrawerMenu extends StatelessWidget {
 
   Widget mapScreenDrawer(String currentRoute, context) => ListTile(
         leading: Icon(Icons.map),
-        title: Text('Map'),
+        title: Text(FlutterI18n.translate(context, "drawer.map")),
         onTap: () => currentRoute == '/map'
             ? Navigator.pop(context)
             : Navigator.pushReplacementNamed(context, '/map'),
@@ -66,7 +67,7 @@ class DrawerMenu extends StatelessWidget {
 
   Widget chartScreenDrawer(String currentRoute, context) => ListTile(
         leading: Icon(Icons.show_chart),
-        title: Text('Breakdown'),
+        title: Text(FlutterI18n.translate(context, "drawer.breakdown")),
         onTap: () => currentRoute == '/charts'
             ? Navigator.pop(context)
             : Navigator.pushReplacementNamed(context, '/charts'),
@@ -74,7 +75,7 @@ class DrawerMenu extends StatelessWidget {
 
   Widget _syncScreen(String currentRoute, context) => ListTile(
         leading: Icon(Icons.cloud_download),
-        title: Text('Sync'),
+        title: Text(FlutterI18n.translate(context, "drawer.sync")),
         onTap: () => currentRoute == '/sync'
             ? Navigator.pop(context)
             : Navigator.pushReplacementNamed(context, '/sync'),
