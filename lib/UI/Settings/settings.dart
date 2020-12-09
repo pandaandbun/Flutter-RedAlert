@@ -90,7 +90,7 @@ class SettingsPage extends State<Settings> {
                   _isOn1 = value;
                 });
               },
-              title: Text('Receive Notifications'),
+              title: Text('Instant Notifications'),
               secondary:
                   const Icon(Icons.notification_important, color: Colors.red),
             ),
@@ -103,7 +103,7 @@ class SettingsPage extends State<Settings> {
                   _isOn2 = value;
                 });
               },
-              title: Text('Receive Notifications'),
+              title: Text('Featured Persons'),
               secondary:
                   const Icon(Icons.notification_important, color: Colors.red),
             ),

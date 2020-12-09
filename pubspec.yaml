@@ -27,6 +27,9 @@ dependencies:
   firebase_core:
   cloud_firestore:
 
+  # Internationalization
+  flutter_i18n:
+
   # Google Map
   # google_maps_flutter: ^1.0.6
   # location: ^3.0.2
@@ -66,4 +69,5 @@ flutter:
   assets: 
     - images/
     - assets/
+    - assets/flutter_i18n/
 

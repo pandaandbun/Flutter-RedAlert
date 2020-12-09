@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 
 import '../popup_map.dart';
 
+import 'package:flutter_i18n/flutter_i18n.dart';
+
 // Pop up dialog for main page
 class PeopleDialog extends StatelessWidget {
   final Map person;
@@ -26,12 +28,12 @@ class PeopleDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _blurBackGround();
+    return _blurBackGround(context);
   }
 
   // ----------------------------------------------------------
 
-  Widget _blurBackGround() => BackdropFilter(
+  Widget _blurBackGround(BuildContext context) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: SimpleDialog(
           backgroundColor: Colors.brown[400],
@@ -40,7 +42,7 @@ class PeopleDialog extends StatelessWidget {
           title: _dialogHeader(),
           children: [
             _dialogImage(),
-            _dialogBody(),
+            _dialogBody(context),
           ],
         ),
       );
@@ -61,12 +63,12 @@ class PeopleDialog extends StatelessWidget {
 
   // ----------------------------------------------------------
 
-  Widget _dialogBody() => Container(
+  Widget _dialogBody(BuildContext context) => Container(
         child: SimpleDialogOption(
           child: Column(
             children: <Widget>[
               SizedBox(height: 15),
-              _dialogBodyDate(),
+              _dialogBodyDate(context),
               SizedBox(height: 15),
               _dialogBodyLoc(),
               SizedBox(height: 15),
@@ -75,7 +77,7 @@ class PeopleDialog extends StatelessWidget {
         ),
       );
 
-  Widget _dialogBodyDate() {
+  Widget _dialogBodyDate(BuildContext context) {
     String missingSince =
         formatter.format(DateTime.parse(person['missingSince']));
 
@@ -83,7 +85,7 @@ class PeopleDialog extends StatelessWidget {
       children: [
         Expanded(
             child: Text(
-          'Missing Since: $missingSince',
+          FlutterI18n.translate(context, "person_dialog.missing_since") + missingSince,
           style: TextStyle(fontSize: 15),
           textAlign: TextAlign.center,
         ))
@@ -96,7 +98,7 @@ class PeopleDialog extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 child: Text(
-                  'Last Location: ${person['city']}, ${person['province']}',
+                  FlutterI18n.translate(context, "person_dialog.last_location") + person['city'] + ", " + person['province'],
                   style: TextStyle(fontSize: 15),
                   textAlign: TextAlign.center,
                 ),
