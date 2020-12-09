@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_i18n/loaders/decoders/json_decode_strategy.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -29,19 +30,31 @@ Future main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  //load user settings
+  // --- USER SETTINGS INITIALIZATION ---
+
+  //get language stored on disk
   final prefs = await SharedPreferences.getInstance();
   String language = prefs.getString('language') ?? "none";
+
+  //if language does not exist on disk, the app is being run for the first time
+  //perform some basic setup
   if(language == "none") {
+
+    // -- Language Settings --
     print("No language selected, using default: ${Platform.localeName.substring(0,2)}.");
-    language = Platform.localeName.substring(0,2);
+    language = Platform.localeName.substring(0,2); //get language code from device
     if(language == "en" || language == "fr")
-      prefs.setString("language", language);
+      prefs.setString("language", language); //if device default is en/fr, set language to device default
     else
-      prefs.setString("language", "en");
+      prefs.setString("language", "en"); //if device default is anything else, set language to en
+
+    // -- Notification Settings --
+    //enable all notifications by default
+    prefs.setBool("notifications_instant", true);
+    prefs.setBool("notifications_featured", true);
   }
   else {
-    print("Selected language is: $language");
+    print("Selected language is: $language"); //print selected language to console
   }
 
   //load internationalization files
@@ -49,7 +62,8 @@ Future main() async {
     translationLoader: FileTranslationLoader(
         useCountryCode: false,
         fallbackFile: 'en',
-        forcedLocale: Locale(language),
+        forcedLocale: Locale(language), //force the language to be the stored language chosen in settings
+        decodeStrategies:  [JsonDecodeStrategy()],
         basePath: 'assets/flutter_i18n',),
   );
   await flutterI18nDelegate.load(Locale(language));
@@ -136,7 +150,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/' + main,
         routes: {
           '/sync': (context) => SyncScreen(),
-          '/missing': (context) => MissingPerson(),
+          '/missing': (context) => MissingPerson(prefs),
           '/map': (context) => MapScreen(),
           '/saved': (context) => SavedPersonScreen(),
           '/charts': (context) => Breakdown(),

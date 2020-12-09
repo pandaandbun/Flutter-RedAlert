@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'calendar.dart';
 import 'missing_person_list.dart';
@@ -26,6 +27,9 @@ class MissingPerson extends StatelessWidget {
   final Notifications _notifications = Notifications();
   final NotificationsNum notificationsNum = NotificationsNum();
   final TutorialModel tutorialModel = TutorialModel();
+  final SharedPreferences prefs;
+  
+  MissingPerson(this.prefs);
 
   void _tutorial(BuildContext context) async {
     bool showTutorial =
@@ -42,12 +46,12 @@ class MissingPerson extends StatelessWidget {
   Widget build(BuildContext context) {
     _notifications.init(scaffoldContext: context);
     _tutorial(context);
-    return _scaffold(context);
+    return _scaffold(context, prefs);
   }
 
   // ------------------------------------------------------------
 
-  Widget _scaffold(BuildContext context) => Scaffold(
+  Widget _scaffold(BuildContext context, SharedPreferences prefs) => Scaffold(
         appBar: AppBar(
           title: Text(FlutterI18n.translate(context, "drawer.missing_persons")),
           actions: [
@@ -58,25 +62,25 @@ class MissingPerson extends StatelessWidget {
         ),
         drawer: DrawerMenu(),
         backgroundColor: Colors.brown[900],
-        body: _areYourSureYouWantToExitWarpper(),
+        body: _areYourSureYouWantToExitWarpper(prefs),
       );
 
-  Widget _areYourSureYouWantToExitWarpper() => Builder(
+  Widget _areYourSureYouWantToExitWarpper(SharedPreferences prefs) => Builder(
       builder: (context) => WillPopScope(
-          child: _body(),
+          child: _body(prefs),
           onWillPop: () async {
             bool value = await showDialog<bool>(
                 context: context, builder: (context) => ExitDialog());
             return value;
           }));
 
-  Widget _body() => Column(
+  Widget _body(SharedPreferences prefs) => Column(
         children: [
           Row(children: [
             SearchBar(),
             Calendar(),
           ]),
-          MissingPersonList(_notifications, notificationsNum),
+          MissingPersonList(_notifications, notificationsNum, prefs),
         ],
       );
 

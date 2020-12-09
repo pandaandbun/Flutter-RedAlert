@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'missing_person_list_tile.dart';
 
@@ -14,10 +15,12 @@ class MissingPersonList extends StatelessWidget {
   final Random random = new Random();
   final Notifications _notifications;
   final notificationsNum;
+  final SharedPreferences prefs;
 
-  MissingPersonList(this._notifications, this.notificationsNum);
+  MissingPersonList(this._notifications, this.notificationsNum, this.prefs);
 
   void _notifyMissingPersonOfTheDay(Map person) async {
+    if(prefs.getBool('notifications_featured') ?? false)
     await _notifications.sendNotificationNow(
         "Feature Person", person['firstName'] + " " + person['lastName'],
         payload: person['id'].toString());

@@ -13,10 +13,6 @@ class Settings extends StatefulWidget {
 
 class SettingsPage extends State<Settings> {
   final SharedPreferences prefs;
-  bool _isOn1 = false;
-  bool _isOn2 = false;
-  bool _isOn3 = false;
-  bool _isOn4 = false;
 
   SettingsPage(this.prefs);
   @override
@@ -74,114 +70,126 @@ class SettingsPage extends State<Settings> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text(
-                  "Language Settings",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
-                Column(
-                  children: <Widget> [
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlineButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget> [
-                            Text(
-                              'English',
-                              textScaleFactor: 1.2,
-                            ),
-                            (prefs.getString('language')=="en") ? Icon(Icons.check) : Text(""), //update this to actually check language
-                          ]
-                        ),
-                        shape: RoundedRectangleBorder(  
-                          borderRadius: BorderRadius.circular(15)),
-                        onPressed: () async {
-                          print('Language Select: English');
-                          prefs.setString("language", "en");
-                          Locale newLocale = Locale('en');
-                          await FlutterI18n.refresh(context, newLocale);
-                          setState(() {});
-                        },
-                      )
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlineButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget> [
-                            Text(
-                            'French',
-                            textScaleFactor: 1.2,
-                            ),
-                            (prefs.getString('language')=="fr") ? Icon(Icons.check) : Text(""), //update this to actually check language
-                          ]
-                        ),
-                        shape: RoundedRectangleBorder(  
-                          borderRadius: BorderRadius.circular(15)),
-                        onPressed: () async {
-                          print('Language Select: French');
-                          prefs.setString("language", "fr");
-                          Locale newLocale = Locale('fr');
-                          await FlutterI18n.refresh(context, newLocale);
-                          setState(() {});
-                        },
-                      )
-                    ),
-                  ]
-                ),
+                _languageSettings(),
                 const SizedBox(height: 20),
-                Text(
-                  "Notification Settings",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
-                SwitchListTile(
-                  activeColor: Colors.red,
-                  contentPadding: const EdgeInsets.all(0),
-                  value: _isOn1,
-                  onChanged: (bool value) {
-                    if (value) {
-                      notification.sendNotificationNow(
-                        "Test Notification",
-                        "This is an instant notification",
-                        // "Received"
-                      );
-                    }
-                    setState(() {
-                      _isOn1 = value;
-                    });
-                  },
-                  title: Text('Instant Notifications'),
-                  secondary:
-                      const Icon(Icons.notification_important, color: Colors.red),
-                ),
-                SwitchListTile(
-                  activeColor: Colors.red,
-                  contentPadding: const EdgeInsets.all(0),
-                  value: _isOn2,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isOn2 = value;
-                    });
-                  },
-                  title: Text('Featured Persons'),
-                  secondary:
-                      const Icon(Icons.notification_important, color: Colors.red),
-                ),
+                _notificationSettings(notification),
               ],
             )
           )
         )
     );
   }
+
+  Widget _languageSettings() => Column(
+    children: <Widget>[
+      Text(
+        "Language Settings",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.red,
+        ),
+      ),
+      Column(
+        children: <Widget> [
+          SizedBox(
+            width: double.infinity,
+            child: OutlineButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget> [
+                  Text(
+                    'English',
+                    textScaleFactor: 1.2,
+                  ),
+                  (prefs.getString('language')=="en") ? Icon(Icons.check) : Text(""),
+                ]
+              ),
+              shape: RoundedRectangleBorder(  
+                borderRadius: BorderRadius.circular(15)),
+              onPressed: () async {
+                print('Language Select: English');
+                prefs.setString("language", "en");
+                Locale newLocale = Locale('en');
+                await FlutterI18n.refresh(context, newLocale);
+                setState(() {});
+              },
+            )
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: OutlineButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget> [
+                  Text(
+                  'French',
+                  textScaleFactor: 1.2,
+                  ),
+                  (prefs.getString('language')=="fr") ? Icon(Icons.check) : Text(""), 
+                ]
+              ),
+              shape: RoundedRectangleBorder(  
+                borderRadius: BorderRadius.circular(15)),
+              onPressed: () async {
+                print('Language Select: French');
+                prefs.setString("language", "fr");
+                Locale newLocale = Locale('fr');
+                await FlutterI18n.refresh(context, newLocale);
+                setState(() {});
+              },
+            )
+          ),
+        ]
+      ),
+    ]
+  );
+
+  Widget _notificationSettings(Notifications notification) => Column(
+    children: <Widget> [
+      Text(
+        "Notification Settings",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.red,
+        ),
+      ),
+      SwitchListTile(
+        activeColor: Colors.red,
+        contentPadding: const EdgeInsets.all(0),
+        value: prefs.getBool('notifications_instant') ?? true,
+        onChanged: (bool value) {
+          if (value) {
+            notification.sendNotificationNow(
+              "Notification Settings",
+              "Instant notifications are now enabled.",
+              // "Received"
+            );
+          }
+          setState(() {
+            prefs.setBool("notifications_instant", value);
+          });
+        },
+        title: Text('Instant Notifications'),
+        secondary:
+            const Icon(Icons.notification_important, color: Colors.red),
+      ),
+      SwitchListTile(
+        activeColor: Colors.red,
+        contentPadding: const EdgeInsets.all(0),
+        value: prefs.getBool('notifications_featured') ?? true,
+        onChanged: (bool value) {
+          setState(() {
+            prefs.setBool("notifications_featured", value);
+          });
+        },
+        title: Text('Featured Persons'),
+        secondary:
+            const Icon(Icons.notification_important, color: Colors.red),
+      ),
+    ]
+  );
 }
 
 class _solidLine extends StatelessWidget {
@@ -199,3 +207,5 @@ class _solidLine extends StatelessWidget {
     );
   }
 }
+
+
