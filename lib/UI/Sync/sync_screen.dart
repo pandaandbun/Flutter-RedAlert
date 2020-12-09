@@ -2,12 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Database/missing_person_database.dart';
+import '../../Database/tutorial_database.dart';
 
 import '../drawer.dart';
 import '../are_you_sure_you_want_to_exit.dart';
+import '../tutorial.dart';
+
 import 'package:flutter_i18n/flutter_i18n.dart';
 
 class SyncScreen extends StatelessWidget {
+  final TutorialModel tutorialModel = TutorialModel();
+
+  void _tutorial(BuildContext context) async {
+    bool showTutorial = await tutorialModel.getTutorialSettingFor("syncPage");
+    if (showTutorial) {
+      await showDialog(
+        context: context,
+        child: TutorialDialog("syncPage"),
+      );
+    }
+  }
+
+  // ------------------------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
     MissingPeopleModel missingPeopleModel = context.watch<MissingPeopleModel>();
@@ -15,7 +32,11 @@ class SyncScreen extends StatelessWidget {
     return _scaffold(missingPeopleModel, context);
   }
 
-  Widget _scaffold(MissingPeopleModel missingPeopleModel, BuildContext context) => Scaffold(
+  // ------------------------------------------------------------------
+
+  Widget _scaffold(
+          MissingPeopleModel missingPeopleModel, BuildContext context) =>
+      Scaffold(
         appBar: AppBar(
           title: Text(FlutterI18n.translate(context, "drawer.sync")),
         ),
@@ -35,15 +56,22 @@ class SyncScreen extends StatelessWidget {
                 return value;
               }));
 
-  Widget _body(MissingPeopleModel missingPeopleModel) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _localDbStatusText(missingPeopleModel),
-          _btns(missingPeopleModel),
-          _backToMainPageBtn(),
-        ],
-      );
+  Widget _body(MissingPeopleModel missingPeopleModel) {
+    return Builder(
+      builder: (context) {
+        _tutorial(context);
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _localDbStatusText(missingPeopleModel),
+            _btns(missingPeopleModel),
+            _backToMainPageBtn(),
+          ],
+        );
+      },
+    );
+  }
 
   // ----------------------------------------------------
 

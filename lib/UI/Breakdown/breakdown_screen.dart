@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import '../settings_btn.dart';
 import '../drawer.dart';
 import '../are_you_sure_you_want_to_exit.dart';
+import '../tutorial.dart';
 
 import '../../Database/missing_person_database.dart';
+import '../../Database/tutorial_database.dart';
 
 import 'Chart/chart_selector.dart';
 
@@ -16,13 +18,30 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 
 class Breakdown extends StatelessWidget {
   final MissingPeopleModel missingPerson = MissingPeopleModel();
+  final TutorialModel tutorialModel = TutorialModel();
   final BreakdownFunc _breakdownFunc = BreakdownFunc();
   final int _numOfTabs = 2;
 
+  void _tutorial(BuildContext context) async {
+    bool showTutorial =
+        await tutorialModel.getTutorialSettingFor("breakdownPage");
+    if (showTutorial) {
+      await showDialog(
+        context: context,
+        child: TutorialDialog("breakdownPage"),
+      );
+    }
+  }
+
+  // ------------------------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
+    _tutorial(context);
     return _tabs(context);
   }
+
+  // ------------------------------------------------------------------
 
   Widget _tabs(BuildContext context) => DefaultTabController(
       length: _numOfTabs,

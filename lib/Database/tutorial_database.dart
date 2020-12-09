@@ -30,6 +30,8 @@ class TutorialModel {
     }, version: 1);
   }
 
+  // ---------------------------------------------------------------------
+
   Future getTutorialSettingFor(String page) async {
     String query = '''
     SELECT $page
@@ -52,7 +54,7 @@ class TutorialModel {
   void turnOffAllTutorials() async {
     String query = '''
     UPDATE tutorial
-    SET syncPage = false, 
+    SET syncPage = 0, 
         missingPersonPage = 0,
         savedPersonPage = 0,
         mapPage = 0,

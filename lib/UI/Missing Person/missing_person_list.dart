@@ -11,13 +11,11 @@ import '../../Database/missing_person_database.dart';
 import '../../Database/filter_by_date_model.dart';
 
 class MissingPersonList extends StatelessWidget {
-  final savedPeople;
   final Random random = new Random();
   final Notifications _notifications;
   final notificationsNum;
 
-  MissingPersonList(
-      this.savedPeople, this._notifications, this.notificationsNum);
+  MissingPersonList(this._notifications, this.notificationsNum);
 
   void _notifyMissingPersonOfTheDay(Map person) async {
     await _notifications.sendNotificationNow(
@@ -58,8 +56,8 @@ class MissingPersonList extends StatelessWidget {
               int randomNumber = random.nextInt(people.length);
               Map randomPerson = people[randomNumber];
 
-              _notifyMissingPersonOfTheDay(randomPerson);
               notificationsNum.num++;
+              _notifyMissingPersonOfTheDay(randomPerson);
             }
 
             return peopleList(people);

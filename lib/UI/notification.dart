@@ -94,19 +94,6 @@ class Notifications {
     );
   }
 
-  // sendNotificationDaily(String title, String body, DateTime date,
-  //     {String payload}) {
-  //   _flutterNotificationPlugin.zonedSchedule(
-  //     1,
-  //     'Test',
-  //     'Daily Notification',
-  //     date,
-  //     _platformChannelInfo,
-  //     matchDateTimeComponents: DateTimeComponents.time,
-  //     androidAllowWhileIdle: true,
-  //   );
-  // }
-
   sendNotificationLater(int id, String title, String body, tz.TZDateTime when,
       {String payload}) {
     sent = true;

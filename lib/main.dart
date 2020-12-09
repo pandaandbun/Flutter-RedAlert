@@ -26,9 +26,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 Future main() async {
   final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
     translationLoader: FileTranslationLoader(
-        useCountryCode: false,
-        fallbackFile: 'en',
-        basePath: 'assets/flutter_i18n',),
+      useCountryCode: false,
+      fallbackFile: 'en',
+      basePath: 'assets/flutter_i18n',
+    ),
   );
   WidgetsFlutterBinding.ensureInitialized();
   await flutterI18nDelegate.load(null);

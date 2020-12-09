@@ -5,10 +5,12 @@ import 'package:geocoding/geocoding.dart';
 import 'package:latlong/latlong.dart';
 
 import '../../Database/missing_person_database.dart';
+import '../../Database/tutorial_database.dart';
 
 import '../settings_btn.dart';
 import '../drawer.dart';
 import '../are_you_sure_you_want_to_exit.dart';
+import '../tutorial.dart';
 
 import 'map_box.dart';
 
@@ -16,6 +18,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 
 class MapScreen extends StatefulWidget {
   final MissingPeopleModel missingPeopleModel = MissingPeopleModel();
+  final TutorialModel tutorialModel = TutorialModel();
   final MapController mapController = MapController();
 
   @override
@@ -25,6 +28,17 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   String city = '';
   String province = '';
+
+  void _tutorial(BuildContext context) async {
+    bool showTutorial =
+        await widget.tutorialModel.getTutorialSettingFor("mapPage");
+    if (showTutorial) {
+      await showDialog(
+        context: context,
+        child: TutorialDialog("mapPage"),
+      );
+    }
+  }
 
   void _moveMapCenter(Position position) {
     var currentZoom = widget.mapController.zoom;
@@ -106,6 +120,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _tutorial(context);
     return _scaffold();
   }
 

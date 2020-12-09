@@ -41,53 +41,42 @@ class MissingPerson extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _notifications.init(scaffoldContext: context);
-
-    final SavedPeopleModel savedPeopleModel =
-        Provider.of<SavedPeopleModel>(context);
-    final SelectedPeopleModel selectedPeopleModel =
-        Provider.of<SelectedPeopleModel>(context);
-
     _tutorial(context);
-
-    return _scaffold(savedPeopleModel, selectedPeopleModel, context);
+    return _scaffold(context);
   }
 
   // ------------------------------------------------------------
 
-  Widget _scaffold(SavedPeopleModel savedPeopleModel,
-          SelectedPeopleModel selectedPeopleModel,
-          BuildContext context) =>
-      Scaffold(
+  Widget _scaffold(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: Text(FlutterI18n.translate(context, "drawer.missing_persons")),
           actions: [
             _turnOnTutorialBtn(),
-            savedButton(savedPeopleModel, selectedPeopleModel),
+            savedButton(),
             SettingsBtn(),
           ],
         ),
         drawer: DrawerMenu(),
         backgroundColor: Colors.brown[900],
-        body: _areYourSureYouWantToExitWarpper(savedPeopleModel),
+        body: _areYourSureYouWantToExitWarpper(),
       );
 
-  Widget _areYourSureYouWantToExitWarpper(SavedPeopleModel savedPeopleModel) =>
-      Builder(
-          builder: (context) => WillPopScope(
-              child: _body(savedPeopleModel),
-              onWillPop: () async {
-                bool value = await showDialog<bool>(
-                    context: context, builder: (context) => ExitDialog());
-                return value;
-              }));
+  Widget _areYourSureYouWantToExitWarpper() => Builder(
+      builder: (context) => WillPopScope(
+          child: _body(),
+          onWillPop: () async {
+            bool value = await showDialog<bool>(
+                context: context, builder: (context) => ExitDialog());
+            return value;
+          }));
 
-  Widget _body(SavedPeopleModel savedPeopleModel) => Column(
+  Widget _body() => Column(
         children: [
           Row(children: [
             SearchBar(),
             Calendar(),
           ]),
-          MissingPersonList(savedPeopleModel, _notifications, notificationsNum),
+          MissingPersonList(_notifications, notificationsNum),
         ],
       );
 
@@ -100,32 +89,36 @@ class MissingPerson extends StatelessWidget {
       });
 
   // Save button for saving people to local list
-  Widget savedButton(SavedPeopleModel savedPeopleModel,
-          SelectedPeopleModel selectedPeopleModel) =>
-      Builder(
-          builder: (context) => IconButton(
-                icon: Icon(Icons.save),
-                tooltip: "Settings",
-                onPressed: () async {
-                  var snackBar =
-                      SnackBar(content: Text('Please first click on someone'));
-                  List<String> ids = selectedPeopleModel.getDocIds();
+  Widget savedButton() => Builder(builder: (context) {
+        final SavedPeopleModel savedPeopleModel =
+            Provider.of<SavedPeopleModel>(context);
+        final SelectedPeopleModel selectedPeopleModel =
+            Provider.of<SelectedPeopleModel>(context);
 
-                  if (ids.length > 0) {
-                    snackBar = SnackBar(content: Text('Saved'));
+        return IconButton(
+          icon: Icon(Icons.save),
+          tooltip: "Settings",
+          onPressed: () async {
+            var snackBar =
+                SnackBar(content: Text('Please first click on someone'));
+            List<String> ids = selectedPeopleModel.getDocIds();
 
-                    for (String id in ids) {
-                      SavedPerson person = SavedPerson(id);
-                      var result = await savedPeopleModel.insertPeople(person);
+            if (ids.length > 0) {
+              snackBar = SnackBar(content: Text('Saved'));
 
-                      if (result != null) {
-                        snackBar = SnackBar(
-                            content: Text('One Of The Item Is Already Saved'));
-                      }
-                    }
-                    selectedPeopleModel.resetDocIds();
-                  }
-                  Scaffold.of(context).showSnackBar(snackBar);
-                },
-              ));
+              for (String id in ids) {
+                SavedPerson person = SavedPerson(id);
+                var result = await savedPeopleModel.insertPeople(person);
+
+                if (result != null) {
+                  snackBar = SnackBar(
+                      content: Text('One Of The Item Is Already Saved'));
+                }
+              }
+              selectedPeopleModel.resetDocIds();
+            }
+            Scaffold.of(context).showSnackBar(snackBar);
+          },
+        );
+      });
 }

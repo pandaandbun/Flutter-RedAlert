@@ -60,6 +60,11 @@ flutter:
   assets: 
     - images/
     - images/tutorials/missing_person/
+    - images/tutorials/about/
+    - images/tutorials/sync/
+    - images/tutorials/map/
+    - images/tutorials/charts_data_table/
+
     - assets/
     - assets/flutter_i18n/
 
