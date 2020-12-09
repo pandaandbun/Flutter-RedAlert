@@ -10,7 +10,6 @@ class SyncScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MissingPeopleModel missingPeopleModel = context.watch<MissingPeopleModel>();
-
     return _scaffold(missingPeopleModel);
   }
 

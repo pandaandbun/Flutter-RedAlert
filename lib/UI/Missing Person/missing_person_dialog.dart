@@ -79,16 +79,14 @@ class PeopleDialog extends StatelessWidget {
     String missingSince =
         formatter.format(DateTime.parse(person['missingSince']));
 
-    return Row(
-      children: [
-        Expanded(
-            child: Text(
-          'Missing Since: $missingSince',
-          style: TextStyle(fontSize: 15),
-          textAlign: TextAlign.center,
-        ))
-      ],
-    );
+    return Row(children: [
+      Expanded(
+          child: Text(
+        'Missing Since: $missingSince',
+        style: TextStyle(fontSize: 15),
+        textAlign: TextAlign.center,
+      ))
+    ]);
   }
 
   Widget _dialogBodyLoc() => Builder(

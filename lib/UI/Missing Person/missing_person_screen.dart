@@ -9,9 +9,11 @@ import '../drawer.dart';
 import '../Search Bar/search_bar.dart';
 import '../notification.dart';
 import '../are_you_sure_you_want_to_exit.dart';
+import '../tutorial.dart';
 
 import '../../Database/saved_people_database.dart';
 import '../../Database/selected_item_model.dart';
+import '../../Database/tutorial_database.dart';
 
 class NotificationsNum {
   int num = 0;
@@ -21,8 +23,18 @@ class NotificationsNum {
 class MissingPerson extends StatelessWidget {
   final Notifications _notifications = Notifications();
   final NotificationsNum notificationsNum = NotificationsNum();
+  final TutorialModel tutorialModel = TutorialModel();
 
-  MissingPerson();
+  void _tutorial(BuildContext context) async {
+    bool showTutorial =
+        await tutorialModel.getTutorialSettingFor("missingPersonPage");
+    if (showTutorial) {
+      await showDialog(
+        context: context,
+        child: TutorialDialog("missingPersonPage"),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +45,12 @@ class MissingPerson extends StatelessWidget {
     final SelectedPeopleModel selectedPeopleModel =
         Provider.of<SelectedPeopleModel>(context);
 
+    _tutorial(context);
+
     return _scaffold(savedPeopleModel, selectedPeopleModel);
   }
+
+  // ------------------------------------------------------------
 
   Widget _scaffold(SavedPeopleModel savedPeopleModel,
           SelectedPeopleModel selectedPeopleModel) =>
@@ -42,6 +58,7 @@ class MissingPerson extends StatelessWidget {
         appBar: AppBar(
           title: Text('Missing Person'),
           actions: [
+            _turnOnTutorialBtn(),
             savedButton(savedPeopleModel, selectedPeopleModel),
             SettingsBtn(),
           ],
@@ -70,6 +87,14 @@ class MissingPerson extends StatelessWidget {
           MissingPersonList(savedPeopleModel, _notifications, notificationsNum),
         ],
       );
+
+  // ------------------------------------------------------------
+
+  Widget _turnOnTutorialBtn() => IconButton(
+      icon: Icon(Icons.school),
+      onPressed: () {
+        tutorialModel.turnOnAllTutorials();
+      });
 
   // Save button for saving people to local list
   Widget savedButton(SavedPeopleModel savedPeopleModel,

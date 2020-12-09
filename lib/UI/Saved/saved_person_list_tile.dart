@@ -23,24 +23,17 @@ class SavedPersonTile extends StatelessWidget {
         );
       });
 
+  // -------------------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
     final SavedPeopleModel savedPeopleModel =
         Provider.of<SavedPeopleModel>(context);
 
-    // Person person = Person.fromMap(doc.data(), reference: doc.reference);
-
     return personCard(savedPeopleModel);
   }
 
-  // Card delete button
-  Widget delBtn(SavedPeopleModel savedPeopleModel) => RaisedButton(
-        child: Icon(Icons.delete),
-        color: Colors.red[200],
-        onPressed: () {
-          savedPeopleModel.deletePeopleId(person['id'].toString());
-        },
-      );
+  // -------------------------------------------------------------
 
   // Person card
   Widget personCard(SavedPeopleModel savedPeopleModel) => Card(
@@ -53,7 +46,7 @@ class SavedPersonTile extends StatelessWidget {
                 subtitle: personCardText(savedPeopleModel)),
           ],
         ),
-        color: Colors.brown,
+        color: Colors.brown[400],
       );
 
   // PErson Card Image
@@ -96,14 +89,27 @@ class SavedPersonTile extends StatelessWidget {
   Widget _personCardLoc() => Builder(
       builder: (context) => Row(children: [
             Expanded(
-              child: ElevatedButton(
+              child: RaisedButton(
                 child: Text(
                   'Last Location: ${person['city']}, ${person['province']}',
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 onPressed: () => _showMapDialog(context),
+                color: Colors.brown,
               ),
             ),
           ]));
+
+  // Card delete button
+  Widget delBtn(SavedPeopleModel savedPeopleModel) => RaisedButton(
+        child: Icon(Icons.delete),
+        color: Colors.red[200],
+        onPressed: () {
+          savedPeopleModel.deletePeopleId(person['id'].toString());
+        },
+      );
 }

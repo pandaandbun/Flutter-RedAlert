@@ -42,18 +42,25 @@ class SearchList extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
-              List people = snapshot.data;
-
-              return ListView.builder(
-                itemCount: people.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    seachCard(people[index], savedPeopleModel),
-              );
+              return _searchListView(snapshot.data, savedPeopleModel);
+            } else {
+              return Center(child: Text("No One Was Found"));
             }
           }
-          return Text("Loading People Or No One Was Found");
+          return _loadingIcon();
         },
       ));
+
+  Widget _loadingIcon() => Center(child: CircularProgressIndicator());
+
+  // --------------------------------------
+
+  Widget _searchListView(List people, SavedPeopleModel savedPeopleModel) =>
+      ListView.builder(
+        itemCount: people.length,
+        itemBuilder: (BuildContext context, int index) =>
+            seachCard(people[index], savedPeopleModel),
+      );
 
   // Search Cards
   Widget seachCard(Map person, SavedPeopleModel savedPeopleModel) => Card(

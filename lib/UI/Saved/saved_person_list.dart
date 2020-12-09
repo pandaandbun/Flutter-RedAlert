@@ -16,6 +16,8 @@ class SavedPersonList extends StatelessWidget {
     return _futureList(savedPeopleModel);
   }
 
+  // --------------------------------------------------------------
+
   Widget _futureList(SavedPeopleModel savedPeopleModel) => FutureBuilder(
         future: savedPeopleModel.getAllSavedPeople(),
         builder: (context, snapshot) {
@@ -27,7 +29,7 @@ class SavedPersonList extends StatelessWidget {
 
             return savedPersonListView(peopleIds);
           } else {
-            return Text("Data Loading or Data is Empty");
+            return _loadingStatus(snapshot.connectionState);
           }
         },
       );
@@ -38,16 +40,26 @@ class SavedPersonList extends StatelessWidget {
         if (snapshot.hasData) {
           return _savePersonListViewBuilder(snapshot.data);
         } else {
-          return Text("Data Loading....");
+          return _loadingStatus(snapshot.connectionState);
         }
       });
 
   Widget _savePersonListViewBuilder(List people) => Expanded(
-        child: ListView.separated(
+        child: ListView.builder(
           itemCount: people.length,
           itemBuilder: (BuildContext context, int index) =>
               SavedPersonTile(people[index]),
-          separatorBuilder: (BuildContext context, int index) => Divider(),
         ),
       );
+
+  // --------------------------------------------------------------
+
+  Widget _loadingStatus(ConnectionState connectionState) {
+    if (connectionState == ConnectionState.waiting)
+      return _loadingIcon();
+    else
+      return Text("No One Was Found");
+  }
+
+  Widget _loadingIcon() => Center(child: CircularProgressIndicator());
 }

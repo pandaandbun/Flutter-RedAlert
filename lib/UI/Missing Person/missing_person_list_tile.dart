@@ -32,8 +32,11 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
     });
   }
 
-  Future<void> _moreInfo() async {
-    showDialog(context: context, child: PeopleDialog(widget.person));
+  void _moreInfo() async {
+    await showDialog(
+      context: context,
+      child: PeopleDialog(widget.person),
+    );
   }
 
   void _tileSelectionHandler(SelectedPeopleModel selectedPeopleModel) =>

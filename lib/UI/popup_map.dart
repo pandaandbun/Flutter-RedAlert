@@ -33,8 +33,10 @@ class PopUpMap extends StatelessWidget {
     return locations;
   }
 
-  void _moveView() {
+  void _moveView() async {
+    await _mapController.onReady;
     double curZoom = _mapController.zoom;
+
     LatLng newCenter;
 
     if (_locations.currentView == "You") {
@@ -117,7 +119,7 @@ class PopUpMap extends StatelessWidget {
     if (connectionState == ConnectionState.waiting)
       return _loadingIcon();
     else
-      return Text("Location was not found");
+      return Center(child: Text("Location was not found"));
   }
 
   Widget _loadingIcon() => Center(child: CircularProgressIndicator());
