@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Database/tutorial_database.dart';
 
@@ -58,31 +59,34 @@ class TutorialDialog extends StatefulWidget {
       },
     ],
   };
+  final SharedPreferences prefs;
 
-  TutorialDialog(this.parentScreen);
+  TutorialDialog(this.parentScreen, this.prefs);
 
   @override
-  _TutorialDialogState createState() => _TutorialDialogState();
+  _TutorialDialogState createState() => _TutorialDialogState(prefs);
 }
 
 class _TutorialDialogState extends State<TutorialDialog> {
+  final SharedPreferences prefs;
+  _TutorialDialogState(this.prefs);
   TutorialModel tutorialModel = TutorialModel();
 
   double _curSliderVal = 0;
 
   @override
   Widget build(BuildContext context) {
-    return _dialog();
+    return _dialog(prefs);
   }
 
   // --------------------------------------------------------------
 
-  Widget _dialog() => AlertDialog(
+  Widget _dialog(SharedPreferences prefs) => AlertDialog(
         backgroundColor: Colors.brown[400],
         title: _dialogTitle(),
         content: _dialogBody(),
         actions: [
-          _turnOfAllTutorialBtn(),
+          _turnOfAllTutorialBtn(prefs),
           _turnOffThisTutorialBtn(),
           _exitBtn(),
         ],
@@ -148,9 +152,10 @@ class _TutorialDialogState extends State<TutorialDialog> {
             )),
       ]));
 
-  Widget _turnOfAllTutorialBtn() => TextButton(
+  Widget _turnOfAllTutorialBtn(SharedPreferences prefs) => TextButton(
       onPressed: () {
         tutorialModel.turnOffAllTutorials();
+        prefs.setBool("tutorial_on", false);
         Navigator.pop(context);
       },
       child: Row(children: [

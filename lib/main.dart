@@ -52,6 +52,10 @@ Future main() async {
     //enable all notifications by default
     prefs.setBool("notifications_scheduled", true);
     prefs.setBool("notifications_featured", true);
+
+    // -- Tutorial Settings --
+    //enable tutorials by default
+    prefs.setBool("tutorial_on", true);
   }
   else {
     print("Selected language is: $language"); //print selected language to console
@@ -149,11 +153,11 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/' + main,
         routes: {
-          '/sync': (context) => SyncScreen(),
+          '/sync': (context) => SyncScreen(prefs),
           '/missing': (context) => MissingPerson(prefs),
-          '/map': (context) => MapScreen(),
+          '/map': (context) => MapScreen(prefs),
           '/saved': (context) => SavedPersonScreen(),
-          '/charts': (context) => Breakdown(),
+          '/charts': (context) => Breakdown(prefs),
           '/settings': (context) => Settings(prefs),
           '/profile': (context) => Profile(),
           '/theme': (context) => ThemeP(),

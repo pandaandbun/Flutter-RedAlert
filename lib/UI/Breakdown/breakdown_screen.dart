@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../settings_btn.dart';
 import '../drawer.dart';
@@ -21,6 +22,9 @@ class Breakdown extends StatelessWidget {
   final TutorialModel tutorialModel = TutorialModel();
   final BreakdownFunc _breakdownFunc = BreakdownFunc();
   final int _numOfTabs = 2;
+  final SharedPreferences prefs;
+
+  Breakdown(this.prefs);
 
   void _tutorial(BuildContext context) async {
     bool showTutorial =
@@ -28,7 +32,7 @@ class Breakdown extends StatelessWidget {
     if (showTutorial) {
       await showDialog(
         context: context,
-        child: TutorialDialog("breakdownPage"),
+        child: TutorialDialog("breakdownPage", prefs),
       );
     }
   }

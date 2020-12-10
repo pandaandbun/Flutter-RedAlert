@@ -37,7 +37,7 @@ class MissingPerson extends StatelessWidget {
     if (showTutorial) {
       await showDialog(
         context: context,
-        child: TutorialDialog("missingPersonPage"),
+        child: TutorialDialog("missingPersonPage", prefs),
       );
     }
   }
@@ -55,7 +55,7 @@ class MissingPerson extends StatelessWidget {
         appBar: AppBar(
           title: Text(FlutterI18n.translate(context, "drawer.missing_persons")),
           actions: [
-            _turnOnTutorialBtn(),
+            //_turnOnTutorialBtn(),
             savedButton(),
             SettingsBtn(),
           ],

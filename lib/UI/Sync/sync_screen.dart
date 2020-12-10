@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Database/missing_person_database.dart';
 import '../../Database/tutorial_database.dart';
@@ -12,13 +13,16 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 
 class SyncScreen extends StatelessWidget {
   final TutorialModel tutorialModel = TutorialModel();
+  final SharedPreferences prefs;
+
+  SyncScreen(this.prefs);
 
   void _tutorial(BuildContext context) async {
     bool showTutorial = await tutorialModel.getTutorialSettingFor("syncPage");
     if (showTutorial) {
       await showDialog(
         context: context,
-        child: TutorialDialog("syncPage"),
+        child: TutorialDialog("syncPage", prefs),
       );
     }
   }
