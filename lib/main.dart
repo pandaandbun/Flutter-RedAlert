@@ -14,8 +14,6 @@ import 'UI/Breakdown/breakdown_screen.dart';
 import 'UI/Sync/sync_screen.dart';
 
 import 'UI/Settings/settings.dart';
-import 'UI/Settings/profile.dart';
-import 'UI/Settings/theme.dart';
 
 import 'Database/saved_people_database.dart';
 import 'Database/filter_by_date_model.dart';
@@ -159,8 +157,6 @@ class MyApp extends StatelessWidget {
           '/saved': (context) => SavedPersonScreen(),
           '/charts': (context) => Breakdown(prefs),
           '/settings': (context) => Settings(prefs),
-          '/profile': (context) => Profile(),
-          '/theme': (context) => ThemeP(),
         },
         localizationsDelegates: [
           flutterI18nDelegate,

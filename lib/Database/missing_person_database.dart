@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 
 class Person {
   DocumentReference reference;
-  int id; //this will probably be deleted but I'm leaving it for now
+  int id;
   String image;
   String firstName;
   String lastName;

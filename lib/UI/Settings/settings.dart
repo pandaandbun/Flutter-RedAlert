@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Database/tutorial_database.dart';
 
 class Settings extends StatefulWidget {
-  final SharedPreferences prefs;
+  final SharedPreferences prefs; //used to get stored settings
   Settings(this.prefs);
   @override
   SettingsPage createState() => SettingsPage(prefs);
@@ -18,6 +18,7 @@ class SettingsPage extends State<Settings> {
   SettingsPage(this.prefs);
   @override
   Widget build(BuildContext context) {
+    //initialize notifications and tutorial screens
     Notifications notification = new Notifications();
     notification.init();
     TutorialModel tutorialModel = TutorialModel();
@@ -32,9 +33,9 @@ class SettingsPage extends State<Settings> {
             child:Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                _languageSettings(),
-                _notificationSettings(notification),
-                _tutorialSettings(tutorialModel),
+                _languageSettings(), //widget for language settings
+                _notificationSettings(notification), //widget for notification settings
+                _tutorialSettings(tutorialModel), //widget for tutorial settings
               ],
             )
           )
@@ -42,6 +43,8 @@ class SettingsPage extends State<Settings> {
     );
   }
 
+  // -- Language Settings --
+  //options: english and french
   Widget _languageSettings() => Container(
     padding: const EdgeInsets.all(10.0),
     decoration: BoxDecoration(
@@ -55,7 +58,7 @@ class SettingsPage extends State<Settings> {
     child: Column(
       children: <Widget>[
         Text(
-          FlutterI18n.translate(context, "settings.language"),
+          FlutterI18n.translate(context, "settings.language"), //section header
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -64,6 +67,8 @@ class SettingsPage extends State<Settings> {
         ),
         Column(
           children: <Widget> [
+
+            // -- English --
             SizedBox(
               width: double.infinity,
               child: OutlineButton(
@@ -76,20 +81,24 @@ class SettingsPage extends State<Settings> {
                       textScaleFactor: 1.2,
                       style: TextStyle(color: Colors.white),
                     ),
+                    //display checkbox if language is selected
                     (prefs.getString('language')=="en") ? Icon(Icons.check, color:Colors.white) : Text(""),
                   ]
                 ),
                 shape: RoundedRectangleBorder(  
                   borderRadius: BorderRadius.circular(15)),
                 onPressed: () async {
+                  //set the stored language and current locale to english
                   print('Language Select: English');
-                  prefs.setString("language", "en");
-                  Locale newLocale = Locale('en');
+                  prefs.setString("language", "en"); //set stored language
+                  Locale newLocale = Locale('en'); //set current locale
                   await FlutterI18n.refresh(context, newLocale);
                   setState(() {});
                 },
               )
             ),
+
+            // -- French --
             SizedBox(
               width: double.infinity,
               child: OutlineButton(
@@ -102,15 +111,17 @@ class SettingsPage extends State<Settings> {
                     textScaleFactor: 1.2,
                     style: TextStyle(color: Colors.white),
                     ),
+                    //display checkbox if language is selected
                     (prefs.getString('language')=="fr") ? Icon(Icons.check, color:Colors.white) : Text(""), 
                   ]
                 ),
                 shape: RoundedRectangleBorder(  
                   borderRadius: BorderRadius.circular(15)),
                 onPressed: () async {
+                  //set the stored language and current locale to french
                   print('Language Select: French');
-                  prefs.setString("language", "fr");
-                  Locale newLocale = Locale('fr');
+                  prefs.setString("language", "fr"); //set stored language
+                  Locale newLocale = Locale('fr'); //set current locale
                   await FlutterI18n.refresh(context, newLocale);
                   setState(() {});
                 },
@@ -122,6 +133,8 @@ class SettingsPage extends State<Settings> {
     )
   );
 
+  // -- Notification Settings --
+  //options: scheduled notifications and featured persons notifications
   Widget _notificationSettings(Notifications notification) => Container(
     padding: const EdgeInsets.all(10.0),
     decoration: BoxDecoration(
@@ -135,13 +148,15 @@ class SettingsPage extends State<Settings> {
     child: Column(
       children: <Widget> [
         Text(
-          FlutterI18n.translate(context, "settings.notifications.title"),
+          FlutterI18n.translate(context, "settings.notifications.title"), //header
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
+
+        // -- Scheduled Notifications --
         SwitchListTile(
           activeColor: Colors.white,
           contentPadding: const EdgeInsets.all(0),
@@ -156,8 +171,9 @@ class SettingsPage extends State<Settings> {
             textScaleFactor: 1.1,
             style: TextStyle(color: Colors.white)
           ),
-          //secondary: const Icon(Icons.notification_important, color: Colors.red),
         ),
+
+        // -- Featured Persons Notifications --
         SwitchListTile(
           activeColor: Colors.white,
           contentPadding: const EdgeInsets.all(0),
@@ -172,13 +188,13 @@ class SettingsPage extends State<Settings> {
             textScaleFactor: 1.1,
             style: TextStyle(color: Colors.white),
           ),
-          //secondary:
-              //const Icon(Icons.notification_important, color: Colors.red),
         ),
       ]
     )
   );
 
+  // -- Tutorial Settings --
+  //options: enable or disable tutorials
   Widget _tutorialSettings(TutorialModel tutorialModel) => Container(
     padding: const EdgeInsets.all(10.0),
     decoration: BoxDecoration(
@@ -192,13 +208,15 @@ class SettingsPage extends State<Settings> {
     child: Column(
       children: <Widget> [
         Text(
-          FlutterI18n.translate(context, "settings.tutorial.title"),
+          FlutterI18n.translate(context, "settings.tutorial.title"), //header
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
+
+        // -- Tutorials On/Off --
         SwitchListTile(
           activeColor: Colors.white,
           contentPadding: const EdgeInsets.all(0),
@@ -225,64 +243,3 @@ class SettingsPage extends State<Settings> {
     )
   );
 }
-
-/*class _solidLine extends StatelessWidget {
-  const _solidLine({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      width: double.infinity,
-      height: 1,
-      color: Colors.grey,
-    );
-  }
-}*/
-
-/*
-const SizedBox(height: 10),
-Card(
-  elevation: 8,
-  margin: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-  shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10)),
-  child: Column(
-    children: <Widget>[
-      ListTile(
-        leading: Icon(
-          Icons.lock_outline,
-          color: Colors.red,
-        ),
-        title: Text('Change Password'),
-        trailing: Icon(
-          Icons.keyboard_arrow_right,
-          color: Colors.red,
-        ),
-        onTap: () {
-          Navigator.pushReplacementNamed(context, '/password');
-        },
-      ),
-      _solidLine(),
-      ListTile(
-        leading: Icon(
-          Icons.brightness_medium,
-          color: Colors.red,
-        ),
-        title: Text('Change Theme'),
-        trailing: Icon(
-          Icons.keyboard_arrow_right,
-          color: Colors.red,
-        ),
-        onTap: () {
-          Navigator.pushReplacementNamed(context, '/theme');
-        },
-      ),
-    ],
-  ),
-),
-*/
-
-
