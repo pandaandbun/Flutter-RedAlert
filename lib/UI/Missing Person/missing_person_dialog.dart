@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../popup_map.dart';
 
@@ -10,9 +11,12 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 // Pop up dialog for main page
 class PeopleDialog extends StatelessWidget {
   final Map person;
-  final DateFormat formatter = DateFormat('MMMM dd, yyyy');
+  final SharedPreferences prefs;
+  DateFormat formatter;
 
-  PeopleDialog(this.person);
+  PeopleDialog(this.person, this.prefs) {
+    formatter = DateFormat('MMMM dd, yyyy', prefs.getString('language') ?? "en");
+  }
 
   Future _showMapDialog(BuildContext scaffoldContext) async => await showDialog(
       context: scaffoldContext,

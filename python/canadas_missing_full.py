@@ -128,7 +128,7 @@ while(driver.find_element_by_xpath("//*[@rel='next']/ancestor::li[1]").get_attri
                 #get the date from innerHTML of list, split away the label and spaces, and format into datetime using strptime
                 'missingSince': datetime.strptime(dateList[i].get_attribute("innerHTML").split(";",1)[1].strip(), "%B %d, %Y"),
                 #get the city/province from innerHTML, split away the label and province
-                'city': locationList[i].get_attribute("innerHTML").split(",",1)[0].split(";",1)[1].strip(),
+                'city': locationList[i].get_attribute("innerHTML").split(",",1)[0].split(";",1)[1].strip().replace("é", "e"),
                 #get the city/province from innerHTML, split away the label and city, and call getProvinceCode()
                 'province': getProvinceCode((locationList[i].get_attribute("innerHTML").strip().split(",",1)[1])[1:]),
             }

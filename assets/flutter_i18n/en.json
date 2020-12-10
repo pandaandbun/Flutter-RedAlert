@@ -13,6 +13,10 @@
         "last_location": "Last Location: "
     },
 
+    "person_list": {
+        "notification_dialog": "Scheduled notifications are currently disabled. Please go to Settings and re-enable them to use this feature."
+    },
+
     "settings": {
         "title": "Settings",
         "language": "Language Settings",

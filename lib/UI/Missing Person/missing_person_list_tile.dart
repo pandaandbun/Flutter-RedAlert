@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,10 +27,12 @@ class MissingPersonListTile extends StatefulWidget {
 
 class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
-  final DateFormat formatter = DateFormat('MMMM dd, yyyy');
+  DateFormat formatter;
   final SharedPreferences prefs;
 
-  _MissingPersonListTileState(this.prefs);
+  _MissingPersonListTileState(this.prefs) {
+    formatter = DateFormat('MMMM dd, yyyy', prefs.getString('language') ?? "en");
+  }
 
   void refresh(bool bool) {
     setState(() {
@@ -40,7 +43,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   void _moreInfo() async {
     await showDialog(
       context: context,
-      child: PeopleDialog(widget.person),
+      child: PeopleDialog(widget.person, prefs),
     );
   }
 
@@ -107,7 +110,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
     builder: (BuildContext context) {
       return AlertDialog(
           content: new Text(
-              "Scheduled notifications are currently disabled. Please go to Settings and re-enable them to use this feature."),
+              FlutterI18n.translate(context, "person_list.notification_dialog")),
           backgroundColor: Colors.brown[100],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))
@@ -193,7 +196,8 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
         context: context,
         initialDate: DateTime.now().add(const Duration(days: 1)),
         firstDate: DateTime.now().add(const Duration(days: 1)),
-        lastDate: DateTime.now().add(const Duration(days: 365)));
+        lastDate: DateTime.now().add(const Duration(days: 365)),
+        locale: Locale(prefs.getString('language') ?? "en"));
 
     if (selectedDate == null) {
       return null;

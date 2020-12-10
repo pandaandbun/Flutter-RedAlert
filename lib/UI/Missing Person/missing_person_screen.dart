@@ -78,7 +78,7 @@ class MissingPerson extends StatelessWidget {
         children: [
           Row(children: [
             SearchBar(),
-            Calendar(),
+            Calendar(prefs),
           ]),
           MissingPersonList(_notifications, notificationsNum, prefs),
         ],

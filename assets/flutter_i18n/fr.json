@@ -12,6 +12,10 @@
         "last_location": "Dernier Emplacement: "
     },
 
+    "person_list": {
+        "notification_dialog": "Les notifications programmées sont actuellement désactivées. Veuillez aller dans Paramètres et réactivez-les pour utiliser cette fonctionnalité."
+    },
+
     "settings": {
         "title": "Réglages",
         "language": "Paramètres de Langue",
