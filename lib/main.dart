@@ -50,7 +50,7 @@ Future main() async {
 
     // -- Notification Settings --
     //enable all notifications by default
-    prefs.setBool("notifications_instant", true);
+    prefs.setBool("notifications_scheduled", true);
     prefs.setBool("notifications_featured", true);
   }
   else {

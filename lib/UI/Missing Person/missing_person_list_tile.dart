@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -15,16 +16,20 @@ import 'missing_person_dialog.dart';
 class MissingPersonListTile extends StatefulWidget {
   final Map person;
   final Notifications _notifications;
+  final SharedPreferences prefs;
 
-  MissingPersonListTile(this.person, this._notifications);
+  MissingPersonListTile(this.person, this._notifications, this.prefs);
 
   @override
-  _MissingPersonListTileState createState() => _MissingPersonListTileState();
+  _MissingPersonListTileState createState() => _MissingPersonListTileState(prefs);
 }
 
 class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
   final DateFormat formatter = DateFormat('MMMM dd, yyyy');
+  final SharedPreferences prefs;
+
+  _MissingPersonListTileState(this.prefs);
 
   void refresh(bool bool) {
     setState(() {
@@ -52,21 +57,26 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
 
   // ---------------------------------------------------------------------
 
-  void _notifyBtnHandler() async {
-    var when = await _selectDate(context); //function which opens a DatePicker
+  void _notifyBtnHandler(SharedPreferences prefs) async {
+    if(prefs.getBool('notifications_scheduled') ?? false) {
+      var when = await _selectDate(context); //function which opens a DatePicker
 
-    if (when != null) {
-      await widget._notifications.sendNotificationNow(
-          "Reminder Set For " + formatter.format(when),
-          widget.person['firstName'] + " " + widget.person['lastName']);
-      await widget._notifications.sendNotificationLater(
-        widget.person['id'],
-        "Did you find me?",
-        widget.person['firstName'] + " " + widget.person['lastName'],
-        when,
-      );
+      if (when != null) {
+        await widget._notifications.sendNotificationNow(
+            "Reminder Set For " + formatter.format(when),
+            widget.person['firstName'] + " " + widget.person['lastName']);
+        await widget._notifications.sendNotificationLater(
+          widget.person['id'],
+          "Did you find me?",
+          widget.person['firstName'] + " " + widget.person['lastName'],
+          when,
+        );
 
-      _confirmationFialog(when);
+        _confirmationFialog(when);
+      }
+    }
+    else {
+      _notEnabledDialog();
     }
   }
 
@@ -79,8 +89,39 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
                 "Reminder for ${widget.person['firstName']} ${widget.person['lastName']} set for ${formatter.format(when)}."),
             backgroundColor: Colors.brown[100],
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))));
+              borderRadius: BorderRadius.all(Radius.circular(20.0))
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
       });
+    
+  Future _notEnabledDialog() => showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+          content: new Text(
+              "Scheduled notifications are currently disabled. Please go to Settings and re-enable them to use this feature."),
+          backgroundColor: Colors.brown[100],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+    });
 
   // ---------------------------------------------------------------------
 
@@ -99,12 +140,12 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
       refresh(true);
     }
 
-    return _personTile(selectedPeopleModel);
+    return _personTile(selectedPeopleModel, prefs);
   }
 
   // ---------------------------------------------------------------------
 
-  Widget _personTile(SelectedPeopleModel selectedPeopleModel) => Container(
+  Widget _personTile(SelectedPeopleModel selectedPeopleModel, SharedPreferences prefs) => Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: _selectedIndex ? Colors.brown[900] : Colors.brown,
@@ -115,16 +156,16 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
       ),
       margin: EdgeInsets.only(left: 20, right: 20, top: 15),
       child: GestureDetector(
-        child: _tileContent(selectedPeopleModel),
+        child: _tileContent(selectedPeopleModel, prefs),
         onLongPress: _moreInfo,
       ));
 
-  Widget _tileContent(SelectedPeopleModel selectedPeopleModel) => Ink(
+  Widget _tileContent(SelectedPeopleModel selectedPeopleModel, SharedPreferences prefs) => Ink(
         child: ListTile(
           leading: _tileImage(),
           title: _tileTitle(),
           subtitle: _tileSubTitle(),
-          trailing: notifyButton(),
+          trailing: notifyButton(prefs),
           onTap: () => _tileSelectionHandler(selectedPeopleModel),
         ),
       );
@@ -162,11 +203,11 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   }
 
   //notifyButton: a button which processes a future notification for the accociated person.
-  Widget notifyButton() => IconButton(
+  Widget notifyButton(SharedPreferences prefs) => IconButton(
         icon: Icon(
           Icons.add_alert,
           color: Colors.white,
         ),
-        onPressed: () => _notifyBtnHandler(),
+        onPressed: () => _notifyBtnHandler(prefs),
       );
 }

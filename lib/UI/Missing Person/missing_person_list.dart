@@ -81,7 +81,7 @@ class MissingPersonList extends StatelessWidget {
         child: ListView.builder(
           itemCount: people.length,
           itemBuilder: (BuildContext context, int index) =>
-              MissingPersonListTile(people[index], _notifications),
+              MissingPersonListTile(people[index], _notifications, prefs),
         ),
       );
 }
