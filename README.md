@@ -271,3 +271,13 @@ Tutorial Settings: Allows the user to enable or disable the in-app tutorials.
 ### References
 
 Missing persons information was retrieved from https://www.canadasmissing.ca/index-eng.htm using a python script, found in the python folder of the project.
+
+--------------------------
+
+### Note
+
+On the use of certain notifications, the following exception is thrown:
+
+![Bug1](images/bug.png)
+
+This is a known issue with Firebase, and does not affect the functioning of the app: https://github.com/firebase/firebase-android-sdk/issues/1662
