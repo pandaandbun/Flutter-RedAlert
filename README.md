@@ -253,7 +253,7 @@ When viewing the missing persons list, a featured person will appear as a notifi
 --------------------------
 
 ### Settings Page
-![settings](images/settings.PNG)
+![Settings](images/settings.png)
 
 The settings page contains 3 types of settings:
 
