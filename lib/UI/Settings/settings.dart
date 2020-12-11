@@ -28,23 +28,27 @@ class SettingsPage extends State<Settings> {
   }
 
   Widget _areYourSureYouWantToExitWarpper() => Builder(
-      builder: (context) => WillPopScope(
-          child: _body(),
-          onWillPop: () async {
-            bool value = await showDialog<bool>(
-                context: context, builder: (context) => ExitDialog());
-            return value;
-          }));
+    builder: (context) => WillPopScope(
+      child: _body(),
+      onWillPop: () async {
+        bool value = await showDialog<bool>(
+            context: context, builder: (context) => ExitDialog());
+        return value;
+      }
+    )
+  );
 
   Widget _body() => SingleChildScrollView(
-      child: Container(
-          margin: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              LanguageSettings(refresh), //widget for language settings
-              NotificationSettings(), //widget for notification settings
-              TutorialSettings(), //widget for tutorial settings
-            ],
-          )));
+    child: Container(
+        margin: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            LanguageSettings(refresh), //widget for language settings
+            NotificationSettings(), //widget for notification settings
+            TutorialSettings(), //widget for tutorial settings
+          ],
+        )
+      )
+    );
 }

@@ -22,14 +22,12 @@ class ProvinceBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 10),
-      child: _barChart(),
-    );
-  }
-
-  Widget _barChart() => BarChart(
+      child: BarChart(
         _createSeriesData(),
         animate: true,
         defaultRenderer: new BarRendererConfig(
             groupingType: BarGroupingType.grouped, strokeWidthPx: 2.0),
-      );
+      ),
+    );
+  }
 }

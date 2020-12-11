@@ -12,14 +12,11 @@ class SearchForm extends StatelessWidget {
   }
 
   Widget searchForm() => Form(
-      key: _formKey,
-      child: Container(
-        width: 300,
-        margin: EdgeInsets.only(left: 25, right: 25),
-        child: nameForm(),
-      ));
-
-  Widget nameForm() => TextFormField(
+    key: _formKey,
+    child: Container(
+      width: 300,
+      margin: EdgeInsets.only(left: 25, right: 25),
+      child: TextFormField(
         decoration: const InputDecoration(
           prefixIcon: Icon(
             Icons.person,
@@ -36,5 +33,7 @@ class SearchForm extends StatelessWidget {
           color: Colors.grey,
         ),
         onSaved: (String value) => name.fullName = value,
-      );
+      ),
+    )
+  );
 }

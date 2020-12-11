@@ -16,26 +16,27 @@ class ExitDialog extends StatelessWidget {
   }
 
   Widget _dialogTitle() => Text(
-        'Are you sure you want to exit?',
-        style: TextStyle(color: Colors.white),
-      );
+    'Are you sure you want to exit?',
+    style: TextStyle(color: Colors.white),
+  );
 
   Widget _noBtn() => Builder(
-        builder: (context) => FlatButton(
-          child: Text(
-            'No',
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () => Navigator.of(context).pop(false),
-        ),
-      );
+    builder: (context) => FlatButton(
+      child: Text(
+        'No',
+        style: TextStyle(color: Colors.white),
+      ),
+      onPressed: () => Navigator.of(context).pop(false),
+    ),
+  );
 
   Widget _yesBtn() => Builder(
-      builder: (context) => FlatButton(
-            child: Text(
-              'Yes, exit',
-              style: TextStyle(color: Colors.red[400]),
-            ),
-            onPressed: () => Navigator.of(context).pop(true),
-          ));
+    builder: (context) => FlatButton(
+      child: Text(
+        'Yes, exit',
+        style: TextStyle(color: Colors.red[400]),
+      ),
+      onPressed: () => Navigator.of(context).pop(true),
+    )
+  );
 }

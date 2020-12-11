@@ -48,32 +48,11 @@ class NotifyButton extends StatelessWidget {
         DateFormat('MMMM dd, yyyy', prefs.getString('language') ?? "en");
 
     return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: new Text(
-                "Reminder for ${person['firstName']} ${person['lastName']} set for ${formatter.format(when)}."),
-            backgroundColor: Colors.brown[100],
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            actions: <Widget>[
-              TextButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
-  }
-
-  Future _notEnabledDialog(BuildContext context) => showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: new Text(FlutterI18n.translate(
-              context, "person_list.notification_dialog")),
+          content: new Text(
+              "Reminder for ${person['firstName']} ${person['lastName']} set for ${formatter.format(when)}."),
           backgroundColor: Colors.brown[100],
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
@@ -86,7 +65,30 @@ class NotifyButton extends StatelessWidget {
             ),
           ],
         );
-      });
+      }
+    );
+  }
+
+  Future _notEnabledDialog(BuildContext context) => showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: new Text(FlutterI18n.translate(
+            context, "person_list.notification_dialog")),
+        backgroundColor: Colors.brown[100],
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    }
+  );
 
   @override
   Widget build(BuildContext context) {

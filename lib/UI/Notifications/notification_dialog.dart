@@ -15,21 +15,12 @@ class NotificationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.brown,
-      title: _dialogTitle(),
-      content: _missingPersonOfTheyDay(),
-      actions: [_dialogBtn()],
-    );
-  }
-
-  // ---------------------------------------------------------
-  // Widgets in dialog for notification
-
-  Widget _dialogTitle() => Text(
+      title: Text(
         "Feature Person",
-        style: TextStyle(color: Colors.white),
-      );
-
-  Widget _dialogBtn() => Builder(
+        style: TextStyle(color: Colors.white),),
+      content: _missingPersonOfTheyDay(),
+      actions: [
+        Builder(
         builder: (context) => TextButton(
           onPressed: () {
             Navigator.pop(context);
@@ -39,21 +30,26 @@ class NotificationDialog extends StatelessWidget {
             style: TextStyle(color: Colors.blue[300]),
           ),
         ),
-      );
+      )],
+    );
+  }
+
+  // ---------------------------------------------------------
+  // Widgets in dialog for notification
 
   Widget _missingPersonOfTheyDay() => FutureBuilder(
-      future: missingPeople.getPeopleFromId(payload),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            return _missingPersonOfTheDayContent(snapshot.data[0]);
-          } else {
-            return Text("No Data");
-          }
+    future: missingPeople.getPeopleFromId(payload),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        if (snapshot.data.length > 0) {
+          return _missingPersonOfTheDayContent(snapshot.data[0]);
         } else {
-          return Text("Fetching Data");
+          return Text("No Data");
         }
-      });
+      } else {
+        return Text("Fetching Data");
+      }
+    });
 
   Widget _missingPersonOfTheDayContent(Map person) => FutureBuilder(
       future: SharedPreferences.getInstance(),

@@ -59,60 +59,61 @@ class MissingPerson extends StatelessWidget {
   }
 
   Widget _areYourSureYouWantToExitWarpper() => Builder(
-      builder: (context) => WillPopScope(
-          child: _body(),
-          onWillPop: () async {
-            bool value = await showDialog<bool>(
-                context: context, builder: (context) => ExitDialog());
-            return value;
-          }));
+    builder: (context) => WillPopScope(
+        child: _body(),
+        onWillPop: () async {
+          bool value = await showDialog<bool>(
+              context: context, builder: (context) => ExitDialog());
+          return value;
+        }
+      )
+    );
 
   Widget _body() => Column(
-        children: [
-          Row(children: [
-            SearchBar(),
-            Calendar(),
-          ]),
-          MissingPersonList(
-            _notifications,
-            notificationsNum,
-          ),
-        ],
-      );
+    children: [
+      Row(children: [
+        SearchBar(),
+        Calendar(),
+      ]),
+      MissingPersonList(
+        _notifications,
+        notificationsNum,
+      ),
+    ],);
 
   // ------------------------------------------------------------
 
   // Save button for saving people to local list
   Widget savedButton() => Builder(builder: (context) {
-        final SavedPeopleModel savedPeopleModel =
-            Provider.of<SavedPeopleModel>(context);
-        final SelectedPeopleModel selectedPeopleModel =
-            Provider.of<SelectedPeopleModel>(context);
+    final SavedPeopleModel savedPeopleModel =
+        Provider.of<SavedPeopleModel>(context);
+    final SelectedPeopleModel selectedPeopleModel =
+        Provider.of<SelectedPeopleModel>(context);
 
-        return IconButton(
-          icon: Icon(Icons.save),
-          tooltip: "Settings",
-          onPressed: () async {
-            var snackBar =
-                SnackBar(content: Text('Please first click on someone'));
-            List<String> ids = selectedPeopleModel.getDocIds();
+    return IconButton(
+      icon: Icon(Icons.save),
+      tooltip: "Settings",
+      onPressed: () async {
+        var snackBar =
+            SnackBar(content: Text('Please first click on someone'));
+        List<String> ids = selectedPeopleModel.getDocIds();
 
-            if (ids.length > 0) {
-              snackBar = SnackBar(content: Text('Saved'));
+        if (ids.length > 0) {
+          snackBar = SnackBar(content: Text('Saved'));
 
-              for (String id in ids) {
-                SavedPerson person = SavedPerson(id);
-                var result = await savedPeopleModel.insertPeople(person);
+          for (String id in ids) {
+            SavedPerson person = SavedPerson(id);
+            var result = await savedPeopleModel.insertPeople(person);
 
-                if (result != null) {
-                  snackBar = SnackBar(
-                      content: Text('One Of The Item Is Already Saved'));
-                }
-              }
-              selectedPeopleModel.resetDocIds();
+            if (result != null) {
+              snackBar = SnackBar(
+                  content: Text('One Of The Item Is Already Saved'));
             }
-            Scaffold.of(context).showSnackBar(snackBar);
-          },
-        );
-      });
+          }
+          selectedPeopleModel.resetDocIds();
+        }
+        Scaffold.of(context).showSnackBar(snackBar);
+      },
+    );
+  });
 }

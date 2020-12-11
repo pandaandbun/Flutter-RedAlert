@@ -31,12 +31,13 @@ class _CalendarState extends State<Calendar> {
   }
 
   Widget _calendar(DateModel dateModel) => GestureDetector(
-      child: Icon(
-        Icons.date_range,
-        color: Colors.white,
-      ),
-      onTap: () => _calendarDatePicker()
-          .then((value) => _calendarHandler(value, dateModel)));
+    child: Icon(
+      Icons.date_range,
+      color: Colors.white,
+    ),
+    onTap: () => _calendarDatePicker()
+        .then((value) => _calendarHandler(value, dateModel))
+    );
 
   Future<DateTime> _calendarDatePicker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

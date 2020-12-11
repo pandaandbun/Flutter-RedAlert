@@ -43,36 +43,37 @@ class _CityBarChartState extends State<CityBarChart> {
   }
 
   Widget _dropDownList() => DropdownButton(
-        items: widget.provinces
-            .map((String e) => DropdownMenuItem(
-                  child: Text(e),
-                  value: e,
-                ))
-            .toList(),
-        value: selectedProvince,
-        onChanged: (e) => setState(() {
-          selectedProvince = e;
-        }),
-      );
+    items: widget.provinces
+        .map((String e) => DropdownMenuItem(
+              child: Text(e),
+              value: e,
+            ))
+        .toList(),
+    value: selectedProvince,
+    onChanged: (e) => setState(() {
+      selectedProvince = e;
+    }),
+  );
 
   Widget _pieChart() => Expanded(
-          child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Container(
-          width: 1000,
-          padding: EdgeInsets.all(8),
-          child: charts.PieChart(
-            _createSeriesData(),
-            animate: true,
-            defaultRenderer: new charts.ArcRendererConfig(
-              arcWidth: 110,
-              arcRendererDecorators: [
-                new charts.ArcLabelDecorator(
-                  labelPosition: charts.ArcLabelPosition.outside,
-                )
-              ],
-            ),
+    child: SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        width: 1000,
+        padding: EdgeInsets.all(8),
+        child: charts.PieChart(
+          _createSeriesData(),
+          animate: true,
+          defaultRenderer: new charts.ArcRendererConfig(
+            arcWidth: 110,
+            arcRendererDecorators: [
+              new charts.ArcLabelDecorator(
+                labelPosition: charts.ArcLabelPosition.outside,
+              )
+            ],
           ),
         ),
-      ));
+      ),
+    )
+  );
 }

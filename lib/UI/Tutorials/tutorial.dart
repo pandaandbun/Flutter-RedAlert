@@ -5,59 +5,59 @@ import 'tutorial_actions.dart';
 // Path for GIFs of how to use each functions in that page
 class Paths {
   static Map get img => {
-        'missingPersonPage': [
-          {
-            'name': 'Search Bar',
-            'path': 'images/tutorials/missing_person/search.gif'
-          },
-          {
-            'name': 'Calendar',
-            'path': 'images/tutorials/missing_person/calendar.gif'
-          },
-          {
-            'name': 'Long Press',
-            'path': 'images/tutorials/missing_person/long_press.gif'
-          },
-          {
-            'name': 'Map',
-            'path': 'images/tutorials/missing_person/map_distance.gif'
-          },
-          {
-            'name': 'Bell',
-            'path': 'images/tutorials/missing_person/notifications.gif'
-          },
-          {
-            'name': 'Save',
-            'path': 'images/tutorials/missing_person/save_delete.gif'
-          },
-          {
-            'name': 'About',
-            'path': 'images/tutorials/about/about.gif',
-          },
-        ],
-        'syncPage': [
-          {
-            'name': 'Tutorial',
-            'path': 'images/tutorials/sync/sync.gif',
-          },
-        ],
-        'mapPage': [
-          {
-            'name': 'Map',
-            'path': 'images/tutorials/map/map.gif',
-          },
-        ],
-        'breakdownPage': [
-          {
-            'name': 'Table',
-            'path': 'images/tutorials/charts_data_table/data_table.gif'
-          },
-          {
-            'name': 'Table',
-            'path': 'images/tutorials/charts_data_table/charts.gif'
-          },
-        ],
-      };
+    'missingPersonPage': [
+      {
+        'name': 'Search Bar',
+        'path': 'images/tutorials/missing_person/search.gif'
+      },
+      {
+        'name': 'Calendar',
+        'path': 'images/tutorials/missing_person/calendar.gif'
+      },
+      {
+        'name': 'Long Press',
+        'path': 'images/tutorials/missing_person/long_press.gif'
+      },
+      {
+        'name': 'Map',
+        'path': 'images/tutorials/missing_person/map_distance.gif'
+      },
+      {
+        'name': 'Bell',
+        'path': 'images/tutorials/missing_person/notifications.gif'
+      },
+      {
+        'name': 'Save',
+        'path': 'images/tutorials/missing_person/save_delete.gif'
+      },
+      {
+        'name': 'About',
+        'path': 'images/tutorials/about/about.gif',
+      },
+    ],
+    'syncPage': [
+      {
+        'name': 'Tutorial',
+        'path': 'images/tutorials/sync/sync.gif',
+      },
+    ],
+    'mapPage': [
+      {
+        'name': 'Map',
+        'path': 'images/tutorials/map/map.gif',
+      },
+    ],
+    'breakdownPage': [
+      {
+        'name': 'Table',
+        'path': 'images/tutorials/charts_data_table/data_table.gif'
+      },
+      {
+        'name': 'Table',
+        'path': 'images/tutorials/charts_data_table/charts.gif'
+      },
+    ],
+  };
 }
 
 class TutorialDialog extends StatefulWidget {
@@ -88,35 +88,35 @@ class _TutorialDialogState extends State<TutorialDialog> {
   // ----------------------------------------------
   // Dialog Tilte and Content
   Widget _dialogTitle() => Text(
-        widget.imgPaths[widget.parentScreen][_curSliderVal.toInt()]['name'],
-        style: TextStyle(color: Colors.white),
-      );
+      widget.imgPaths[widget.parentScreen][_curSliderVal.toInt()]['name'],
+      style: TextStyle(color: Colors.white),
+    );
 
   Widget _dialogBody() => Column(
-        children: [
-          Expanded(child: _image()),
-          _slider(),
-        ],
-      );
+    children: [
+      Expanded(child: _image()),
+      _slider(),
+    ],
+  );
 
   Widget _image() => Image.asset(
-        widget.imgPaths[widget.parentScreen][_curSliderVal.toInt()]['path'],
-        fit: BoxFit.cover,
-      );
+    widget.imgPaths[widget.parentScreen][_curSliderVal.toInt()]['path'],
+    fit: BoxFit.cover,
+  );
 
   // The carousel
   Widget _slider() => Slider(
-        value: _curSliderVal,
-        min: 0,
-        max: widget.imgPaths[widget.parentScreen].length.toDouble() - 1,
-        divisions: widget.imgPaths[widget.parentScreen].length == 1
-            ? 1
-            : widget.imgPaths[widget.parentScreen].length - 1,
-        label: _curSliderVal.round().toString(),
-        onChanged: (value) {
-          setState(() {
-            _curSliderVal = value;
-          });
-        },
-      );
+    value: _curSliderVal,
+    min: 0,
+    max: widget.imgPaths[widget.parentScreen].length.toDouble() - 1,
+    divisions: widget.imgPaths[widget.parentScreen].length == 1
+        ? 1
+        : widget.imgPaths[widget.parentScreen].length - 1,
+    label: _curSliderVal.round().toString(),
+    onChanged: (value) {
+      setState(() {
+        _curSliderVal = value;
+      });
+    },
+  );
 }

@@ -63,39 +63,41 @@ class MissingPersonList extends StatelessWidget {
   // --------------------------------------------------------------
   // Wait for list from firebase
   Widget _futureList(Future future) => FutureBuilder(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
+    future: future,
+    builder: (context, snapshot) {
+      if (snapshot.hasError) {
+        return const Text("No One Was Found",
+            textDirection: TextDirection.ltr);
+      } else if (snapshot.hasData) {
+        if (snapshot.data.length > 0) {
+          List people = snapshot.data;
+          _chooseRandomPerson(people);
+
+          return peopleList(people);
+        } else {
           return const Text("No One Was Found",
               textDirection: TextDirection.ltr);
-        } else if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            List people = snapshot.data;
-            _chooseRandomPerson(people);
-
-            return peopleList(people);
-          } else {
-            return const Text("No One Was Found",
-                textDirection: TextDirection.ltr);
-          }
-        } else {
-          return const Text("Loading...", textDirection: TextDirection.ltr);
         }
-      });
+      } else {
+        return const Text("Loading...", textDirection: TextDirection.ltr);
+      }
+    }
+  );
 
   // main page list builder
   Widget peopleList(List people) => FutureBuilder(
-      future: SharedPreferences.getInstance(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Expanded(
-              child: ListView.builder(
-            itemCount: people.length,
-            itemBuilder: (BuildContext context, int index) =>
-                MissingPersonListTile(people[index], _notifications),
-          ));
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      });
+    future: SharedPreferences.getInstance(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return Expanded(
+            child: ListView.builder(
+          itemCount: people.length,
+          itemBuilder: (BuildContext context, int index) =>
+              MissingPersonListTile(people[index], _notifications),
+        ));
+      } else {
+        return Center(child: CircularProgressIndicator());
+      }
+    }
+  );
 }

@@ -36,27 +36,29 @@ class SyncScreen extends StatelessWidget {
 
   Widget _scaffold(
           MissingPeopleModel missingPeopleModel, BuildContext context) =>
-      Scaffold(
-        appBar: AppBar(
-          title: Text(FlutterI18n.translate(context, "drawer.sync")),
-        ),
-        drawer: DrawerMenu(),
-        backgroundColor: Colors.brown[900],
-        body: _areYourSureYouWantToExitWarpper(missingPeopleModel),
-      );
+    Scaffold(
+      appBar: AppBar(
+        title: Text(FlutterI18n.translate(context, "drawer.sync")),
+      ),
+      drawer: DrawerMenu(),
+      backgroundColor: Colors.brown[900],
+      body: _areYourSureYouWantToExitWrapper(missingPeopleModel),
+    );
 
   // ------------------------------------------------------------------
 
-  Widget _areYourSureYouWantToExitWarpper(
+  Widget _areYourSureYouWantToExitWrapper(
           MissingPeopleModel missingPeopleModel) =>
-      Builder(
-          builder: (context) => WillPopScope(
-              child: _body(missingPeopleModel),
-              onWillPop: () async {
-                bool value = await showDialog<bool>(
-                    context: context, builder: (context) => ExitDialog());
-                return value;
-              }));
+    Builder(
+      builder: (context) => WillPopScope(
+        child: _body(missingPeopleModel),
+        onWillPop: () async {
+          bool value = await showDialog<bool>(
+              context: context, builder: (context) => ExitDialog());
+          return value;
+        }
+      )
+    );
 
   Widget _body(MissingPeopleModel missingPeopleModel) {
     return Builder(
@@ -78,92 +80,86 @@ class SyncScreen extends StatelessWidget {
   // ----------------------------------------------------
 
   Widget _localDbStatusText(MissingPeopleModel missingPeopleModel) =>
-      FutureBuilder(
-        future: missingPeopleModel.isDbEmpty(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data) {
-              return _emptyText();
-            } else {
-              return _fullText();
-            }
+    FutureBuilder(
+      future: missingPeopleModel.isDbEmpty(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data) {
+            return Text(
+              "Local DB is Empty",
+              style: TextStyle(color: Colors.white),
+              textScaleFactor: 2,
+            );
           } else {
-            return _loadingText();
+            return Text(
+              "Local DB is Sync",
+              style: TextStyle(color: Colors.white),
+              textScaleFactor: 2,
+            );
           }
-        },
-      );
-
-  Widget _emptyText() => Text(
-        "Local DB is Empty",
-        style: TextStyle(color: Colors.white),
-        textScaleFactor: 2,
-      );
-
-  Widget _fullText() => Text(
-        "Local DB is Sync",
-        style: TextStyle(color: Colors.white),
-        textScaleFactor: 2,
-      );
-
-  Widget _loadingText() => Text(
-        "Loading Status....",
-        style: TextStyle(color: Colors.white),
-        textScaleFactor: 2,
-      );
+        } else {
+          return Text(
+            "Loading Status....",
+            style: TextStyle(color: Colors.white),
+            textScaleFactor: 2,
+          );
+        }
+      },
+    );
 
   // ----------------------------------------------------
 
   Widget _btns(MissingPeopleModel missingPeopleModel) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 10),
-            _refreshBtn(missingPeopleModel),
-            SizedBox(height: 10),
-            _downloadBtn(missingPeopleModel),
-            SizedBox(height: 10),
-            _deleteBtn(missingPeopleModel),
-            SizedBox(height: 10),
-          ],
-        ),
-      );
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: 10),
+        _refreshBtn(missingPeopleModel),
+        SizedBox(height: 10),
+        _downloadBtn(missingPeopleModel),
+        SizedBox(height: 10),
+        _deleteBtn(missingPeopleModel),
+        SizedBox(height: 10),
+      ],
+    ),
+  );
 
   Widget _refreshBtn(MissingPeopleModel missingPeopleModel) =>
-      FloatingActionButton(
-        child: Icon(
-          Icons.refresh,
-          color: Colors.white,
-        ),
-        onPressed: () => missingPeopleModel.refreshLocalDb(),
-        heroTag: "btn1",
-      );
+    FloatingActionButton(
+      child: Icon(
+        Icons.refresh,
+        color: Colors.white,
+      ),
+      onPressed: () => missingPeopleModel.refreshLocalDb(),
+      heroTag: "btn1",
+    );
 
   Widget _downloadBtn(MissingPeopleModel missingPeopleModel) =>
-      FloatingActionButton(
-        child: Icon(
-          Icons.cloud_download,
-          color: Colors.white,
-        ),
-        onPressed: () => missingPeopleModel.downloadAllPeopleToDb(),
-        heroTag: "btn2",
-      );
+    FloatingActionButton(
+      child: Icon(
+        Icons.cloud_download,
+        color: Colors.white,
+      ),
+      onPressed: () => missingPeopleModel.downloadAllPeopleToDb(),
+      heroTag: "btn2",
+    );
 
   Widget _deleteBtn(MissingPeopleModel missingPeopleModel) =>
-      FloatingActionButton(
-        child: Icon(
-          Icons.delete,
-          color: Colors.white,
-        ),
-        onPressed: () => missingPeopleModel.deleteAllPeople(),
-        heroTag: "btn3",
-      );
+    FloatingActionButton(
+      child: Icon(
+        Icons.delete,
+        color: Colors.white,
+      ),
+      onPressed: () => missingPeopleModel.deleteAllPeople(),
+      heroTag: "btn3",
+    );
 
   // ----------------------------------------------------
 
   Widget _backToMainPageBtn() => Builder(
-        builder: (context) => ElevatedButton(
-          onPressed: () => Navigator.pushReplacementNamed(context, '/missing'),
-          child: Text("To Main Page"),
-        ),
-      );
+    builder: (context) => ElevatedButton(
+      onPressed: () => Navigator.pushReplacementNamed(context, '/missing'),
+      child: Text("To Main Page"),
+    ),
+  );
 }

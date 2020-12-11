@@ -24,13 +24,10 @@ class YearTimeChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 10),
-      child: _lineChart(),
-    );
-  }
-
-  Widget _lineChart() => TimeSeriesChart(
+      child: TimeSeriesChart(
         _createSeriesData(),
         animate: true,
-        // defaultRenderer: new LineRendererConfig(),
-      );
+      ),
+    );
+  }
 }

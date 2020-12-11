@@ -100,46 +100,48 @@ class MyApp extends StatelessWidget {
     tz.initializeTimeZones();
 
     return FutureBuilder(
-        future: Firebase.initializeApp(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text(
-              "Error initializing database",
-              textDirection: TextDirection.ltr,
-            );
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            // Main
-            return _checkIfDbIsEmpty();
-          } else {
-            // Before Start up loading Screen
-            return _loadingIcon();
-          }
-        });
+      future: Firebase.initializeApp(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text(
+            "Error initializing database",
+            textDirection: TextDirection.ltr,
+          );
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          // Main
+          return _checkIfDbIsEmpty();
+        } else {
+          // Before Start up loading Screen
+          return _loadingIcon();
+        }
+      }
+    );
   }
 
   Widget _checkIfDbIsEmpty() {
     MissingPeopleModel missingPeopleModel = MissingPeopleModel();
 
     return FutureBuilder(
-        future: missingPeopleModel.isDbEmpty(),
-        builder: (_, dbSnapshot) {
-          if (dbSnapshot.hasData) {
-            if (dbSnapshot.data) {
-              return _startingPageIs("sync");
-            } else {
-              return _startingPageIs("missing");
-            }
+      future: missingPeopleModel.isDbEmpty(),
+      builder: (_, dbSnapshot) {
+        if (dbSnapshot.hasData) {
+          if (dbSnapshot.data) {
+            return _startingPageIs("sync");
           } else {
-            // Waiting for if local DB is empty
-            return _loadingIcon();
+            return _startingPageIs("missing");
           }
-        });
+        } else {
+          // Waiting for if local DB is empty
+          return _loadingIcon();
+        }
+      }
+    );
   }
 
   Widget _loadingIcon() => Directionality(
-      textDirection: TextDirection.ltr,
-      child: Center(
-          child: Row(
+    textDirection: TextDirection.ltr,
+    child: Center(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
@@ -148,29 +150,31 @@ class MyApp extends StatelessWidget {
           ),
           Text("Loading"),
         ],
-      )));
+      )
+    )
+  );
 
   Widget _startingPageIs(String main) => MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.brown,
-        ),
-        initialRoute: '/' + main,
-        routes: {
-          '/sync': (context) => SyncScreen(),
-          '/missing': (context) => MissingPerson(),
-          '/map': (context) => MapScreen(),
-          '/saved': (context) => SavedPersonScreen(),
-          '/charts': (context) => Breakdown(),
-          '/settings': (context) => Settings(),
-        },
-        localizationsDelegates: [
-          flutterI18nDelegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('en'),
-          const Locale('fr'),
-        ],
-      );
+    theme: ThemeData(
+      primarySwatch: Colors.brown,
+    ),
+    initialRoute: '/' + main,
+    routes: {
+      '/sync': (context) => SyncScreen(),
+      '/missing': (context) => MissingPerson(),
+      '/map': (context) => MapScreen(),
+      '/saved': (context) => SavedPersonScreen(),
+      '/charts': (context) => Breakdown(),
+      '/settings': (context) => Settings(),
+    },
+    localizationsDelegates: [
+      flutterI18nDelegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
+    supportedLocales: [
+      const Locale('en'),
+      const Locale('fr'),
+    ],
+  );
 }

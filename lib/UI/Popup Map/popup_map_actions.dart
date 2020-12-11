@@ -38,24 +38,18 @@ class MapActions extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _nextBtn(),
+        ElevatedButton(
+          onPressed: () => _moveView(),
+          child: Text("Next"),
+        ),
         SizedBox(width: 20),
-        _exitBtn(),
+        Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Exit"),
+          ),
+        ),
       ],
     );
   }
-
-  // The next button
-  Widget _nextBtn() => ElevatedButton(
-        onPressed: () => _moveView(),
-        child: Text("Next"),
-      );
-
-  // The exit button
-  Widget _exitBtn() => Builder(
-        builder: (context) => ElevatedButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text("Exit"),
-        ),
-      );
 }

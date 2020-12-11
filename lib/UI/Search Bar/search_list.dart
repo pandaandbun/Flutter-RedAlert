@@ -30,91 +30,83 @@ class SearchList extends StatelessWidget {
         Provider.of<SavedPeopleModel>(context);
 
     return Container(
-        width: double.maxFinite,
-        child: FutureBuilder(
-          future: missingPeople.getPersonWhereName(name),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data.length > 0) {
-                return _searchListView(snapshot.data, savedPeopleModel);
-              } else {
-                return Center(child: Text("No One Was Found"));
-              }
+      width: double.maxFinite,
+      child: FutureBuilder(
+        future: missingPeople.getPersonWhereName(name),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              return _searchListView(snapshot.data, savedPeopleModel);
+            } else {
+              return Center(child: Text("No One Was Found"));
             }
-            return Center(child: CircularProgressIndicator());
-          },
-        ));
+          }
+          return Center(child: CircularProgressIndicator());
+        },
+      )
+    );
   }
 
   // --------------------------------------
 
   Widget _searchListView(List people, SavedPeopleModel savedPeopleModel) =>
-      ListView.builder(
-        itemCount: people.length,
-        itemBuilder: (BuildContext context, int index) =>
-            seachCard(people[index], savedPeopleModel),
-      );
+    ListView.builder(
+      itemCount: people.length,
+      itemBuilder: (BuildContext context, int index) =>
+          seachCard(people[index], savedPeopleModel),
+    );
 
   // Search Cards
   Widget seachCard(Map person, SavedPeopleModel savedPeopleModel) => Card(
-        color: Colors.brown,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            searchCardText(person, savedPeopleModel),
-          ],
-        ),
-      );
+    color: Colors.brown,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        searchCardText(person, savedPeopleModel),
+      ],
+    ),
+  );
 
   // Search Card Text Content
   Widget searchCardText(Map person, SavedPeopleModel savedPeopleModel) =>
-      FutureBuilder(
-          future: SharedPreferences.getInstance(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              // Date format depending on the langauge
-              DateFormat formatter = DateFormat(
-                  'MMMM dd, yyyy', snapshot.data.getString('language') ?? "en");
+    FutureBuilder(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          // Date format depending on the langauge
+          DateFormat formatter = DateFormat(
+              'MMMM dd, yyyy', snapshot.data.getString('language') ?? "en");
 
-              // Person content
-              String url = person['image'];
-              String name = person['firstName'] + " " + person['lastName'];
-              String date =
-                  formatter.format(DateTime.parse(person['missingSince']));
-              String id = person['id'].toString();
+          // Person content
+          String url = person['image'];
+          String name = person['firstName'] + " " + person['lastName'];
+          String date =
+              formatter.format(DateTime.parse(person['missingSince']));
+          String id = person['id'].toString();
 
-              return ListTile(
-                  leading: _cardImg(url),
-                  title: _cardTitle(name),
-                  subtitle: _cardSubTitle(date),
-                  trailing: _cardSaveBtn(id, savedPeopleModel));
-            } else {
-              return Text("Loading");
-            }
-          });
-
-  Widget _cardImg(String url) => CircleAvatar(
-        backgroundImage: NetworkImage(url),
-        onBackgroundImageError: (_, __) {},
-      );
-
-  Widget _cardTitle(String name) => Text(
-        name,
-        style: TextStyle(color: Colors.white),
-      );
-
-  Widget _cardSubTitle(String date) => Text(
-        date,
-        style: TextStyle(color: Colors.white),
-      );
-
-  Widget _cardSaveBtn(String id, SavedPeopleModel savedPeopleModel) => Builder(
-        builder: (context) => IconButton(
-          icon: Icon(
-            Icons.save,
-            color: Colors.white,
-          ),
-          onPressed: () => savePerson(context, id, savedPeopleModel),
-        ),
-      );
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(url),
+              onBackgroundImageError: (_, __) {},),
+            title: Text(
+              name,
+              style: TextStyle(color: Colors.white),),
+            subtitle: Text(
+              date,
+              style: TextStyle(color: Colors.white),),
+            trailing:Builder(
+              builder: (context) => IconButton(
+                icon: Icon(
+                  Icons.save,
+                  color: Colors.white,
+                ),
+                onPressed: () => savePerson(context, id, savedPeopleModel),
+              ),
+            )
+          );
+        } else {
+          return Text("Loading");
+        }
+      }
+    );
 }

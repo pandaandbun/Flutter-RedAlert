@@ -15,14 +15,15 @@ class SearchBar extends StatelessWidget {
   // Show result as a dialog
   Future<void> _findPeople(scaffoldContext) async {
     await showDialog(
-        context: scaffoldContext,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('People Found'),
-            backgroundColor: Colors.brown[100],
-            content: SearchList(name.fullName),
-          );
-        });
+      context: scaffoldContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('People Found'),
+          backgroundColor: Colors.brown[100],
+          content: SearchList(name.fullName),
+        );
+      }
+    );
   }
 
   // ---------------------------------------------------
@@ -30,34 +31,35 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: ExpansionTile(
-      title: Icon(
-        Icons.search,
-        color: Colors.white,
-      ),
-      children: [
-        SearchForm(_formKey, name),
-        searchBtn(),
-      ],
-    ));
+      child: ExpansionTile(
+        title: Icon(
+          Icons.search,
+          color: Colors.white,
+        ),
+        children: [
+          SearchForm(_formKey, name),
+          searchBtn(),
+        ],
+      )
+    );
   }
 
   // ---------------------------------------------------
 
   // Search Icon Button
   Widget searchBtn() => Builder(
-        builder: (context) => RaisedButton(
-          color: Colors.brown,
-          child: Icon(
-            Icons.search,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            _formKey.currentState.save();
-            if (name.fullName.isNotEmpty) {
-              _findPeople(context);
-            }
-          },
-        ),
-      );
+    builder: (context) => RaisedButton(
+      color: Colors.brown,
+      child: Icon(
+        Icons.search,
+        color: Colors.white,
+      ),
+      onPressed: () {
+        _formKey.currentState.save();
+        if (name.fullName.isNotEmpty) {
+          _findPeople(context);
+        }
+      },
+    ),
+  );
 }

@@ -12,11 +12,12 @@ class MapBox extends StatelessWidget {
   MapBox(this.people, this._mapController);
 
   Future _missingPeopleDialog(BuildContext scaffoldContext) async =>
-      await showDialog(
-          context: scaffoldContext,
-          builder: (_) {
-            return MapDialog(people);
-          });
+    await showDialog(
+      context: scaffoldContext,
+      builder: (_) {
+        return MapDialog(people);
+      }
+    );
 
   // --------------------------------------------------------------
 
@@ -31,7 +32,7 @@ class MapBox extends StatelessWidget {
         if (snapshot.hasData) {
           return _mapBox(snapshot.data, context);
         } else {
-          return _loadingIcon();
+          return Center(child: CircularProgressIndicator());
         }
       },
     );
@@ -39,19 +40,17 @@ class MapBox extends StatelessWidget {
 
   // --------------------------------------------------------------
 
-  Widget _loadingIcon() => Center(child: CircularProgressIndicator());
-
   Widget _mapBox(Position loc, BuildContext scaffoldContext) => FlutterMap(
-        mapController: _mapController,
-        options: MapOptions(
-          minZoom: 10.0,
-          center: LatLng(loc.latitude, loc.longitude),
-        ),
-        layers: [
-          _openMapLayer(),
-          _markerLayer(loc, scaffoldContext),
-        ],
-      );
+    mapController: _mapController,
+    options: MapOptions(
+      minZoom: 10.0,
+      center: LatLng(loc.latitude, loc.longitude),
+    ),
+    layers: [
+      _openMapLayer(),
+      _markerLayer(loc, scaffoldContext),
+    ],
+  );
 
   TileLayerOptions _openMapLayer() => TileLayerOptions(
         urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -59,24 +58,27 @@ class MapBox extends StatelessWidget {
       );
 
   MarkerLayerOptions _markerLayer(Position loc, BuildContext scaffoldContext) =>
-      MarkerLayerOptions(markers: [_cityMarkerHandler(loc, scaffoldContext)]);
+    MarkerLayerOptions(
+      markers: [_cityMarkerHandler(loc, scaffoldContext)]
+    );
 
   Marker _cityMarkerHandler(Position loc, BuildContext scaffoldContext) =>
-      people.isNotEmpty
-          ? _cityMissingPeopleMarker(loc, scaffoldContext)
-          : Marker();
+    people.isNotEmpty
+        ? _cityMissingPeopleMarker(loc, scaffoldContext)
+        : Marker();
 
   Marker _cityMissingPeopleMarker(Position loc, BuildContext scaffoldContext) =>
-      Marker(
-          width: 80,
-          height: 80,
-          point: LatLng(loc.latitude, loc.longitude),
-          builder: (context) => IconButton(
-                icon: Icon(
-                  Icons.people,
-                  color: Colors.brown,
-                ),
-                onPressed: () => _missingPeopleDialog(scaffoldContext),
-                iconSize: 80,
-              ));
+    Marker(
+      width: 80,
+      height: 80,
+      point: LatLng(loc.latitude, loc.longitude),
+      builder: (context) => IconButton(
+        icon: Icon(
+          Icons.people,
+          color: Colors.brown,
+        ),
+        onPressed: () => _missingPeopleDialog(scaffoldContext),
+        iconSize: 80,
+      )
+    );
 }

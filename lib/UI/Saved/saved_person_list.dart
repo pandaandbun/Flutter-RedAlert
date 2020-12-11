@@ -18,9 +18,9 @@ class SavedPersonList extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           Set<String> peopleIds = snapshot.data
-              .map((e) => e['id'].toString())
-              .toSet()
-              .cast<String>();
+            .map((e) => e['id'].toString())
+            .toSet()
+            .cast<String>();
 
           return savedPersonListView(peopleIds);
         } else {
@@ -33,22 +33,23 @@ class SavedPersonList extends StatelessWidget {
   // --------------------------------------------------------------
 
   Widget savedPersonListView(Set<String> peopleIds) => FutureBuilder(
-      future: missingPeople.getPeopleFromIds(peopleIds),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return _savePersonListViewBuilder(snapshot.data);
-        } else {
-          return _loadingStatus(snapshot.connectionState);
-        }
-      });
+    future: missingPeople.getPeopleFromIds(peopleIds),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return _savePersonListViewBuilder(snapshot.data);
+      } else {
+        return _loadingStatus(snapshot.connectionState);
+      }
+    }
+  );
 
   Widget _savePersonListViewBuilder(List people) => Expanded(
-        child: ListView.builder(
-          itemCount: people.length,
-          itemBuilder: (BuildContext context, int index) =>
-              SavedPersonTile(people[index]),
-        ),
-      );
+    child: ListView.builder(
+      itemCount: people.length,
+      itemBuilder: (BuildContext context, int index) =>
+          SavedPersonTile(people[index]),
+    ),
+  );
 
   // --------------------------------------------------------------
 

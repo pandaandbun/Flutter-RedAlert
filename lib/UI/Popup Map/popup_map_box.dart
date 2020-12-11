@@ -21,29 +21,29 @@ class MapBox extends StatelessWidget {
   }
 
   Widget _mapBox() => FlutterMap(
-        mapController: _mapController,
-        options: MapOptions(
-          minZoom: 10.0,
-          center: LatLng(
-            _locations.yourPos.latitude,
-            _locations.yourPos.longitude,
-          ),
-        ),
-        layers: [
-          _openMapLayer(),
-          _markerLayer(),
-          _polyLineLayer(),
-        ],
-      );
+    mapController: _mapController,
+    options: MapOptions(
+      minZoom: 10.0,
+      center: LatLng(
+        _locations.yourPos.latitude,
+        _locations.yourPos.longitude,
+      ),
+    ),
+    layers: [
+      _openMapLayer(),
+      _markerLayer(),
+      _polyLineLayer(),
+    ],
+  );
 
   // --------------------------------------------------------------
   // Map Layer, Marker Layer and Lines Layer
 
   // Map Layers
   TileLayerOptions _openMapLayer() => TileLayerOptions(
-        urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        subdomains: ['a', 'b', 'c'],
-      );
+    urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    subdomains: ['a', 'b', 'c'],
+  );
 
   // Marker Layer
   MarkerLayerOptions _markerLayer() {
@@ -63,73 +63,76 @@ class MapBox extends StatelessWidget {
 
   // Line Layer
   PolylineLayerOptions _polyLineLayer() => PolylineLayerOptions(polylines: [
-        _lineBetweenYouAndMissingPerson(),
-      ]);
+    _lineBetweenYouAndMissingPerson(),
+  ]);
 
   // --------------------------------------------------------------
   // Markers
 
   // Your marker
   Marker _yourLocMarker() => Marker(
-        width: 80,
-        height: 80,
-        point:
-            LatLng(_locations.yourPos.latitude, _locations.yourPos.longitude),
-        builder: (context) => Icon(
-          Icons.home,
-          color: Colors.brown,
-          size: 80,
-        ),
-      );
+    width: 80,
+    height: 80,
+    point:
+        LatLng(_locations.yourPos.latitude, _locations.yourPos.longitude),
+    builder: (context) => Icon(
+      Icons.home,
+      color: Colors.brown,
+      size: 80,
+    ),
+  );
 
   // The person marker
   Marker _missingPersonMarker(int distanceInMeters) => Marker(
-      width: 200,
-      height: 200,
-      point: LatLng(_locations.missingPersonLoc.latitude,
-          _locations.missingPersonLoc.longitude),
-      builder: (context) => Column(
-            children: [
-              _missingPersonDistance(distanceInMeters),
-              _missingPersonAvatar(),
-            ],
-          ));
+    width: 200,
+    height: 200,
+    point: LatLng(_locations.missingPersonLoc.latitude,
+        _locations.missingPersonLoc.longitude),
+    builder: (context) => Column(
+      children: [
+        _missingPersonDistance(distanceInMeters),
+        _missingPersonAvatar(),
+      ],
+    )
+  );
 
   // The person marker avatar distance text
   Widget _missingPersonDistance(int distanceInMeters) => Flexible(
-          child: Text(
-        "$distanceInMeters KM",
-        style: TextStyle(
-          color: Colors.white,
-          backgroundColor: Colors.brown,
-        ),
-      ));
+    child: Text(
+      "$distanceInMeters KM",
+      style: TextStyle(
+        color: Colors.white,
+        backgroundColor: Colors.brown,
+      ),
+    )
+  );
 
   // The person marker avatar image
   Widget _missingPersonAvatar() => Flexible(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15.0),
-          child: Image.network(url,
-              fit: BoxFit.fill,
-              errorBuilder: (_, __, ___) => Icon(
-                    Icons.person,
-                    color: Colors.brown,
-                    size: 80,
-                  )),
-        ),
-      );
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(15.0),
+      child: Image.network(url,
+        fit: BoxFit.fill,
+        errorBuilder: (_, __, ___) => Icon(
+          Icons.person,
+          color: Colors.brown,
+          size: 80,
+        )
+      ),
+    ),
+  );
 
   // --------------------------------------------------------------
   // Line
 
   Polyline _lineBetweenYouAndMissingPerson() => Polyline(
-        points: [
-          LatLng(_locations.yourPos.latitude, _locations.yourPos.longitude),
-          LatLng(_locations.missingPersonLoc.latitude,
-              _locations.missingPersonLoc.longitude),
-        ],
-        isDotted: true,
-        color: Colors.red,
-        strokeWidth: 10,
-      );
+    points: [
+      LatLng(_locations.yourPos.latitude, _locations.yourPos.longitude),
+      LatLng(_locations.missingPersonLoc.latitude,
+          _locations.missingPersonLoc.longitude),
+    ],
+    isDotted: true,
+    color: Colors.red,
+    strokeWidth: 10,
+  );
 }

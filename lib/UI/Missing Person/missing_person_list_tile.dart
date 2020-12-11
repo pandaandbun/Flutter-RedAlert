@@ -39,15 +39,16 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   }
 
   void _tileSelectionHandler(SelectedPeopleModel selectedPeopleModel) =>
-      setState(() {
-        _selectedIndex = !_selectedIndex;
+    setState(() {
+      _selectedIndex = !_selectedIndex;
 
-        if (_selectedIndex) {
-          selectedPeopleModel.insertDocId(widget.person['id'].toString());
-        } else {
-          selectedPeopleModel.removeDocId(widget.person['id'].toString());
-        }
-      });
+      if (_selectedIndex) {
+        selectedPeopleModel.insertDocId(widget.person['id'].toString());
+      } else {
+        selectedPeopleModel.removeDocId(widget.person['id'].toString());
+      }
+    }
+  );
 
   // ---------------------------------------------------------------------
 
@@ -72,29 +73,30 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   // ---------------------------------------------------------------------
   // Person content
   Widget _personTile(SelectedPeopleModel selectedPeopleModel) => Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: _selectedIndex ? Colors.brown[900] : Colors.brown,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(color: Colors.brown[300], spreadRadius: 3),
-        ],
-      ),
-      margin: EdgeInsets.only(left: 20, right: 20, top: 15),
-      child: GestureDetector(
-        child: _tileContent(selectedPeopleModel),
-        onLongPress: _moreInfo,
-      ));
+    padding: const EdgeInsets.all(8.0),
+    decoration: BoxDecoration(
+      color: _selectedIndex ? Colors.brown[900] : Colors.brown,
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(color: Colors.brown[300], spreadRadius: 3),
+      ],
+    ),
+    margin: EdgeInsets.only(left: 20, right: 20, top: 15),
+    child: GestureDetector(
+      child: _tileContent(selectedPeopleModel),
+      onLongPress: _moreInfo,
+    )
+  );
 
   Widget _tileContent(SelectedPeopleModel selectedPeopleModel) => Ink(
-        child: ListTile(
-          leading: _tileImage(),
-          title: _tileTitle(),
-          subtitle: _tileSubTitle(),
-          trailing: NotifyButton(widget._notifications, widget.person),
-          onTap: () => _tileSelectionHandler(selectedPeopleModel),
-        ),
-      );
+    child: ListTile(
+      leading: _tileImage(),
+      title: _tileTitle(),
+      subtitle: _tileSubTitle(),
+      trailing: NotifyButton(widget._notifications, widget.person),
+      onTap: () => _tileSelectionHandler(selectedPeopleModel),
+    ),
+  );
 
   // Person image
   Widget _tileImage() => CircleAvatar(

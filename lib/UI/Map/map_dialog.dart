@@ -47,58 +47,49 @@ class MapDialog extends StatelessWidget {
   // --------------------------------------------------------------
 
   Widget _peopleCard(int index) => Card(
-        color: Colors.brown,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [_peopleCardContent(people[index])],
-        ),
-      );
+    color: Colors.brown,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [_peopleCardContent(people[index])],
+    ),
+  );
 
   Widget _peopleCardContent(Map person) => FutureBuilder(
-      future: SharedPreferences.getInstance(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          // Date format depending on the language
-          DateFormat formatter = DateFormat(
-              'MMMM dd, yyyy', snapshot.data.getString('language') ?? "en");
+    future: SharedPreferences.getInstance(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        // Date format depending on the language
+        DateFormat formatter = DateFormat(
+            'MMMM dd, yyyy', snapshot.data.getString('language') ?? "en");
 
-          // Person content
-          String url = person['image'];
-          String name = person['firstName'] + " " + person['lastName'];
-          String date =
-              formatter.format(DateTime.parse(person['missingSince']));
-          String id = person['id'].toString();
+        // Person content
+        String url = person['image'];
+        String name = person['firstName'] + " " + person['lastName'];
+        String date =
+            formatter.format(DateTime.parse(person['missingSince']));
+        String id = person['id'].toString();
 
-          return ListTile(
-              leading: _cardImg(url),
-              title: _cardTitle(name),
-              subtitle: _cardSubTitle(date),
-              trailing: _cardSaveBtn(id));
-        } else {
-          return Text("Loading");
-        }
-      });
-
-  Widget _cardImg(String url) => CircleAvatar(
-        backgroundImage: NetworkImage(url),
-        onBackgroundImageError: (_, __) {},
-      );
-
-  Widget _cardTitle(String name) => Text(
-        name,
-        style: TextStyle(color: Colors.white),
-      );
-
-  Widget _cardSubTitle(String date) => Text(
-        date,
-        style: TextStyle(color: Colors.grey),
-      );
-
-  Widget _cardSaveBtn(String id) => IconButton(
-        icon: Icon(
-          Icons.save,
-          color: Colors.white,
-        ),
-        onPressed: () => savePerson(id),
-      );
+        return ListTile(
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(url),
+            onBackgroundImageError: (_, __) {},),
+          title: Text(
+            name,
+            style: TextStyle(color: Colors.white),),
+          subtitle: Text(
+            date,
+            style: TextStyle(color: Colors.grey),),
+          trailing: IconButton(
+            icon: Icon(
+              Icons.save,
+              color: Colors.white,
+            ),
+            onPressed: () => savePerson(id),
+          )
+        );
+      } else {
+        return Text("Loading");
+      }
+    }
+  );
 }

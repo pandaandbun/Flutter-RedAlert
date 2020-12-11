@@ -17,30 +17,32 @@ class SavedPersonScreen extends StatelessWidget {
   }
 
   Widget _scaffold(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(FlutterI18n.translate(context, "drawer.saved")),
-          actions: [SettingsBtn()],
-        ),
-        drawer: DrawerMenu(),
-        backgroundColor: Colors.brown[900],
-        body: _areYourSureYouWantToExitWarpper(),
-      );
+    appBar: AppBar(
+      title: Text(FlutterI18n.translate(context, "drawer.saved")),
+      actions: [SettingsBtn()],
+    ),
+    drawer: DrawerMenu(),
+    backgroundColor: Colors.brown[900],
+    body: _areYourSureYouWantToExitWarpper(),
+  );
 
   Widget _areYourSureYouWantToExitWarpper() => Builder(
-      builder: (context) => WillPopScope(
-          child: _body(),
-          onWillPop: () async {
-            bool value = await showDialog<bool>(
-                context: context, builder: (context) => ExitDialog());
-            return value;
-          }));
-
-  Widget _body() => Column(children: [
-        Row(
-          children: [
-            SearchBar(),
-          ],
-        ),
-        SavedPersonList(),
-      ]);
+    builder: (context) => WillPopScope(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              SearchBar(),
+            ],
+          ),
+          SavedPersonList(),
+        ]
+      ),
+      onWillPop: () async {
+        bool value = await showDialog<bool>(
+            context: context, builder: (context) => ExitDialog());
+        return value;
+      }
+    )
+  );
 }

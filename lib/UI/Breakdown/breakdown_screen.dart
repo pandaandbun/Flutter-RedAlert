@@ -44,67 +44,63 @@ class Breakdown extends StatelessWidget {
   // ------------------------------------------------------------------
 
   Widget _tabs(BuildContext context) => DefaultTabController(
-      length: _numOfTabs,
-      child: Scaffold(
-        appBar: _appBar(context),
-        drawer: DrawerMenu(),
-        body: _areYourSureYouWantToExitWarpper(),
-      ));
-
-  Widget _areYourSureYouWantToExitWarpper() => Builder(
-      builder: (context) => WillPopScope(
-          child: _futureTable(),
-          onWillPop: () async {
-            bool value = await showDialog<bool>(
-                context: context, builder: (context) => ExitDialog());
-            return value;
-          }));
-
-  // ---------------------------------------------------------
-
-  AppBar _appBar(BuildContext context) => AppBar(
+    length: _numOfTabs,
+    child: Scaffold(
+      appBar: AppBar(
         title: Text(FlutterI18n.translate(context, "drawer.breakdown")),
         actions: [SettingsBtn()],
-        bottom: _tabBar(),
-      );
+        bottom: TabBar(
+          tabs: [
+            Tab(icon: Icon(Icons.table_chart)),
+            Tab(icon: Icon(Icons.stacked_line_chart)),
+          ],
+        ),
+      ),
+      drawer: DrawerMenu(),
+      body: _areYourSureYouWantToExitWarpper(),
+  ));
 
-  Widget _tabBar() => TabBar(
-        tabs: [
-          Tab(icon: Icon(Icons.table_chart)),
-          Tab(icon: Icon(Icons.stacked_line_chart)),
-        ],
-      );
+  Widget _areYourSureYouWantToExitWarpper() => Builder(
+    builder: (context) => WillPopScope(
+      child: _futureTable(),
+      onWillPop: () async {
+        bool value = await showDialog<bool>(
+            context: context, builder: (context) => ExitDialog());
+        return value;
+      }
+    )
+  );
 
   // ---------------------------------------------------------
 
   Widget _futureTable() => FutureBuilder(
-        future: missingPerson.getAllPeople(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              _breakdownFunc.people = snapshot.data;
+    future: missingPerson.getAllPeople(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        if (snapshot.data.length > 0) {
+          _breakdownFunc.people = snapshot.data;
 
-              return _mainTabBarView();
-            } else {
-              return _waitingForMainViewTabBarView('Empty');
-            }
-          } else {
-            return _waitingForMainViewTabBarView('Loading');
-          }
-        },
-      );
+          return _mainTabBarView();
+        } else {
+          return _waitingForMainViewTabBarView('Empty');
+        }
+      } else {
+        return _waitingForMainViewTabBarView('Loading');
+      }
+    },
+  );
 
   Widget _mainTabBarView() => TabBarView(
-        dragStartBehavior: DragStartBehavior.down,
-        children: [
-          BreakdownTable(_breakdownFunc),
-          ChartSelector(_breakdownFunc),
-        ],
-      );
+    dragStartBehavior: DragStartBehavior.down,
+    children: [
+      BreakdownTable(_breakdownFunc),
+      ChartSelector(_breakdownFunc),
+    ],
+  );
 
   Widget _waitingForMainViewTabBarView(String type) => TabBarView(
-        children: _loadingText(type),
-      );
+    children: _loadingText(type),
+  );
 
   List<Widget> _loadingText(String type) {
     List<Widget> text = [];

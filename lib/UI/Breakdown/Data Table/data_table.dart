@@ -9,7 +9,7 @@ class BreakdownTable extends StatefulWidget {
 
   BreakdownTable(this._breakdownFunc) {
     _dataSource.setSource(
-        _breakdownFunc.byProvince.entries.toList(), "Province", "Location");
+      _breakdownFunc.byProvince.entries.toList(), "Province", "Location");
   }
 
   @override
@@ -35,56 +35,56 @@ class _BreakdownTableState extends State<BreakdownTable> {
   }
 
   void _onRowsPerPageChanged(r) => setState(() {
-        _rowsPerPage = r;
-      });
+    _rowsPerPage = r;
+  });
 
   void _categorySelector() => setState(() {
-        _sortColumnIndex = 0;
-        String _newSourceBy;
-        String _curCategory = widget._dataSource.category == _category[0]
-            ? _category[1]
-            : _category[0];
+    _sortColumnIndex = 0;
+    String _newSourceBy;
+    String _curCategory = widget._dataSource.category == _category[0]
+        ? _category[1]
+        : _category[0];
 
-        List breakdown;
-        if (_curCategory == _category[0]) {
-          _newSourceBy = _locSources[0];
-          breakdown = widget._breakdownFunc.byProvince.entries.toList();
-        } else {
-          _newSourceBy = _dateSources[0];
-          breakdown = widget._breakdownFunc.byYear.entries.toList();
-        }
+    List breakdown;
+    if (_curCategory == _category[0]) {
+      _newSourceBy = _locSources[0];
+      breakdown = widget._breakdownFunc.byProvince.entries.toList();
+    } else {
+      _newSourceBy = _dateSources[0];
+      breakdown = widget._breakdownFunc.byYear.entries.toList();
+    }
 
-        widget._dataSource.setSource(breakdown, _newSourceBy, _curCategory);
-      });
+    widget._dataSource.setSource(breakdown, _newSourceBy, _curCategory);
+  });
 
   void _sourceSelector() => setState(() {
-        _sortColumnIndex = 0;
-        String _newSourceBy;
+    _sortColumnIndex = 0;
+    String _newSourceBy;
 
-        if (widget._dataSource.category == _category[0]) {
-          _newSourceBy = widget._dataSource.sourceBy == _locSources[0]
-              ? _locSources[1]
-              : _locSources[0];
-        } else if (widget._dataSource.category == _category[1]) {
-          _newSourceBy = widget._dataSource.sourceBy == _dateSources[0]
-              ? _dateSources[1]
-              : _dateSources[0];
-        }
+    if (widget._dataSource.category == _category[0]) {
+      _newSourceBy = widget._dataSource.sourceBy == _locSources[0]
+          ? _locSources[1]
+          : _locSources[0];
+    } else if (widget._dataSource.category == _category[1]) {
+      _newSourceBy = widget._dataSource.sourceBy == _dateSources[0]
+          ? _dateSources[1]
+          : _dateSources[0];
+    }
 
-        List breakdown;
-        if (_newSourceBy == _locSources[0]) {
-          breakdown = widget._breakdownFunc.byProvince.entries.toList();
-        } else if (_newSourceBy == _locSources[1]) {
-          breakdown = widget._breakdownFunc.byCity.entries.toList();
-        } else if (_newSourceBy == _dateSources[0]) {
-          breakdown = widget._breakdownFunc.byYear.entries.toList();
-        } else if (_newSourceBy == _dateSources[1]) {
-          breakdown = widget._breakdownFunc.byMonth.entries.toList();
-        }
+    List breakdown;
+    if (_newSourceBy == _locSources[0]) {
+      breakdown = widget._breakdownFunc.byProvince.entries.toList();
+    } else if (_newSourceBy == _locSources[1]) {
+      breakdown = widget._breakdownFunc.byCity.entries.toList();
+    } else if (_newSourceBy == _dateSources[0]) {
+      breakdown = widget._breakdownFunc.byYear.entries.toList();
+    } else if (_newSourceBy == _dateSources[1]) {
+      breakdown = widget._breakdownFunc.byMonth.entries.toList();
+    }
 
-        widget._dataSource
-            .setSource(breakdown, _newSourceBy, widget._dataSource.category);
-      });
+    widget._dataSource
+        .setSource(breakdown, _newSourceBy, widget._dataSource.category);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -94,28 +94,26 @@ class _BreakdownTableState extends State<BreakdownTable> {
   }
 
   Widget _dataTable() => PaginatedDataTable(
-        header: _header(),
-        columns: widget._dataSource.category == _category[0]
-            ? (widget._dataSource.sourceBy == _locSources[1]
-                ? _provinceAndCityColumn()
-                : _provineColumn())
-            : (widget._dataSource.sourceBy == _dateSources[1]
-                ? _yearAndMonthColumn()
-                : _yearColumn()),
-        source: widget._dataSource,
-        onRowsPerPageChanged: _onRowsPerPageChanged,
-        rowsPerPage: _rowsPerPage,
-        sortAscending: _sortAscending,
-        sortColumnIndex: _sortColumnIndex,
-        columnSpacing: 0,
-      );
-
-  Widget _header() => Row(children: [
-        Text("Under"),
-        _categoryBtn(),
-        Text("Show"),
-        _sourceBtn(),
-      ]);
+    header: Row(children: [
+      Text("Under"),
+      _categoryBtn(),
+      Text("Show"),
+      _sourceBtn(),
+    ]),
+    columns: widget._dataSource.category == _category[0]
+        ? (widget._dataSource.sourceBy == _locSources[1]
+            ? _provinceAndCityColumn()
+            : _provineColumn())
+        : (widget._dataSource.sourceBy == _dateSources[1]
+            ? _yearAndMonthColumn()
+            : _yearColumn()),
+    source: widget._dataSource,
+    onRowsPerPageChanged: _onRowsPerPageChanged,
+    rowsPerPage: _rowsPerPage,
+    sortAscending: _sortAscending,
+    sortColumnIndex: _sortColumnIndex,
+    columnSpacing: 0,
+  );
 
   Widget _categoryBtn() => TextButton(
         onPressed: () => _categorySelector(),

@@ -125,38 +125,38 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Widget _scaffold() => Scaffold(
-        appBar: AppBar(
-          title: Text(FlutterI18n.translate(context, "drawer.map")),
-          actions: [SettingsBtn()],
-        ),
-        drawer: DrawerMenu(),
-        body: _areYourSureYouWantToExitWarpper(),
-        floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add), onPressed: () => _setCurrentLocation()),
-      );
+    appBar: AppBar(
+      title: Text(FlutterI18n.translate(context, "drawer.map")),
+      actions: [SettingsBtn()],
+    ),
+    drawer: DrawerMenu(),
+    body: _areYourSureYouWantToExitWrapper(),
+    floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add), onPressed: () => _setCurrentLocation()),
+  );
 
-  Widget _areYourSureYouWantToExitWarpper() => Builder(
-      builder: (context) => WillPopScope(
-          child: _futureMap(),
-          onWillPop: () async {
-            bool value = await showDialog<bool>(
-                context: context, builder: (context) => ExitDialog());
-            return value;
-          }));
+  Widget _areYourSureYouWantToExitWrapper() => Builder(
+    builder: (context) => WillPopScope(
+      child: _futureMap(),
+      onWillPop: () async {
+        bool value = await showDialog<bool>(
+            context: context, builder: (context) => ExitDialog());
+        return value;
+      }
+    )
+  );
 
   Widget _futureMap() => FutureBuilder(
-        future: widget.missingPeopleModel.getPeopleWhereCityAndProvince(
-          city,
-          province: province,
-        ),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return MapBox(snapshot.data, widget.mapController);
-          } else {
-            return _loadingIcon();
-          }
-        },
-      );
-
-  Widget _loadingIcon() => Center(child: CircularProgressIndicator());
+    future: widget.missingPeopleModel.getPeopleWhereCityAndProvince(
+      city,
+      province: province,
+    ),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return MapBox(snapshot.data, widget.mapController);
+      } else {
+        return Center(child: CircularProgressIndicator());
+      }
+    },
+  );
 }

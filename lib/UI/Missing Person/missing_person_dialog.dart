@@ -15,14 +15,15 @@ class PeopleDialog extends StatelessWidget {
   PeopleDialog(this.person);
 
   Future _showMapDialog(BuildContext scaffoldContext) async => await showDialog(
-      context: scaffoldContext,
-      builder: (_) {
-        return PopUpMap(
-          person['city'],
-          person['province'],
-          person['image'],
-        );
-      });
+    context: scaffoldContext,
+    builder: (_) {
+      return PopUpMap(
+        person['city'],
+        person['province'],
+        person['image'],
+      );
+    }
+  );
 
   // ----------------------------------------------------------
 
@@ -101,20 +102,21 @@ class PeopleDialog extends StatelessWidget {
       });
 
   Widget _dialogBodyLoc() => Builder(
-      builder: (context) => Row(children: [
-            Expanded(
-              child: ElevatedButton(
-                child: Text(
-                  FlutterI18n.translate(
-                          context, "person_dialog.last_location") +
-                      person['city'] +
-                      ", " +
-                      person['province'],
-                  style: TextStyle(fontSize: 15),
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: () => _showMapDialog(context),
-              ),
-            ),
-          ]));
+    builder: (context) => Row(children: [
+      Expanded(
+        child: ElevatedButton(
+          child: Text(
+            FlutterI18n.translate(
+                    context, "person_dialog.last_location") +
+                person['city'] +
+                ", " +
+                person['province'],
+            style: TextStyle(fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+          onPressed: () => _showMapDialog(context),
+        ),
+      ),
+    ])
+  );
 }
