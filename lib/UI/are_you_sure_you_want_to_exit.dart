@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
+// Wrapper for each page exit
+// Helping the user from accidentally pressing the back button and exiting the app
 class ExitDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return _alertDialog();
+    return AlertDialog(
+      content: _dialogTitle(),
+      actions: [
+        _noBtn(),
+        _yesBtn(),
+      ],
+      backgroundColor: Colors.brown,
+    );
   }
-
-  Widget _alertDialog() => AlertDialog(
-        content: _dialogTitle(),
-        actions: [
-          _noBtn(),
-          _yesBtn(),
-        ],
-        backgroundColor: Colors.brown,
-      );
 
   Widget _dialogTitle() => Text(
         'Are you sure you want to exit?',

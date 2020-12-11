@@ -3,15 +3,14 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:latlong/latlong.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Database/missing_person_database.dart';
 import '../../Database/tutorial_database.dart';
 
-import '../settings_btn.dart';
+import '../Settings/settings_btn.dart';
 import '../drawer.dart';
 import '../are_you_sure_you_want_to_exit.dart';
-import '../tutorial.dart';
+import '../Tutorials/tutorial.dart';
 
 import 'map_box.dart';
 
@@ -21,19 +20,12 @@ class MapScreen extends StatefulWidget {
   final MissingPeopleModel missingPeopleModel = MissingPeopleModel();
   final TutorialModel tutorialModel = TutorialModel();
   final MapController mapController = MapController();
-  final SharedPreferences prefs;
-
-  MapScreen(this.prefs);
 
   @override
-  _MapScreenState createState() => _MapScreenState(prefs);
+  _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
-  final SharedPreferences prefs;
-
-  _MapScreenState(this.prefs);
-
   String city = '';
   String province = '';
 
@@ -43,7 +35,7 @@ class _MapScreenState extends State<MapScreen> {
     if (showTutorial) {
       await showDialog(
         context: context,
-        child: TutorialDialog("mapPage", prefs),
+        child: TutorialDialog("mapPage"),
       );
     }
   }

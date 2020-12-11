@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'calendar.dart';
 import 'missing_person_list.dart';
 
-import '../settings_btn.dart';
+import '../Settings/settings_btn.dart';
 import '../drawer.dart';
 import '../Search Bar/search_bar.dart';
 import '../notification.dart';
 import '../are_you_sure_you_want_to_exit.dart';
-import '../tutorial.dart';
+import '../Tutorials/tutorial.dart';
 
 import '../../Database/saved_people_database.dart';
 import '../../Database/selected_item_model.dart';
@@ -27,9 +26,6 @@ class MissingPerson extends StatelessWidget {
   final Notifications _notifications = Notifications();
   final NotificationsNum notificationsNum = NotificationsNum();
   final TutorialModel tutorialModel = TutorialModel();
-  final SharedPreferences prefs;
-  
-  MissingPerson(this.prefs);
 
   void _tutorial(BuildContext context) async {
     bool showTutorial =
@@ -37,7 +33,7 @@ class MissingPerson extends StatelessWidget {
     if (showTutorial) {
       await showDialog(
         context: context,
-        child: TutorialDialog("missingPersonPage", prefs),
+        child: TutorialDialog("missingPersonPage"),
       );
     }
   }
@@ -46,51 +42,44 @@ class MissingPerson extends StatelessWidget {
   Widget build(BuildContext context) {
     _notifications.init(scaffoldContext: context);
     _tutorial(context);
-    return _scaffold(context, prefs);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(FlutterI18n.translate(context, "drawer.missing_persons")),
+        actions: [
+          savedButton(),
+          SettingsBtn(),
+        ],
+      ),
+      drawer: DrawerMenu(),
+      backgroundColor: Colors.brown[900],
+      body: _areYourSureYouWantToExitWarpper(),
+    );
   }
 
-  // ------------------------------------------------------------
-
-  Widget _scaffold(BuildContext context, SharedPreferences prefs) => Scaffold(
-        appBar: AppBar(
-          title: Text(FlutterI18n.translate(context, "drawer.missing_persons")),
-          actions: [
-            //_turnOnTutorialBtn(),
-            savedButton(),
-            SettingsBtn(),
-          ],
-        ),
-        drawer: DrawerMenu(),
-        backgroundColor: Colors.brown[900],
-        body: _areYourSureYouWantToExitWarpper(prefs),
-      );
-
-  Widget _areYourSureYouWantToExitWarpper(SharedPreferences prefs) => Builder(
+  Widget _areYourSureYouWantToExitWarpper() => Builder(
       builder: (context) => WillPopScope(
-          child: _body(prefs),
+          child: _body(),
           onWillPop: () async {
             bool value = await showDialog<bool>(
                 context: context, builder: (context) => ExitDialog());
             return value;
           }));
 
-  Widget _body(SharedPreferences prefs) => Column(
+  Widget _body() => Column(
         children: [
           Row(children: [
             SearchBar(),
-            Calendar(prefs),
+            Calendar(),
           ]),
-          MissingPersonList(_notifications, notificationsNum, prefs),
+          MissingPersonList(
+            _notifications,
+            notificationsNum,
+          ),
         ],
       );
 
   // ------------------------------------------------------------
-
-  Widget _turnOnTutorialBtn() => IconButton(
-      icon: Icon(Icons.school),
-      onPressed: () {
-        tutorialModel.turnOnAllTutorials();
-      });
 
   // Save button for saving people to local list
   Widget savedButton() => Builder(builder: (context) {

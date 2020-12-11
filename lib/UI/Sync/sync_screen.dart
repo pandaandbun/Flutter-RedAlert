@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Database/missing_person_database.dart';
 import '../../Database/tutorial_database.dart';
 
 import '../drawer.dart';
 import '../are_you_sure_you_want_to_exit.dart';
-import '../tutorial.dart';
+import '../Tutorials/tutorial.dart';
 
 import 'package:flutter_i18n/flutter_i18n.dart';
 
 class SyncScreen extends StatelessWidget {
   final TutorialModel tutorialModel = TutorialModel();
-  final SharedPreferences prefs;
 
-  SyncScreen(this.prefs);
+  SyncScreen();
 
   void _tutorial(BuildContext context) async {
     bool showTutorial = await tutorialModel.getTutorialSettingFor("syncPage");
     if (showTutorial) {
       await showDialog(
         context: context,
-        child: TutorialDialog("syncPage", prefs),
+        child: TutorialDialog("syncPage"),
       );
     }
   }
@@ -36,8 +34,6 @@ class SyncScreen extends StatelessWidget {
     return _scaffold(missingPeopleModel, context);
   }
 
-  // ------------------------------------------------------------------
-
   Widget _scaffold(
           MissingPeopleModel missingPeopleModel, BuildContext context) =>
       Scaffold(
@@ -48,6 +44,8 @@ class SyncScreen extends StatelessWidget {
         backgroundColor: Colors.brown[900],
         body: _areYourSureYouWantToExitWarpper(missingPeopleModel),
       );
+
+  // ------------------------------------------------------------------
 
   Widget _areYourSureYouWantToExitWarpper(
           MissingPeopleModel missingPeopleModel) =>

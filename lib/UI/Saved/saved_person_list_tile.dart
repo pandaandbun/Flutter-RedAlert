@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 
 import '../../Database/saved_people_database.dart';
 
-import '../popup_map.dart';
+import '../Popup Map/popup_map.dart';
 
 // Item Card
 class SavedPersonTile extends StatelessWidget {
   final Map person;
-  final DateFormat formatter = DateFormat('MMMM dd, yyyy');
 
   SavedPersonTile(this.person);
 
@@ -80,18 +81,31 @@ class SavedPersonTile extends StatelessWidget {
         textAlign: TextAlign.center,
       );
 
-  Widget _personCardDate() => Text(
-        formatter.format(DateTime.parse(person['missingSince'])),
-        style: TextStyle(color: Colors.white),
-        textAlign: TextAlign.center,
-      );
+  Widget _personCardDate() => FutureBuilder(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          DateFormat formatter = DateFormat(
+              'MMMM dd, yyyy', snapshot.data.getString('language') ?? "en");
+
+          return Text(
+            formatter.format(DateTime.parse(person['missingSince'])),
+            style: TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          );
+        } else {
+          return Text("loading");
+        }
+      });
 
   Widget _personCardLoc() => Builder(
       builder: (context) => Row(children: [
             Expanded(
               child: RaisedButton(
                 child: Text(
-                  'Last Location: ${person['city']}, ${person['province']}',
+                  FlutterI18n.translate(
+                          context, "person_dialog.last_location") +
+                      '${person['city']}, ${person['province']}',
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.white,

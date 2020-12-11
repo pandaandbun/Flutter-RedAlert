@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 
+// Drawer for each page
 class DrawerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,7 @@ class DrawerMenu extends StatelessWidget {
     );
   }
 
+  // The drawer title
   Widget drawerHeader() => DrawerHeader(
       decoration: BoxDecoration(
         color: Colors.brown[900],
@@ -41,6 +43,10 @@ class DrawerMenu extends StatelessWidget {
         ],
       )));
 
+  // -----------------------------------------------------------------------
+  // The options
+
+  // Main page
   Widget missingScreenDrawer(String currentRoute, context) => ListTile(
         leading: Icon(Icons.list),
         title: Text(FlutterI18n.translate(context, "drawer.missing_persons")),
@@ -49,6 +55,7 @@ class DrawerMenu extends StatelessWidget {
             : Navigator.pushReplacementNamed(context, '/missing'),
       );
 
+  // Saved Page
   Widget savedSceeenDrawer(String currentRoute, context) => ListTile(
         leading: Icon(Icons.save),
         title: Text(FlutterI18n.translate(context, "drawer.saved")),
@@ -57,6 +64,7 @@ class DrawerMenu extends StatelessWidget {
             : Navigator.pushReplacementNamed(context, '/saved'),
       );
 
+  // Map Page
   Widget mapScreenDrawer(String currentRoute, context) => ListTile(
         leading: Icon(Icons.map),
         title: Text(FlutterI18n.translate(context, "drawer.map")),
@@ -65,6 +73,7 @@ class DrawerMenu extends StatelessWidget {
             : Navigator.pushReplacementNamed(context, '/map'),
       );
 
+  // Breakdown Page
   Widget chartScreenDrawer(String currentRoute, context) => ListTile(
         leading: Icon(Icons.show_chart),
         title: Text(FlutterI18n.translate(context, "drawer.breakdown")),
@@ -73,6 +82,7 @@ class DrawerMenu extends StatelessWidget {
             : Navigator.pushReplacementNamed(context, '/charts'),
       );
 
+  // Sync Page
   Widget _syncScreen(String currentRoute, context) => ListTile(
         leading: Icon(Icons.cloud_download),
         title: Text(FlutterI18n.translate(context, "drawer.sync")),
@@ -81,6 +91,7 @@ class DrawerMenu extends StatelessWidget {
             : Navigator.pushReplacementNamed(context, '/sync'),
       );
 
+  // License Page
   Widget _about() => AboutListTile(
         icon: Icon(Icons.info),
         applicationIcon: FlutterLogo(),

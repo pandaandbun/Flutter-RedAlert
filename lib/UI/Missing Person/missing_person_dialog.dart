@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../popup_map.dart';
+import '../Popup Map/popup_map.dart';
 
 import 'package:flutter_i18n/flutter_i18n.dart';
 
@@ -12,11 +12,8 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 class PeopleDialog extends StatelessWidget {
   final Map person;
   final SharedPreferences prefs;
-  DateFormat formatter;
 
-  PeopleDialog(this.person, this.prefs) {
-    formatter = DateFormat('MMMM dd, yyyy', prefs.getString('language') ?? "en");
-  }
+  PeopleDialog(this.person, this.prefs);
 
   Future _showMapDialog(BuildContext scaffoldContext) async => await showDialog(
       context: scaffoldContext,
@@ -82,6 +79,8 @@ class PeopleDialog extends StatelessWidget {
       );
 
   Widget _dialogBodyDate(BuildContext context) {
+    DateFormat formatter =
+        DateFormat('MMMM dd, yyyy', prefs.getString('language') ?? "en");
     String missingSince =
         formatter.format(DateTime.parse(person['missingSince']));
 
@@ -89,7 +88,8 @@ class PeopleDialog extends StatelessWidget {
       children: [
         Expanded(
             child: Text(
-          FlutterI18n.translate(context, "person_dialog.missing_since") + missingSince,
+          FlutterI18n.translate(context, "person_dialog.missing_since") +
+              missingSince,
           style: TextStyle(fontSize: 15),
           textAlign: TextAlign.center,
         ))
@@ -102,7 +102,11 @@ class PeopleDialog extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 child: Text(
-                  FlutterI18n.translate(context, "person_dialog.last_location") + person['city'] + ", " + person['province'],
+                  FlutterI18n.translate(
+                          context, "person_dialog.last_location") +
+                      person['city'] +
+                      ", " +
+                      person['province'],
                   style: TextStyle(fontSize: 15),
                   textAlign: TextAlign.center,
                 ),

@@ -22,17 +22,12 @@ class MissingPersonListTile extends StatefulWidget {
   MissingPersonListTile(this.person, this._notifications, this.prefs);
 
   @override
-  _MissingPersonListTileState createState() => _MissingPersonListTileState(prefs);
+  _MissingPersonListTileState createState() => _MissingPersonListTileState();
 }
 
 class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
   DateFormat formatter;
-  final SharedPreferences prefs;
-
-  _MissingPersonListTileState(this.prefs) {
-    formatter = DateFormat('MMMM dd, yyyy', prefs.getString('language') ?? "en");
-  }
 
   void refresh(bool bool) {
     setState(() {
@@ -43,7 +38,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   void _moreInfo() async {
     await showDialog(
       context: context,
-      child: PeopleDialog(widget.person, prefs),
+      child: PeopleDialog(widget.person, widget.prefs),
     );
   }
 
@@ -60,8 +55,8 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
 
   // ---------------------------------------------------------------------
 
-  void _notifyBtnHandler(SharedPreferences prefs) async {
-    if(prefs.getBool('notifications_scheduled') ?? false) {
+  void _notifyBtnHandler() async {
+    if (widget.prefs.getBool('notifications_scheduled') ?? false) {
       var when = await _selectDate(context); //function which opens a DatePicker
 
       if (when != null) {
@@ -77,8 +72,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
 
         _confirmationFialog(when);
       }
-    }
-    else {
+    } else {
       _notEnabledDialog();
     }
   }
@@ -88,33 +82,11 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-            content: new Text(
-                "Reminder for ${widget.person['firstName']} ${widget.person['lastName']} set for ${formatter.format(when)}."),
-            backgroundColor: Colors.brown[100],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20.0))
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-      });
-    
-  Future _notEnabledDialog() => showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
           content: new Text(
-              FlutterI18n.translate(context, "person_list.notification_dialog")),
+              "Reminder for ${widget.person['firstName']} ${widget.person['lastName']} set for ${formatter.format(when)}."),
           backgroundColor: Colors.brown[100],
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0))
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
           actions: <Widget>[
             TextButton(
               child: Text('Ok'),
@@ -124,12 +96,34 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
             ),
           ],
         );
-    });
+      });
+
+  Future _notEnabledDialog() => showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: new Text(FlutterI18n.translate(
+              context, "person_list.notification_dialog")),
+          backgroundColor: Colors.brown[100],
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      });
 
   // ---------------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
+    formatter =
+        DateFormat('MMMM dd, yyyy', widget.prefs.getString('language') ?? "en");
     final SelectedPeopleModel selectedPeopleModel =
         context.watch<SelectedPeopleModel>();
 
@@ -143,12 +137,12 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
       refresh(true);
     }
 
-    return _personTile(selectedPeopleModel, prefs);
+    return _personTile(selectedPeopleModel);
   }
 
   // ---------------------------------------------------------------------
 
-  Widget _personTile(SelectedPeopleModel selectedPeopleModel, SharedPreferences prefs) => Container(
+  Widget _personTile(SelectedPeopleModel selectedPeopleModel) => Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: _selectedIndex ? Colors.brown[900] : Colors.brown,
@@ -159,16 +153,16 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
       ),
       margin: EdgeInsets.only(left: 20, right: 20, top: 15),
       child: GestureDetector(
-        child: _tileContent(selectedPeopleModel, prefs),
+        child: _tileContent(selectedPeopleModel),
         onLongPress: _moreInfo,
       ));
 
-  Widget _tileContent(SelectedPeopleModel selectedPeopleModel, SharedPreferences prefs) => Ink(
+  Widget _tileContent(SelectedPeopleModel selectedPeopleModel) => Ink(
         child: ListTile(
           leading: _tileImage(),
           title: _tileTitle(),
           subtitle: _tileSubTitle(),
-          trailing: notifyButton(prefs),
+          trailing: notifyButton(),
           onTap: () => _tileSelectionHandler(selectedPeopleModel),
         ),
       );
@@ -197,7 +191,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
         initialDate: DateTime.now().add(const Duration(days: 1)),
         firstDate: DateTime.now().add(const Duration(days: 1)),
         lastDate: DateTime.now().add(const Duration(days: 365)),
-        locale: Locale(prefs.getString('language') ?? "en"));
+        locale: Locale(widget.prefs.getString('language') ?? "en"));
 
     if (selectedDate == null) {
       return null;
@@ -207,11 +201,11 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   }
 
   //notifyButton: a button which processes a future notification for the accociated person.
-  Widget notifyButton(SharedPreferences prefs) => IconButton(
+  Widget notifyButton() => IconButton(
         icon: Icon(
           Icons.add_alert,
           color: Colors.white,
         ),
-        onPressed: () => _notifyBtnHandler(prefs),
+        onPressed: () => _notifyBtnHandler(),
       );
 }

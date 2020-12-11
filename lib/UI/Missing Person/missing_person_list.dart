@@ -15,16 +15,31 @@ class MissingPersonList extends StatelessWidget {
   final Random random = new Random();
   final Notifications _notifications;
   final notificationsNum;
-  final SharedPreferences prefs;
 
-  MissingPersonList(this._notifications, this.notificationsNum, this.prefs);
+  MissingPersonList(
+    this._notifications,
+    this.notificationsNum,
+  );
 
   void _notifyMissingPersonOfTheDay(Map person) async {
-    if(prefs.getBool('notifications_featured') ?? false)
-    await _notifications.sendNotificationNow(
-        "Feature Person", person['firstName'] + " " + person['lastName'],
-        payload: person['id'].toString());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('notifications_featured') ?? false)
+      await _notifications.sendNotificationNow(
+          "Feature Person", person['firstName'] + " " + person['lastName'],
+          payload: person['id'].toString());
   }
+
+  void _chooseRandomPerson(List people) {
+    if (notificationsNum.num == 0) {
+      int randomNumber = random.nextInt(people.length);
+      Map randomPerson = people[randomNumber];
+
+      notificationsNum.num++;
+      _notifyMissingPersonOfTheDay(randomPerson);
+    }
+  }
+
+  // --------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +60,7 @@ class MissingPersonList extends StatelessWidget {
     return _futureList(future);
   }
 
+  // --------------------------------------------------------------
   // Wait for list from firebase
   Widget _futureList(Future future) => FutureBuilder(
       future: future,
@@ -54,14 +70,7 @@ class MissingPersonList extends StatelessWidget {
         } else if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
             List people = snapshot.data;
-
-            if (notificationsNum.num == 0) {
-              int randomNumber = random.nextInt(people.length);
-              Map randomPerson = people[randomNumber];
-
-              notificationsNum.num++;
-              _notifyMissingPersonOfTheDay(randomPerson);
-            }
+            _chooseRandomPerson(people);
 
             return peopleList(people);
           } else {
@@ -77,11 +86,22 @@ class MissingPersonList extends StatelessWidget {
 
   Widget loadingText() => Text("Loading...", textDirection: TextDirection.ltr);
 
-  Widget peopleList(List people) => Expanded(
-        child: ListView.builder(
-          itemCount: people.length,
-          itemBuilder: (BuildContext context, int index) =>
-              MissingPersonListTile(people[index], _notifications, prefs),
-        ),
-      );
+  Widget peopleList(List people) => FutureBuilder(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Expanded(
+              child: ListView.builder(
+            itemCount: people.length,
+            itemBuilder: (BuildContext context, int index) =>
+                MissingPersonListTile(
+              people[index],
+              _notifications,
+              snapshot.data,
+            ),
+          ));
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      });
 }

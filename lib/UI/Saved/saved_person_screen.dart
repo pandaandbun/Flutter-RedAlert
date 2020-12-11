@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../settings_btn.dart';
+import '../Settings/settings_btn.dart';
 import '../Search Bar/search_bar.dart';
 import '../drawer.dart';
 import '../are_you_sure_you_want_to_exit.dart';

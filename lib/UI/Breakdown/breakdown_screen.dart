@@ -1,11 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../settings_btn.dart';
+import '../Settings/settings_btn.dart';
 import '../drawer.dart';
 import '../are_you_sure_you_want_to_exit.dart';
-import '../tutorial.dart';
+import '../Tutorials/tutorial.dart';
 
 import '../../Database/missing_person_database.dart';
 import '../../Database/tutorial_database.dart';
@@ -22,9 +21,6 @@ class Breakdown extends StatelessWidget {
   final TutorialModel tutorialModel = TutorialModel();
   final BreakdownFunc _breakdownFunc = BreakdownFunc();
   final int _numOfTabs = 2;
-  final SharedPreferences prefs;
-
-  Breakdown(this.prefs);
 
   void _tutorial(BuildContext context) async {
     bool showTutorial =
@@ -32,7 +28,7 @@ class Breakdown extends StatelessWidget {
     if (showTutorial) {
       await showDialog(
         context: context,
-        child: TutorialDialog("breakdownPage", prefs),
+        child: TutorialDialog("breakdownPage"),
       );
     }
   }

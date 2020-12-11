@@ -25,7 +25,6 @@ import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   // --- USER SETTINGS INITIALIZATION ---
@@ -36,15 +35,18 @@ Future main() async {
 
   //if language does not exist on disk, the app is being run for the first time
   //perform some basic setup
-  if(language == "none") {
-
+  if (language == "none") {
     // -- Language Settings --
-    print("No language selected, using default: ${Platform.localeName.substring(0,2)}.");
-    language = Platform.localeName.substring(0,2); //get language code from device
-    if(language == "en" || language == "fr")
-      prefs.setString("language", language); //if device default is en/fr, set language to device default
+    print(
+        "No language selected, using default: ${Platform.localeName.substring(0, 2)}.");
+    language =
+        Platform.localeName.substring(0, 2); //get language code from device
+    if (language == "en" || language == "fr")
+      prefs.setString("language",
+          language); //if device default is en/fr, set language to device default
     else
-      prefs.setString("language", "en"); //if device default is anything else, set language to en
+      prefs.setString("language",
+          "en"); //if device default is anything else, set language to en
 
     // -- Notification Settings --
     //enable all notifications by default
@@ -54,19 +56,21 @@ Future main() async {
     // -- Tutorial Settings --
     //enable tutorials by default
     prefs.setBool("tutorial_on", true);
-  }
-  else {
-    print("Selected language is: $language"); //print selected language to console
+  } else {
+    print(
+        "Selected language is: $language"); //print selected language to console
   }
 
   //load internationalization files
   final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
     translationLoader: FileTranslationLoader(
-        useCountryCode: false,
-        fallbackFile: 'en',
-        forcedLocale: Locale(language), //force the language to be the stored language chosen in settings
-        decodeStrategies:  [JsonDecodeStrategy()],
-        basePath: 'assets/flutter_i18n',),
+      useCountryCode: false,
+      fallbackFile: 'en',
+      forcedLocale: Locale(
+          language), //force the language to be the stored language chosen in settings
+      decodeStrategies: [JsonDecodeStrategy()],
+      basePath: 'assets/flutter_i18n',
+    ),
   );
   await flutterI18nDelegate.load(Locale(language));
 
@@ -82,15 +86,15 @@ Future main() async {
       // Listener for when people are save and to deselect them
       ChangeNotifierProvider(create: (_) => SelectedPeopleModel()),
     ],
-    child: MyApp(flutterI18nDelegate, prefs),
+    child: MyApp(flutterI18nDelegate),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  // final MissingPeopleModel missingPeopleModel = MissingPeopleModel();
   final FlutterI18nDelegate flutterI18nDelegate;
-  final SharedPreferences prefs;
-  MyApp(this.flutterI18nDelegate, this.prefs);
+
+  MyApp(this.flutterI18nDelegate);
+
   @override
   Widget build(BuildContext context) {
     tz.initializeTimeZones();
@@ -105,7 +109,7 @@ class MyApp extends StatelessWidget {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             // Main
-            return _checkIfDbIsEmpty(prefs);
+            return _checkIfDbIsEmpty();
           } else {
             // Before Start up loading Screen
             return _loadingIcon();
@@ -113,16 +117,17 @@ class MyApp extends StatelessWidget {
         });
   }
 
-  Widget _checkIfDbIsEmpty(SharedPreferences prefs) {
+  Widget _checkIfDbIsEmpty() {
     MissingPeopleModel missingPeopleModel = MissingPeopleModel();
+
     return FutureBuilder(
         future: missingPeopleModel.isDbEmpty(),
         builder: (_, dbSnapshot) {
           if (dbSnapshot.hasData) {
             if (dbSnapshot.data) {
-              return _startingPageIs("sync", prefs);
+              return _startingPageIs("sync");
             } else {
-              return _startingPageIs("missing", prefs);
+              return _startingPageIs("missing");
             }
           } else {
             // Waiting for if local DB is empty
@@ -145,18 +150,18 @@ class MyApp extends StatelessWidget {
         ],
       )));
 
-  Widget _startingPageIs(String main, SharedPreferences prefs) => MaterialApp(
+  Widget _startingPageIs(String main) => MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.brown,
         ),
         initialRoute: '/' + main,
         routes: {
-          '/sync': (context) => SyncScreen(prefs),
-          '/missing': (context) => MissingPerson(prefs),
-          '/map': (context) => MapScreen(prefs),
+          '/sync': (context) => SyncScreen(),
+          '/missing': (context) => MissingPerson(),
+          '/map': (context) => MapScreen(),
           '/saved': (context) => SavedPersonScreen(),
-          '/charts': (context) => Breakdown(prefs),
-          '/settings': (context) => Settings(prefs),
+          '/charts': (context) => Breakdown(),
+          '/settings': (context) => Settings(),
         },
         localizationsDelegates: [
           flutterI18nDelegate,
