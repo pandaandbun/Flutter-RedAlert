@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Database/saved_people_database.dart';
 
 class MapDialog extends StatelessWidget {
-  // final DateFormat formatter = DateFormat('MMMM dd, yyyy');
   final SavedPeopleModel savedPeopleModel = SavedPeopleModel();
   final List people;
 
