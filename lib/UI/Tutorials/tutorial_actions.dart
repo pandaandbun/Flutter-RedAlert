@@ -13,7 +13,7 @@ class TutorialActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _turnOfAllTutorialBtn(),
+        _turnOnAllTutorialBtn(),
         _turnOffThisTutorialBtn(),
         _exitBtn(),
       ],
@@ -22,7 +22,7 @@ class TutorialActions extends StatelessWidget {
 
   // --------------------------------------------------------------
 
-  Widget _turnOfAllTutorialBtn() => Builder(
+  Widget _turnOnAllTutorialBtn() => Builder(
     builder: (context) => TextButton(
         onPressed: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
