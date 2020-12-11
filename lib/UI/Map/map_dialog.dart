@@ -21,6 +21,8 @@ class MapDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.brown[200],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       title: Text("Missing People (${people.length})"),
       content: _peopleList(),
       actions: [_exitBtn(context)],
