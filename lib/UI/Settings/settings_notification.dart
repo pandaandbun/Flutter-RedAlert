@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../notification.dart';
+import '../Notifications/notification.dart';
 
 class NotificationSettings extends StatefulWidget {
   @override
@@ -12,24 +12,20 @@ class NotificationSettings extends StatefulWidget {
 class _NotificationSettingsState extends State<NotificationSettings> {
   @override
   Widget build(BuildContext context) {
-    return _waitingForPrefs();
+    return FutureBuilder(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            //initialize notifications and tutorial screens
+            Notifications notification = new Notifications();
+            notification.init();
+
+            return _notificationSettings(notification, snapshot.data);
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
-
-  Widget _waitingForPrefs() => FutureBuilder(
-      future: SharedPreferences.getInstance(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          //initialize notifications and tutorial screens
-          Notifications notification = new Notifications();
-          notification.init();
-
-          return _notificationSettings(notification, snapshot.data);
-        } else {
-          return _loadingIcon();
-        }
-      });
-
-  Widget _loadingIcon() => Center(child: CircularProgressIndicator());
 
   // ------------------------------------------------------------------
 

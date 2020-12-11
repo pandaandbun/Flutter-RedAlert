@@ -14,20 +14,16 @@ class TutorialSettings extends StatefulWidget {
 class _TutorialSettingsState extends State<TutorialSettings> {
   @override
   Widget build(BuildContext context) {
-    return _waitingForPrefs();
+    return FutureBuilder(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _tutorialSettings(snapshot.data);
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
-
-  Widget _waitingForPrefs() => FutureBuilder(
-      future: SharedPreferences.getInstance(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return _tutorialSettings(snapshot.data);
-        } else {
-          return _loadingIcon();
-        }
-      });
-
-  Widget _loadingIcon() => Center(child: CircularProgressIndicator());
 
   // ----------------------------------------------------------------------------------
   // -- Tutorial Settings --

@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'missing_person_list_tile.dart';
 
-import '../notification.dart';
+import '../Notifications/notification.dart';
 
 import '../../Database/missing_person_database.dart';
 import '../../Database/filter_by_date_model.dart';
@@ -66,7 +66,8 @@ class MissingPersonList extends StatelessWidget {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return errorText();
+          return const Text("No One Was Found",
+              textDirection: TextDirection.ltr);
         } else if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
             List people = snapshot.data;
@@ -74,18 +75,15 @@ class MissingPersonList extends StatelessWidget {
 
             return peopleList(people);
           } else {
-            return errorText();
+            return const Text("No One Was Found",
+                textDirection: TextDirection.ltr);
           }
         } else {
-          return loadingText();
+          return const Text("Loading...", textDirection: TextDirection.ltr);
         }
       });
 
-  Widget errorText() =>
-      Text("No One Was Found", textDirection: TextDirection.ltr);
-
-  Widget loadingText() => Text("Loading...", textDirection: TextDirection.ltr);
-
+  // main page list builder
   Widget peopleList(List people) => FutureBuilder(
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
@@ -94,11 +92,7 @@ class MissingPersonList extends StatelessWidget {
               child: ListView.builder(
             itemCount: people.length,
             itemBuilder: (BuildContext context, int index) =>
-                MissingPersonListTile(
-              people[index],
-              _notifications,
-              snapshot.data,
-            ),
+                MissingPersonListTile(people[index], _notifications),
           ));
         } else {
           return Center(child: CircularProgressIndicator());

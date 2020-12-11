@@ -1,11 +1,12 @@
 import 'package:Red_Alert/Database/saved_people_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Database/saved_people_database.dart';
 
 class MapDialog extends StatelessWidget {
-  final DateFormat formatter = DateFormat('MMMM dd, yyyy');
+  // final DateFormat formatter = DateFormat('MMMM dd, yyyy');
   final SavedPeopleModel savedPeopleModel = SavedPeopleModel();
   final List people;
 
@@ -52,18 +53,30 @@ class MapDialog extends StatelessWidget {
         ),
       );
 
-  Widget _peopleCardContent(Map person) {
-    String url = person['image'];
-    String name = person['firstName'] + " " + person['lastName'];
-    String date = formatter.format(DateTime.parse(person['missingSince']));
-    String id = person['id'].toString();
+  Widget _peopleCardContent(Map person) => FutureBuilder(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          // Date format depending on the language
+          DateFormat formatter = DateFormat(
+              'MMMM dd, yyyy', snapshot.data.getString('language') ?? "en");
 
-    return ListTile(
-        leading: _cardImg(url),
-        title: _cardTitle(name),
-        subtitle: _cardSubTitle(date),
-        trailing: _cardSaveBtn(id));
-  }
+          // Person content
+          String url = person['image'];
+          String name = person['firstName'] + " " + person['lastName'];
+          String date =
+              formatter.format(DateTime.parse(person['missingSince']));
+          String id = person['id'].toString();
+
+          return ListTile(
+              leading: _cardImg(url),
+              title: _cardTitle(name),
+              subtitle: _cardSubTitle(date),
+              trailing: _cardSaveBtn(id));
+        } else {
+          return Text("Loading");
+        }
+      });
 
   Widget _cardImg(String url) => CircleAvatar(
         backgroundImage: NetworkImage(url),

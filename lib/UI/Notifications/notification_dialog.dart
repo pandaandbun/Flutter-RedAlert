@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 
-import '../Database/missing_person_database.dart';
+import '../../Database/missing_person_database.dart';
 
 class NotificationDialog extends StatelessWidget {
   final MissingPeopleModel missingPeople = MissingPeopleModel();

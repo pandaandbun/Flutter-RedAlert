@@ -9,20 +9,16 @@ class LanguageSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _waitingForPrefs();
+    return FutureBuilder(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _languageSettings(snapshot.data);
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
-
-  Widget _waitingForPrefs() => FutureBuilder(
-      future: SharedPreferences.getInstance(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return _languageSettings(snapshot.data);
-        } else {
-          return _loadingIcon();
-        }
-      });
-
-  Widget _loadingIcon() => Center(child: CircularProgressIndicator());
 
   // ------------------------------------------------------------------
 

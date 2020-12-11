@@ -13,26 +13,24 @@ class SavedPersonList extends StatelessWidget {
   Widget build(BuildContext context) {
     final SavedPeopleModel savedPeopleModel = context.watch<SavedPeopleModel>();
 
-    return _futureList(savedPeopleModel);
+    return FutureBuilder(
+      future: savedPeopleModel.getAllSavedPeople(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          Set<String> peopleIds = snapshot.data
+              .map((e) => e['id'].toString())
+              .toSet()
+              .cast<String>();
+
+          return savedPersonListView(peopleIds);
+        } else {
+          return _loadingStatus(snapshot.connectionState);
+        }
+      },
+    );
   }
 
   // --------------------------------------------------------------
-
-  Widget _futureList(SavedPeopleModel savedPeopleModel) => FutureBuilder(
-        future: savedPeopleModel.getAllSavedPeople(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            Set<String> peopleIds = snapshot.data
-                .map((e) => e['id'].toString())
-                .toSet()
-                .cast<String>();
-
-            return savedPersonListView(peopleIds);
-          } else {
-            return _loadingStatus(snapshot.connectionState);
-          }
-        },
-      );
 
   Widget savedPersonListView(Set<String> peopleIds) => FutureBuilder(
       future: missingPeople.getPeopleFromIds(peopleIds),
@@ -56,10 +54,8 @@ class SavedPersonList extends StatelessWidget {
 
   Widget _loadingStatus(ConnectionState connectionState) {
     if (connectionState == ConnectionState.waiting)
-      return _loadingIcon();
+      return Center(child: CircularProgressIndicator());
     else
       return Text("No One Was Found");
   }
-
-  Widget _loadingIcon() => Center(child: CircularProgressIndicator());
 }

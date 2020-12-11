@@ -31,25 +31,21 @@ class SavedPersonTile extends StatelessWidget {
     final SavedPeopleModel savedPeopleModel =
         Provider.of<SavedPeopleModel>(context);
 
-    return personCard(savedPeopleModel);
+    return Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+              contentPadding: EdgeInsets.all(16.0),
+              title: personCardImage(),
+              subtitle: personCardText(savedPeopleModel)),
+        ],
+      ),
+      color: Colors.brown[400],
+    );
   }
 
   // -------------------------------------------------------------
-
-  // Person card
-  Widget personCard(SavedPeopleModel savedPeopleModel) => Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-                contentPadding: EdgeInsets.all(16.0),
-                title: personCardImage(),
-                subtitle: personCardText(savedPeopleModel)),
-          ],
-        ),
-        color: Colors.brown[400],
-      );
-
   // PErson Card Image
   Widget personCardImage() => ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
@@ -72,6 +68,7 @@ class SavedPersonTile extends StatelessWidget {
         delBtn(savedPeopleModel),
       ]);
 
+  // Name
   Widget _personCardName() => Text(
         person['firstName'] + " " + person['lastName'],
         style: TextStyle(
@@ -81,6 +78,7 @@ class SavedPersonTile extends StatelessWidget {
         textAlign: TextAlign.center,
       );
 
+  // Missing Since
   Widget _personCardDate() => FutureBuilder(
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
@@ -98,6 +96,7 @@ class SavedPersonTile extends StatelessWidget {
         }
       });
 
+  // Location
   Widget _personCardLoc() => Builder(
       builder: (context) => Row(children: [
             Expanded(

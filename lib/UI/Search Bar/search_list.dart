@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Database/missing_person_database.dart';
 import '../../Database/saved_people_database.dart';
 
 class SearchList extends StatelessWidget {
-  final DateFormat formatter = DateFormat('MMMM dd, yyyy');
   final MissingPeopleModel missingPeople = MissingPeopleModel();
 
   final String name;
@@ -29,29 +29,22 @@ class SearchList extends StatelessWidget {
     final SavedPeopleModel savedPeopleModel =
         Provider.of<SavedPeopleModel>(context);
 
-    return searchList(savedPeopleModel);
-  }
-
-  // --------------------------------------
-
-  // List response
-  Widget searchList(savedPeopleModel) => Container(
-      width: double.maxFinite,
-      child: FutureBuilder(
-        future: missingPeople.getPersonWhereName(name),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              return _searchListView(snapshot.data, savedPeopleModel);
-            } else {
-              return Center(child: Text("No One Was Found"));
+    return Container(
+        width: double.maxFinite,
+        child: FutureBuilder(
+          future: missingPeople.getPersonWhereName(name),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data.length > 0) {
+                return _searchListView(snapshot.data, savedPeopleModel);
+              } else {
+                return Center(child: Text("No One Was Found"));
+              }
             }
-          }
-          return _loadingIcon();
-        },
-      ));
-
-  Widget _loadingIcon() => Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
+          },
+        ));
+  }
 
   // --------------------------------------
 
@@ -74,18 +67,31 @@ class SearchList extends StatelessWidget {
       );
 
   // Search Card Text Content
-  Widget searchCardText(Map person, SavedPeopleModel savedPeopleModel) {
-    String url = person['image'];
-    String name = person['firstName'] + " " + person['lastName'];
-    String date = formatter.format(DateTime.parse(person['missingSince']));
-    String id = person['id'].toString();
+  Widget searchCardText(Map person, SavedPeopleModel savedPeopleModel) =>
+      FutureBuilder(
+          future: SharedPreferences.getInstance(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              // Date format depending on the langauge
+              DateFormat formatter = DateFormat(
+                  'MMMM dd, yyyy', snapshot.data.getString('language') ?? "en");
 
-    return ListTile(
-        leading: _cardImg(url),
-        title: _cardTitle(name),
-        subtitle: _cardSubTitle(date),
-        trailing: _cardSaveBtn(id, savedPeopleModel));
-  }
+              // Person content
+              String url = person['image'];
+              String name = person['firstName'] + " " + person['lastName'];
+              String date =
+                  formatter.format(DateTime.parse(person['missingSince']));
+              String id = person['id'].toString();
+
+              return ListTile(
+                  leading: _cardImg(url),
+                  title: _cardTitle(name),
+                  subtitle: _cardSubTitle(date),
+                  trailing: _cardSaveBtn(id, savedPeopleModel));
+            } else {
+              return Text("Loading");
+            }
+          });
 
   Widget _cardImg(String url) => CircleAvatar(
         backgroundImage: NetworkImage(url),

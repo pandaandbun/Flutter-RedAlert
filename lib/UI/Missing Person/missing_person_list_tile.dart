@@ -1,25 +1,22 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 import '../../Database/selected_item_model.dart';
 
-import '../notification.dart';
+import '../Notifications/notification.dart';
 
 import 'missing_person_dialog.dart';
+import 'missing_person_bell_btn.dart';
 
 class MissingPersonListTile extends StatefulWidget {
   final Map person;
   final Notifications _notifications;
-  final SharedPreferences prefs;
 
-  MissingPersonListTile(this.person, this._notifications, this.prefs);
+  MissingPersonListTile(this.person, this._notifications);
 
   @override
   _MissingPersonListTileState createState() => _MissingPersonListTileState();
@@ -27,7 +24,6 @@ class MissingPersonListTile extends StatefulWidget {
 
 class _MissingPersonListTileState extends State<MissingPersonListTile> {
   bool _selectedIndex = false;
-  DateFormat formatter;
 
   void refresh(bool bool) {
     setState(() {
@@ -38,7 +34,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   void _moreInfo() async {
     await showDialog(
       context: context,
-      child: PeopleDialog(widget.person, widget.prefs),
+      child: PeopleDialog(widget.person),
     );
   }
 
@@ -55,75 +51,8 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
 
   // ---------------------------------------------------------------------
 
-  void _notifyBtnHandler() async {
-    if (widget.prefs.getBool('notifications_scheduled') ?? false) {
-      var when = await _selectDate(context); //function which opens a DatePicker
-
-      if (when != null) {
-        await widget._notifications.sendNotificationNow(
-            "Reminder Set For " + formatter.format(when),
-            widget.person['firstName'] + " " + widget.person['lastName']);
-        await widget._notifications.sendNotificationLater(
-          widget.person['id'],
-          "Did you find me?",
-          widget.person['firstName'] + " " + widget.person['lastName'],
-          when,
-        );
-
-        _confirmationFialog(when);
-      }
-    } else {
-      _notEnabledDialog();
-    }
-  }
-
-  //dialog to alert user that the notification was scheduled
-  Future _confirmationFialog(when) => showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: new Text(
-              "Reminder for ${widget.person['firstName']} ${widget.person['lastName']} set for ${formatter.format(when)}."),
-          backgroundColor: Colors.brown[100],
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      });
-
-  Future _notEnabledDialog() => showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: new Text(FlutterI18n.translate(
-              context, "person_list.notification_dialog")),
-          backgroundColor: Colors.brown[100],
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      });
-
-  // ---------------------------------------------------------------------
-
   @override
   Widget build(BuildContext context) {
-    formatter =
-        DateFormat('MMMM dd, yyyy', widget.prefs.getString('language') ?? "en");
     final SelectedPeopleModel selectedPeopleModel =
         context.watch<SelectedPeopleModel>();
 
@@ -141,7 +70,7 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
   }
 
   // ---------------------------------------------------------------------
-
+  // Person content
   Widget _personTile(SelectedPeopleModel selectedPeopleModel) => Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -162,50 +91,37 @@ class _MissingPersonListTileState extends State<MissingPersonListTile> {
           leading: _tileImage(),
           title: _tileTitle(),
           subtitle: _tileSubTitle(),
-          trailing: notifyButton(),
+          trailing: NotifyButton(widget._notifications, widget.person),
           onTap: () => _tileSelectionHandler(selectedPeopleModel),
         ),
       );
 
+  // Person image
   Widget _tileImage() => CircleAvatar(
         backgroundImage: NetworkImage(widget.person['image']),
         radius: 30,
         onBackgroundImageError: (e, stackTrace) => print(e),
       );
 
+  // Person Name
   Widget _tileTitle() => Text(
         widget.person['firstName'] + " " + widget.person['lastName'],
         style: TextStyle(color: Colors.white),
       );
 
-  Widget _tileSubTitle() => Text(
-        formatter.format(DateTime.parse(widget.person['missingSince'])),
-        style: TextStyle(color: Colors.white),
-      );
-
-  // ---------------------------------------------------------------------
-  //_selectDate: opens a DatePicker to choose the date of the notification to set.
-  Future<tz.TZDateTime> _selectDate(BuildContext context) async {
-    final DateTime selectedDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now().add(const Duration(days: 1)),
-        firstDate: DateTime.now().add(const Duration(days: 1)),
-        lastDate: DateTime.now().add(const Duration(days: 365)),
-        locale: Locale(widget.prefs.getString('language') ?? "en"));
-
-    if (selectedDate == null) {
-      return null;
-    } else {
-      return tz.TZDateTime.from(selectedDate, tz.local);
-    }
-  }
-
-  //notifyButton: a button which processes a future notification for the accociated person.
-  Widget notifyButton() => IconButton(
-        icon: Icon(
-          Icons.add_alert,
-          color: Colors.white,
-        ),
-        onPressed: () => _notifyBtnHandler(),
-      );
+  // Person Missing Since
+  Widget _tileSubTitle() => FutureBuilder(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          DateFormat formatter = DateFormat(
+              'MMMM dd, yyyy', snapshot.data.getString('language') ?? "en");
+          return Text(
+            formatter.format(DateTime.parse(widget.person['missingSince'])),
+            style: TextStyle(color: Colors.white),
+          );
+        } else {
+          return Text("Loading");
+        }
+      });
 }

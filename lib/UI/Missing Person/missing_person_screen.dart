@@ -7,9 +7,10 @@ import 'missing_person_list.dart';
 import '../Settings/settings_btn.dart';
 import '../drawer.dart';
 import '../Search Bar/search_bar.dart';
-import '../notification.dart';
 import '../are_you_sure_you_want_to_exit.dart';
 import '../Tutorials/tutorial.dart';
+
+import '../Notifications/notification.dart';
 
 import '../../Database/saved_people_database.dart';
 import '../../Database/selected_item_model.dart';
