@@ -252,6 +252,22 @@ When viewing the missing persons list, a featured person will appear as a notifi
 
 --------------------------
 
+### Settings Page
+![Settings](images/settings.png)
+
+The settings page contains 3 types of settings:
+
+Language Settings: Allows the user to switch between english and french versions of the app.
+
+Notification Settings: Allows the user to enable and disable two types of notifications:
+
+1) Scheduled Notifications: These are the notifications that the user schedules in the future by clicking the alert icon next to a person in the list.
+2) Featured Person Notifications: These are the notifications that display a random featured person when viewing the persons screen.
+  
+Tutorial Settings: Allows the user to enable or disable the in-app tutorials.
+
+--------------------------
+
 ### References
 
 Missing persons information was retrieved from https://www.canadasmissing.ca/index-eng.htm using a python script, found in the python folder of the project.
